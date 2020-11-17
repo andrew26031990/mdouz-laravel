@@ -16,3 +16,36 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::resource('timelineEvent', App\Http\Controllers\TimelineEventModelController::class);
+
+Route::resource('user', App\Http\Controllers\UserModelController::class);
+
+Route::resource('articleAttachmentModels', App\Http\Controllers\ArticleAttachmentController::class);
+
+Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
+
+Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
+
+Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
+
+Route::resource('articleCategoryModels', App\Http\Controllers\ArticleCategoryModelController::class);
+
+Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
+
+Route::resource('lang', App\Http\Controllers\LangModelController::class);
+
+Route::resource('social', App\Http\Controllers\SocialModelController::class);
+
+Route::resource('currency', App\Http\Controllers\CurrencyModelController::class);
+
+Route::resource('city', App\Http\Controllers\CityModelController::class);
+
+Route::resource('region', App\Http\Controllers\RegionController::class);
+
+Route::resource('country', App\Http\Controllers\CountryModelController::class);

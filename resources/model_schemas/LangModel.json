@@ -1,0 +1,130 @@
+[
+    {
+        "name": "id",
+        "dbType": "integer,true",
+        "htmlType": null,
+        "validations": null,
+        "searchable": false,
+        "fillable": false,
+        "primary": true,
+        "inForm": false,
+        "inIndex": false,
+        "inView": false
+    },
+    {
+        "name": "url",
+        "dbType": "string,255",
+        "htmlType": "text",
+        "validations": "required|string|max:255|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "local",
+        "dbType": "string,255",
+        "htmlType": "text",
+        "validations": "required|string|max:255|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "name",
+        "dbType": "string,255",
+        "htmlType": "text",
+        "validations": "required|string|max:255|string|max:255",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "default",
+        "dbType": "smallInteger,false",
+        "htmlType": null,
+        "validations": "required",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "date_update",
+        "dbType": "integer,false",
+        "htmlType": null,
+        "validations": "required|integer|integer",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "name": "date_create",
+        "dbType": "integer,false",
+        "htmlType": null,
+        "validations": "required|integer|integer",
+        "searchable": true,
+        "fillable": true,
+        "primary": false,
+        "inForm": true,
+        "inIndex": true,
+        "inView": true
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,ArticleCategoryTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,ArticleTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CityTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CountryTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,CustomFieldTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,EventsTimetableTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,EventsTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,PageTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,RegionTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,TagTranslate,lang_id"
+    },
+    {
+        "type": "relation",
+        "relation": "1tm,VideoTranslate,lang_id"
+    }
+]
