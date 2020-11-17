@@ -2,7 +2,7 @@
     {!! Form::open(['route' => 'region.store']) !!}
     {!! Form::hidden('created_at', strtotime('today GMT')) !!}
     {!! Form::label('role', 'Выберите страну') !!}
-    <select class="form-control" name="country_id" required>
+    <select class="form-control" name="country_id" required style="margin-bottom: 15px">
         @foreach($countries as $country)
             <option value="{{$country->country_id}}">{{$country->name}}</option>
         @endforeach
@@ -25,18 +25,18 @@
         <tbody>
         @foreach($region as $regionModel)
             <tr>
-                <td>{{ $regionModel->c_name }}</td>
-                <td>{{ $regionModel->r_name }}</td>
+                <td>{{ $regionModel->ct_name }}</td>
+                <td>{{ $regionModel->r_date }}</td>
                 @foreach($regionTranslate as $regionTrans)
-                    @if($regionModel->id == $regionTrans->region_id)
+                    @if($regionModel->r_id == $regionTrans->region_id)
                         <th>{{$regionTrans->name}}</th>
                     @endif
                 @endforeach
                 <td>
-                    {!! Form::open(['route' => ['region.destroy', $regionModel->id], 'method' => 'delete']) !!}
+                    {!! Form::open(['route' => ['region.destroy', $regionModel->r_id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        <a href="{{ route('region.show', [$regionModel->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-                        <a href="{{ route('region.edit', [$regionModel->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
+                        <a href="{{ route('region.show', [$regionModel->r_id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
+                        <a href="{{ route('region.edit', [$regionModel->r_id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
                         {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                     </div>
                     {!! Form::close() !!}

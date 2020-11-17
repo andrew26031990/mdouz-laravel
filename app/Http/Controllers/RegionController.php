@@ -37,7 +37,7 @@ class RegionController extends AppBaseController
             join('country', 'region.country_id', '=', 'country.id')->
             join('country_translate', 'country_translate.country_id', '=', 'country.id')->
             where('country_translate.lang_id', 3)->
-            select('country.name as c_name')->
+            select('country_translate.name as ct_name', 'region.created_at as r_date', 'region.id as r_id')->
             get();
         $countries = DB::table('country')->join('country_translate', 'country_translate.country_id', '=', 'country.id')
             ->where('country_translate.lang_id', 3)->get();
