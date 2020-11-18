@@ -4,7 +4,9 @@
     {!! Form::label('role', 'Выберите страну') !!}
     <select class="form-control" name="country_id" required style="margin-bottom: 15px">
         @foreach($countries as $country)
-            <option value="{{$country->country_id}}">{{$country->name}}</option>
+            @if($country->name != "")
+                <option value="{{$country->country_id}}">{{$country->name}}</option>
+            @endif
         @endforeach
     </select>
     <button class="btn btn-primary" type="submit">Добавить регион</button>

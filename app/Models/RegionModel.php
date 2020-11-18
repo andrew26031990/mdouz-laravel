@@ -16,15 +16,16 @@ class RegionModel extends Model
 {
 
     public $table = 'region';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    public $timestamps = false;
 
 
     public $fillable = [
-        'country_id'
+        'country_id',
+        'created_at'
     ];
 
     /**

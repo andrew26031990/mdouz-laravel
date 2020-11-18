@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateRegionModelRequest;
 use App\Http\Requests\UpdateRegionModelRequest;
+use App\Models\CountryTranslate;
+use App\Models\RegionTranslate;
 use App\Repositories\LangModelRepository;
 use App\Repositories\RegionModelRepository;
 use App\Http\Controllers\AppBaseController;
@@ -70,6 +72,12 @@ class RegionController extends AppBaseController
 
         $regionModel = $this->regionModelRepository->create($input);
 
+        $langModel = $this->langModelRepository->all();
+        foreach ($langModel as $lang){
+            $userData = array('lang_id' => $lang->id, 'region_id' => $regionModel->id, 'name'=>'');
+            RegionTranslate::create($userData);
+        }
+
         Flash::success('Region Model saved successfully.');
 
         return redirect(route('region.index'));
@@ -84,15 +92,22 @@ class RegionController extends AppBaseController
      */
     public function show($id)
     {
-        $regionModel = $this->regionModelRepository->find($id);
-
+        $regionModel = DB::table('region')->
+            join('country', 'region.country_id', '=', 'country.id')->
+            join('country_translate', 'country.id', '=', 'country_translate.country_id')->
+            where('country_translate.lang_id', 3)->where('country_translate.country_id', $id)->
+            select('country_translate.name as ct_name', 'region.created_at as r_date')->get();
+        $regionTranslate = DB::table('region_translate')->
+            join('lang', 'region_translate.lang_id', '=', 'lang.id')->
+            where('region_translate.region_id', $id)->
+            select('region_translate.name as rt_name', 'lang.name as l_name')->get();
         if (empty($regionModel)) {
             Flash::error('Region Model not found');
 
             return redirect(route('region.index'));
         }
 
-        return view('region_models.show')->with('regionModel', $regionModel);
+        return view('region_models.show')->with('regionModel', $regionModel)->with('regionTranslate', $regionTranslate);
     }
 
     /**
@@ -105,14 +120,22 @@ class RegionController extends AppBaseController
     public function edit($id)
     {
         $regionModel = $this->regionModelRepository->find($id);
-
+        $regionTranslate = DB::table('region_translate')->
+            join('lang', 'region_translate.lang_id', '=', 'lang.id')->
+            where('region_translate.region_id', $id)->
+            select('region_translate.name as rt_name', 'lang.name as l_name', 'lang.url as l_url', 'lang.id as l_id')->get();
+        $countries = DB::table('country')->
+            join('country_translate', 'country_translate.country_id', '=', 'country.id')->
+            where('country_translate.lang_id', 3)->
+            select('country.id as c_id', 'country_translate.name as ct_name')->
+            get();
         if (empty($regionModel)) {
             Flash::error('Region Model not found');
 
             return redirect(route('region.index'));
         }
 
-        return view('region_models.edit')->with('regionModel', $regionModel);
+        return view('region_models.edit')->with('regionModel', $regionModel)->with('regionTranslate', $regionTranslate)->with('countries', $countries);
     }
 
     /**
@@ -132,8 +155,12 @@ class RegionController extends AppBaseController
 
             return redirect(route('region.index'));
         }
+        DB::table('region')->where('region.id', $request->region_id)->update(array('country_id' => $request->country_id));
+        foreach ($request->except('_token', 'created_at', 'region_id', '_method') as $key => $part) {
+            DB::table('region_translate')->where('region_translate.lang_id', $key)->where('region_translate.region_id', $request->region_id)->update(array('name' => $part));
+        }
 
-        $regionModel = $this->regionModelRepository->update($request->all(), $id);
+        //$regionModel = $this->regionModelRepository->update($request->all(), $id);
 
         Flash::success('Region Model updated successfully.');
 
@@ -158,8 +185,9 @@ class RegionController extends AppBaseController
 
             return redirect(route('region.index'));
         }
-
+        DB::table('region_translate')->where('region_id', $id)->delete();
         $this->regionModelRepository->delete($id);
+
 
         Flash::success('Region Model deleted successfully.');
 

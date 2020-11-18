@@ -49,3 +49,6 @@ Route::resource('city', App\Http\Controllers\CityModelController::class);
 Route::resource('region', App\Http\Controllers\RegionController::class);
 
 Route::resource('country', App\Http\Controllers\CountryModelController::class);
+
+
+Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);

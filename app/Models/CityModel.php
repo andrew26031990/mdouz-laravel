@@ -16,14 +16,16 @@ class CityModel extends Model
 {
 
     public $table = 'city';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
+    public $timestamps = false;
 
 
 
     public $fillable = [
+        'created_at',
         'region_id'
     ];
 
@@ -43,7 +45,7 @@ class CityModel extends Model
      * @var array
      */
     public static $rules = [
-        'region_id' => 'required',
+        //'region_id' => 'required',
         'created_at' => 'required|integer'
     ];
 

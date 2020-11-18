@@ -39,3 +39,7 @@
 <li class="{{ Request::is('timelineEvent*') ? 'active' : '' }}">
     <a href="{{ route('timelineEvent.index') }}"><i class="fa fa-edit"></i><span>Timeline Event</span></a>
 </li>
+<li class="{{ Request::is('staticPages*') ? 'active' : '' }}">
+    <a href="{{ route('staticPages.index') }}"><i class="fa fa-edit"></i><span>Static Pages</span></a>
+</li>
+
