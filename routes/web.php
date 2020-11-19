@@ -50,5 +50,6 @@ Route::resource('region', App\Http\Controllers\RegionController::class);
 
 Route::resource('country', App\Http\Controllers\CountryModelController::class);
 
+Route::get('getTemplateFields/{id}', [App\Http\Controllers\StaticPagesController::class,'getTemplateFields']);
 
 Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);
