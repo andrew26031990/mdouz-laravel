@@ -18,15 +18,16 @@ class StaticPages extends Model
 {
 
     public $table = 'page';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    public $timestamps = false;
 
 
     public $fillable = [
         'view',
+        'template_id',
         'status'
     ];
 
@@ -38,6 +39,7 @@ class StaticPages extends Model
     protected $casts = [
         'id' => 'integer',
         'view' => 'string',
+        'template_id' => 'integer',
         'status' => 'integer'
     ];
 
@@ -47,8 +49,7 @@ class StaticPages extends Model
      * @var array
      */
     public static $rules = [
-        'view' => 'nullable|string|max:255',
-        'status' => 'required',
+        'template_id' => 'required',
         'created_at' => 'nullable|integer',
         'updated_at' => 'nullable|integer'
     ];

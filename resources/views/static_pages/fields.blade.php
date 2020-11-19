@@ -10,40 +10,45 @@
             @foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     <div class="box-body">
-                        <div class="form-group">
-                            <label for="title">Заголовок</label>
-                            <input type="text" class="form-control" name="title" id="title" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="bigtext">Текст</label>
-                            <textarea class="ckeditor" id="{{$lang->url}}" id="bigtext" required>
+                        {!! Form::open(['route' => 'staticPages.store']) !!}
+                            <input type="hidden" class="form-control" name="lang" value="{{$lang->id}}" required>
+                            <div class="form-group">
+                                <label for="title">Заголовок</label>
+                                <input type="text" class="form-control" name="title" id="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bigtext">Текст</label>
+                                <textarea class="ckeditor" id="{{$lang->url}}" id="bigtext" name="text" required>
 
-                            </textarea>
-                        </div>
-                        <div class="form-group">
-                            <label>Шаблон</label>
-                            <select class="form-control" name="template">
-                                <option value="">Выберите шаблон</option>
-                                @foreach($templates as $template)
-                                    <option value="{{$template->id}}">{{$template->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="link">Ссылка</label>
-                            <input type="text" name="link" class="form-control" id="link" required>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" name="published" required> Опубликовать
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row custom-field additionalBlocks">
+                                </textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>Шаблон</label>
+                                <select class="form-control" name="template_id" required>
+                                    <option value="">Выберите шаблон</option>
+                                    @foreach($templates as $template)
+                                        <option value="{{$template->id}}">{{$template->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="link">Ссылка</label>
+                                <input type="text" name="link" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Опубликовать</label>
+                                <select class="form-control" name="status">
+                                    <option value="1">Да</option>
+                                    <option value="0">Нет</option>
+                                </select>
+                            </div>
+                            <div class="row custom-field additionalBlocks">
 
-                    </div>
-                    <div class="box-footer">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        {!! Form::close() !!}
                     </div>
                 </div>
             @endforeach
@@ -54,7 +59,7 @@
 </div>
 @push('scripts')
     <script type="text/javascript">
-        $('select[name="template"]').on('change', function() {
+        $('select[name="template_id"]').on('change', function() {
             let id = $(this).val();
             getTemplateFields(id);
         });
