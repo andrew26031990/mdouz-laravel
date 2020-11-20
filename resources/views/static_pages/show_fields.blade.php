@@ -41,7 +41,7 @@
                             <div>{{$templateStatus[0]->p_status == 1 ? 'Да' : 'Нет'}}</div>
                         </div>
                         <div class="row custom-field additionalBlocks">
-                            <div class="col-md-12" style="margin-bottom: 30px"><b>Дополнительные поля</b></div>
+                            <div class="col-md-12" style="margin-bottom: 30px"><b>Дополнительные поля: </b></div>
                             @foreach($customFieldTranslate as $customFieldTrans)
                                 @if($customFieldTrans->lang_id == $lang->id)
                                     <div class="col-md-4 name-block">

@@ -20,8 +20,8 @@
                         @foreach($language as $lang)
                             @if(($lang->id == $pageTrans->pt_lang_id))
                                 <th>{{$pageTrans->pt_title}}</th>
-                            @else
-                                <th> </th>
+{{--                            @else
+                                <th> </th>--}}
                             @endif
                         @endforeach
                     @endif

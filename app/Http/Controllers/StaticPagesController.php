@@ -83,7 +83,7 @@ class StaticPagesController extends AppBaseController
                         <div class="col-md-8 text-block">
                             <div class="form-group field-customfield-0-text required">
                                 <label class="control-label" for="customfield-0-text">Текст поля на текущем языке</label>
-                                <textarea id="customfield-0-text" class="form-control" name="CustomField['.$i.']['.$template_field->name.']" rows="3"></textarea>
+                                <textarea class="form-control" name="CustomField['.$i.']['.$template_field->name.']" rows="3"></textarea>
 
                                 <p class="help-block help-block-error"></p>
                             </div>
@@ -155,6 +155,13 @@ class StaticPagesController extends AppBaseController
     public function show($id)
     {
         $staticPages = $this->staticPagesRepository->find($id);
+
+        if (empty($staticPages)) {
+            Flash::error('Static Pages not found');
+
+            return redirect(route('staticPages.index'));
+        }
+
         $lang = $this->langModelRepository->all();
         $templateStatus = DB::table('templates')->
             join('page', 'page.template_id', '=', 'templates.id')->
@@ -166,11 +173,6 @@ class StaticPagesController extends AppBaseController
         $titleTextSlug = DB::table('page_translate')->
             where('page_translate.page_id', $id)->
             select('page_translate.lang_id as pt_lang_id', 'page_translate.slug as pt_slug', 'page_translate.title as pt_title', 'page_translate.text as pt_text')->get();
-        if (empty($staticPages)) {
-            Flash::error('Static Pages not found');
-
-            return redirect(route('staticPages.index'));
-        }
 
         return view('static_pages.show')->with('staticPages', $staticPages)->
             with('language', $lang)->with('templateStatus', $templateStatus)->with('customFieldTranslate', $customFieldTranslate)->
@@ -194,7 +196,28 @@ class StaticPagesController extends AppBaseController
             return redirect(route('staticPages.index'));
         }
 
-        return view('static_pages.edit')->with('staticPages', $staticPages);
+        $lang = $this->langModelRepository->all();
+        $templates = DB::table('templates')->get();
+        $page = DB::table('page')->where('page.id', $id)->
+            select('page.status as pg_status', 'page.id as pg_id')->get();
+
+        $templateStatus = DB::table('templates')->
+            join('page', 'page.template_id', '=', 'templates.id')->
+            where('page.id', $id)->
+            select('templates.name as t_name', 'page.status as p_status', 'templates.id as t_id')->get();
+
+        $customFieldTranslate = DB::table('custom_field_translate')->
+            join('custom_field', 'custom_field_translate.custom_field_id', '=', 'custom_field.id')->
+            where('custom_field.page_id', $id)->get();
+
+        $titleTextSlug = DB::table('page_translate')->
+            where('page_translate.page_id', $id)->
+            select('page_translate.lang_id as pt_lang_id', 'page_translate.slug as pt_slug', 'page_translate.title as pt_title', 'page_translate.text as pt_text')->get();
+
+
+        return view('static_pages.edit')->with('staticPages', $staticPages)->
+        with('language', $lang)->with('templateStatus', $templateStatus)->with('customFieldTranslate', $customFieldTranslate)->
+        with('titleTextSlug', $titleTextSlug)->with('templates', $templates)->with('page', $page);
     }
 
     /**
@@ -215,7 +238,24 @@ class StaticPagesController extends AppBaseController
             return redirect(route('staticPages.index'));
         }
 
-        $staticPages = $this->staticPagesRepository->update($request->all(), $id);
+        $updatePages = DB::table('page')->where('id', $id)->update(['status' => $request->status]);
+        $updatePagesTranslate = DB::table('page_translate')->where('page_id', $id)->where('lang_id', $request->lang)->
+            update(['slug' => $request->link, 'title' => $request->title, 'text' => $request->text]);
+
+        $getCustomFieldId = DB::table('custom_field')->where('page_id', $id)->get();
+        dd($request['CustomField']);
+
+        for($k=0;$k<count($getCustomFieldId);$k++){
+            foreach ($input['CustomField'][$k] as $key => $part) {
+                if($part !== null){
+                    $recordToCustomField = $this->customFieldRepository->create(array('page_id'=>$recordToPages->id, 'name' => $part));
+                    $this->customFieldTranslateRepository->create(array('custom_field_id'=>$recordToCustomField->id, 'lang_id' => $request->lang, 'text'=>$key));
+                }
+            }
+        }
+
+
+        //$staticPages = $this->staticPagesRepository->update($request->all(), $id);
 
         Flash::success('Static Pages updated successfully.');
 

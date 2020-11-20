@@ -11,11 +11,11 @@
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
-                   {!! Form::model($staticPages, ['route' => ['staticPages.update', $staticPages->id], 'method' => 'patch']) !!}
+                   {{--{!! Form::model($staticPages, ['route' => ['staticPages.update', $staticPages->id], 'method' => 'patch']) !!}--}}
 
                         @include('static_pages.fields')
 
-                   {!! Form::close() !!}
+                   {{--{!! Form::close() !!}--}}
                </div>
            </div>
        </div>
