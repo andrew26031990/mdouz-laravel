@@ -14,7 +14,7 @@
                             <input type="hidden" class="form-control" name="lang" value="{{$lang->id}}" required>
                             <div class="form-group">
                                 <label for="title">Заголовок</label>
-                                <input type="text" class="form-control" name="title" id="title" required>
+                                <input type="text" class="form-control" name="title" id="title" langid="{{$lang->id}}" required>
                             </div>
                             <div class="form-group">
                                 <label for="bigtext">Текст</label>
@@ -33,7 +33,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="link">Ссылка</label>
-                                <input type="text" name="link" class="form-control" required>
+                                <input type="text" name="link" class="form-control" langid="{{$lang->id}}" required>
                             </div>
                             <div class="form-group">
                                 <label>Опубликовать</label>
@@ -75,24 +75,20 @@
                 }
             });
         }
+        $('input[name="title"]').focusout(function() {
+            translitUrl($(this).val(), $(this));
+        })
+
+        function translitUrl(value, input){
+            $.ajax({
+                url: '/translit_url/{value}',
+                type: 'GET',
+                data: { value: value },
+                success: function(response)
+                {
+                    input.closest('div.tab-pane').find('input[name="link"]').val(response);
+                }
+            });
+        }
     </script>
 @endpush
-
-
-{{--<!-- View Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('view', 'View:') !!}
-    {!! Form::text('view', null, ['class' => 'form-control','maxlength' => 255,'maxlength' => 255]) !!}
-</div>
-
-<!-- Status Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('status', 'Status:') !!}
-    {!! Form::number('status', null, ['class' => 'form-control']) !!}
-</div>
-
-<!-- Submit Field -->
-<div class="form-group col-sm-12">
-    {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}
-    <a href="{{ route('staticPages.index') }}" class="btn btn-default">Cancel</a>
-</div>--}}

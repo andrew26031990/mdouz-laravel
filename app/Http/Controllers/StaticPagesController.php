@@ -48,9 +48,12 @@ class StaticPagesController extends AppBaseController
     public function index(Request $request)
     {
         $staticPages = $this->staticPagesRepository->all();
+        $pageTranslate = DB::table('page_translate')->
+            join('lang', 'page_translate.lang_id', '=', 'lang.id')->
+            select('page_translate.title as pt_title', 'page_translate.page_id as pt_page_id', 'page_translate.lang_id as pt_lang_id')->get();
         $lang = $this->langModelRepository->all();
         return view('static_pages.index')
-            ->with('staticPages', $staticPages)->with('language', $lang);
+            ->with('staticPages', $staticPages)->with('language', $lang)->with('pageTranslate', $pageTranslate);
     }
 
     /**
@@ -91,6 +94,28 @@ class StaticPagesController extends AppBaseController
 
     }
 
+    public function translitUrl()
+    {
+        $value = $_GET['value'];
+        $converter = array(
+            'а' => 'a',    'б' => 'b',    'в' => 'v',    'г' => 'g',    'д' => 'd',
+            'е' => 'e',    'ё' => 'e',    'ж' => 'zh',   'з' => 'z',    'и' => 'i',
+            'й' => 'y',    'к' => 'k',    'л' => 'l',    'м' => 'm',    'н' => 'n',
+            'о' => 'o',    'п' => 'p',    'р' => 'r',    'с' => 's',    'т' => 't',
+            'у' => 'u',    'ф' => 'f',    'х' => 'h',    'ц' => 'c',    'ч' => 'ch',
+            'ш' => 'sh',   'щ' => 'sch',  'ь' => '',     'ы' => 'y',    'ъ' => '',
+            'э' => 'e',    'ю' => 'yu',   'я' => 'ya',
+        );
+
+        $value = mb_strtolower($value);
+        $value = strtr($value, $converter);
+        $value = mb_ereg_replace('[^-0-9a-z]', '-', $value);
+        $value = mb_ereg_replace('[-]+', '-', $value);
+        $value = trim($value, '-');
+
+        return $value;
+    }
+
     /**
      * Store a newly created StaticPages in storage.
      *
@@ -120,126 +145,6 @@ class StaticPagesController extends AppBaseController
         return redirect(route('staticPages.index'));
     }
 
-    public function translit($str)
-    {
-        $tr = array(
-            "А"=>"a",
-            "Б"=>"b",
-            "В"=>"v",
-            "Г"=>"g",
-            "Д"=>"d",
-            "Е"=>"e",
-            "Ё"=>"e",
-            "Ж"=>"j",
-            "З"=>"z",
-            "И"=>"i",
-            "Й"=>"y",
-            "К"=>"k",
-            "Л"=>"l",
-            "М"=>"m",
-            "Н"=>"n",
-            "О"=>"o",
-            "П"=>"p",
-            "Р"=>"r",
-            "С"=>"s",
-            "Т"=>"t",
-            "У"=>"u",
-            "Ф"=>"f",
-            "Х"=>"h",
-            "Ц"=>"ts",
-            "Ч"=>"ch",
-            "Ш"=>"sh",
-            "Щ"=>"sch",
-            "Ъ"=>"",
-            "Ы"=>"i",
-            "Ь"=>"j",
-            "Э"=>"e",
-            "Ю"=>"yu",
-            "Я"=>"ya",
-            "а"=>"a",
-            "б"=>"b",
-            "в"=>"v",
-            "г"=>"g",
-            "д"=>"d",
-            "е"=>"e",
-            "ё"=>"e",
-            "ж"=>"j",
-            "з"=>"z",
-            "и"=>"i",
-            "й"=>"y",
-            "к"=>"k",
-            "л"=>"l",
-            "м"=>"m",
-            "н"=>"n",
-            "о"=>"o",
-            "п"=>"p",
-            "р"=>"r",
-            "с"=>"s",
-            "т"=>"t",
-            "у"=>"u",
-            "ф"=>"f",
-            "х"=>"h",
-            "ц"=>"ts",
-            "ч"=>"ch",
-            "ш"=>"sh",
-            "щ"=>"sch",
-            "ъ"=>"y",
-            "ы"=>"i",
-            "ь"=>"j",
-            "э"=>"e",
-            "ю"=>"yu",
-            "я"=>"ya",
-            " "=> "_",
-            "."=> "",
-            "/"=> "_",
-            ","=>"_",
-            "-"=>"_",
-            "("=>"",
-            ")"=>"",
-            "["=>"",
-            "]"=>"",
-            "="=>"_",
-            "+"=>"_",
-            "*"=>"",
-            "?"=>"",
-            "\""=>"",
-            "'"=>"",
-            "&"=>"",
-            "%"=>"",
-            "#"=>"",
-            "@"=>"",
-            "!"=>"",
-            ";"=>"",
-            "№"=>"",
-            "^"=>"",
-            ":"=>"",
-            "~"=>"",
-            "\\"=>""
-        );
-        return strtr($str,$tr);
-    }
-
-    /*function translit_sef($value)
-    {
-        $converter = array(
-            'а' => 'a',    'б' => 'b',    'в' => 'v',    'г' => 'g',    'д' => 'd',
-            'е' => 'e',    'ё' => 'e',    'ж' => 'zh',   'з' => 'z',    'и' => 'i',
-            'й' => 'y',    'к' => 'k',    'л' => 'l',    'м' => 'm',    'н' => 'n',
-            'о' => 'o',    'п' => 'p',    'р' => 'r',    'с' => 's',    'т' => 't',
-            'у' => 'u',    'ф' => 'f',    'х' => 'h',    'ц' => 'c',    'ч' => 'ch',
-            'ш' => 'sh',   'щ' => 'sch',  'ь' => '',     'ы' => 'y',    'ъ' => '',
-            'э' => 'e',    'ю' => 'yu',   'я' => 'ya',
-        );
-
-        $value = mb_strtolower($value);
-        $value = strtr($value, $converter);
-        $value = mb_ereg_replace('[^-0-9a-z]', '-', $value);
-        $value = mb_ereg_replace('[-]+', '-', $value);
-        $value = trim($value, '-');
-
-        return $value;
-    }*/
-
     /**
      * Display the specified StaticPages.
      *
@@ -250,14 +155,26 @@ class StaticPagesController extends AppBaseController
     public function show($id)
     {
         $staticPages = $this->staticPagesRepository->find($id);
-
+        $lang = $this->langModelRepository->all();
+        $templateStatus = DB::table('templates')->
+            join('page', 'page.template_id', '=', 'templates.id')->
+            where('page.id', $id)->
+            select('templates.name as t_name', 'page.status as p_status')->get();
+        $customFieldTranslate = DB::table('custom_field_translate')->
+            join('custom_field', 'custom_field_translate.custom_field_id', '=', 'custom_field.id')->
+            where('custom_field.page_id', $id)->get();
+        $titleTextSlug = DB::table('page_translate')->
+            where('page_translate.page_id', $id)->
+            select('page_translate.lang_id as pt_lang_id', 'page_translate.slug as pt_slug', 'page_translate.title as pt_title', 'page_translate.text as pt_text')->get();
         if (empty($staticPages)) {
             Flash::error('Static Pages not found');
 
             return redirect(route('staticPages.index'));
         }
 
-        return view('static_pages.show')->with('staticPages', $staticPages);
+        return view('static_pages.show')->with('staticPages', $staticPages)->
+            with('language', $lang)->with('templateStatus', $templateStatus)->with('customFieldTranslate', $customFieldTranslate)->
+            with('titleTextSlug', $titleTextSlug);
     }
 
     /**
@@ -316,7 +233,7 @@ class StaticPagesController extends AppBaseController
      */
     public function destroy($id)
     {
-        //$staticPages = $this->staticPagesRepository->find($id);
+        $staticPages = $this->staticPagesRepository->find($id);
 
         if (empty($staticPages)) {
             Flash::error('Static Pages not found');
@@ -324,22 +241,31 @@ class StaticPagesController extends AppBaseController
             return redirect(route('staticPages.index'));
         }
 
-        //Удаление записи из page
-        DB::table('custom_field_translate')->where('page_id', '=', $id)->delete();
+        try{
+            //Получение idшников из custom_fields по id
+            $ids = DB::table('custom_field')->where('page_id', '=', $id)->get('id');
 
-        //Удаление записи из custom_fields
-        DB::table('custom_field')->where('page_id', '=', $id)->delete();
+            //Удаление записей из custom_fields_translate по найденным idшникам
+            for($k=0;$k<count($ids);$k++){
+                foreach ($ids[$k] as $key => $part) {
+                    DB::table('custom_field_translate')->where('custom_field_id', '=', $part)->delete();
+                }
+            }
 
-        //Удаление записи из page_translate
-        DB::table('page_translate')->where('page_id', '=', $id)->delete();
+            //Удаление записи из custom_fields
+            DB::table('custom_field')->where('page_id', '=', $id)->delete();
 
-        //Удаление записи из page
-        DB::table('page')->where('id', '=', $id)->delete();
+            //Удаление записи из page_translate
+            DB::table('page_translate')->where('page_id', '=', $id)->delete();
 
+            //Удаление записи из page
+            DB::table('page')->where('id', '=', $id)->delete();
 
-
-        Flash::success('Static Pages deleted successfully.');
-
-        return redirect(route('staticPages.index'));
+            Flash::success('Page deleted successfully.');
+            return redirect(route('staticPages.index'));
+        }catch (\Exception $ex){
+            Flash::error('Unable to delete your page. '.$ex->getMessage());
+            return redirect(route('staticPages.index'));
+        }
     }
 }
