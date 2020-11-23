@@ -238,21 +238,21 @@ class StaticPagesController extends AppBaseController
             return redirect(route('staticPages.index'));
         }
 
-        $updatePages = DB::table('page')->where('id', $id)->update(['status' => $request->status]);
+        /*$updatePages = DB::table('page')->where('id', $id)->update(['status' => $request->status]);
         $updatePagesTranslate = DB::table('page_translate')->where('page_id', $id)->where('lang_id', $request->lang)->
-            update(['slug' => $request->link, 'title' => $request->title, 'text' => $request->text]);
+            update(['slug' => $request->link, 'title' => $request->title, 'text' => $request->text]);*/
 
         $getCustomFieldId = DB::table('custom_field')->where('page_id', $id)->get();
-        dd($request['CustomField']);
+        dd($getCustomFieldId);
 
-        for($k=0;$k<count($getCustomFieldId);$k++){
+        /*for($k=0;$k<count($getCustomFieldId);$k++){
             foreach ($input['CustomField'][$k] as $key => $part) {
                 if($part !== null){
                     $recordToCustomField = $this->customFieldRepository->create(array('page_id'=>$recordToPages->id, 'name' => $part));
                     $this->customFieldTranslateRepository->create(array('custom_field_id'=>$recordToCustomField->id, 'lang_id' => $request->lang, 'text'=>$key));
                 }
             }
-        }
+        }*/
 
 
         //$staticPages = $this->staticPagesRepository->update($request->all(), $id);

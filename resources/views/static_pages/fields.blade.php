@@ -29,6 +29,16 @@
                                                 {{$tTS->pt_text}}
                                             </textarea>
                                         </div>
+                                    @else
+                                        <div class="form-group">
+                                            <label for="title">Заголовок</label>
+                                            <input type="text" class="form-control" name="title" id="title" langid="{{$lang->id}}" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bigtext">Текст</label>
+                                            <textarea id="{{$lang->url}}" class="ckeditor" name="text" required>
+                                            </textarea>
+                                        </div>
                                     @endif
                                 @endforeach
                             @else
@@ -43,7 +53,7 @@
                             @endif
                             <div class="form-group">
                                 <label>Шаблон</label>
-                                <select class="form-control" name="template_id" required {{strpos(Request::route()->getName(), 'edit') ? 'readonly' : ''}}>
+                                <select class="form-control" required {{strpos(Request::route()->getName(), 'edit') ? 'disabled' : ''}}>
                                     <option value="">Выберите шаблон</option>
                                     @if(isset($templateStatus))
                                         @foreach($templates as $template)
@@ -55,6 +65,9 @@
                                         @endforeach
                                     @endif
                                 </select>
+                                @if(isset($templateStatus))
+                                    <input type="hidden" value="{{$templateStatus[0]->t_id}}" name="template_id">
+                                @endif
                             </div>
                             @if(isset($titleTextSlug))
                                 @foreach($titleTextSlug as $tTS)
@@ -62,6 +75,11 @@
                                         <div class="form-group">
                                             <label for="link">Ссылка</label>
                                             <input type="text" name="link" class="form-control" langid="{{$lang->id}}" value="{{$tTS->pt_slug}}" required>
+                                        </div>
+                                    @else
+                                        <div class="form-group">
+                                            <label for="link">Ссылка</label>
+                                            <input type="text" name="link" class="form-control" langid="{{$lang->id}}" required>
                                         </div>
                                     @endif
                                 @endforeach
