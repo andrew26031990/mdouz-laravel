@@ -2,30 +2,26 @@
     <table class="table" id="staticPages-table">
         <thead>
             <tr>
-                <th>View</th>
-                <th>Status</th>
                 @foreach($language as $lang)
                     <th>{{$lang->name}}</th>
                 @endforeach
+                <th>Опубликовано</th>
                 <th colspan="3">Action</th>
             </tr>
         </thead>
         <tbody>
         @foreach($staticPages as $staticPage)
             <tr>
-                <td>{{ $staticPage->view }}</td>
-                <td>{{ $staticPage->status }}</td>
                 @foreach($pageTranslate as $pageTrans)
                     @if($staticPage->id == $pageTrans->pt_page_id)
                         @foreach($language as $lang)
                             @if(($lang->id == $pageTrans->pt_lang_id))
                                 <th>{{$pageTrans->pt_title}}</th>
-{{--                            @else
-                                <th> </th>--}}
                             @endif
                         @endforeach
                     @endif
                 @endforeach
+                <td>{{ $staticPage->status == 1 ? 'Да' : 'Нет' }}</td>
                 <td>
                     {!! Form::open(['route' => ['staticPages.destroy', $staticPage->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
