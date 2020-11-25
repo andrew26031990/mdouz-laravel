@@ -1,11 +1,11 @@
-<li class="treeview menu-open" style="height: auto;">
+<li class="treeview" style="height: auto;">
     <a href="#">
         <i class="fa fa-wrench"></i><span>Геолокация</span>
         <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
     </a>
-    <ul class="treeview-menu" style="display: block;">
+    <ul class="treeview-menu">
         <li class="{{ Request::is('country*') ? 'active' : '' }}">
             <a href="{{ route('country.index') }}"><i class="fa fa-edit"></i><span>Country</span></a>
         </li>
@@ -39,7 +39,33 @@
 <li class="{{ Request::is('timelineEvent*') ? 'active' : '' }}">
     <a href="{{ route('timelineEvent.index') }}"><i class="fa fa-edit"></i><span>Timeline Event</span></a>
 </li>
+
 <li class="{{ Request::is('staticPages*') ? 'active' : '' }}">
     <a href="{{ route('staticPages.index') }}"><i class="fa fa-edit"></i><span>Static Pages</span></a>
+</li>
+
+<li class="treeview" style="height: auto;">
+    <a href="#">
+        <i class="fa fa-wrench"></i><span>Статьи</span>
+        <span class="pull-right-container">
+              <i class="fa fa-angle-left pull-right"></i>
+            </span>
+    </a>
+    <ul class="treeview-menu">
+        <li class="{{ Request::is('articleCategories*') ? 'active' : '' }}">
+            <a href="{{ route('articleCategories.index') }}"><i class="fa fa-edit"></i><span>Категории</span></a>
+        </li>
+        <li class="{{ Request::is('events*') ? 'active' : '' }}">
+            <a href="{{ route('events.index') }}"><i class="fa fa-edit"></i><span>Мероприятия</span></a>
+        </li>
+    </ul>
+</li>
+
+
+
+
+
+<li class="{{ Request::is('keyStorages*') ? 'active' : '' }}">
+    <a href="{{ route('keyStorages.index') }}"><i class="fa fa-edit"></i><span>Key Storages</span></a>
 </li>
 

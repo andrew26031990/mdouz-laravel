@@ -54,3 +54,10 @@ Route::get('getTemplateFields/{id}', [App\Http\Controllers\StaticPagesController
 Route::get('translit_url/{value}', [App\Http\Controllers\StaticPagesController::class,'translitUrl']);
 
 Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);
+
+
+Route::resource('articleCategories', App\Http\Controllers\ArticleCategoryController::class);
+
+Route::resource('events', App\Http\Controllers\EventsController::class);
+
+Route::resource('keyStorages', App\Http\Controllers\KeyStorageController::class);
