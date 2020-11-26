@@ -59,12 +59,12 @@ class Events extends Model
      */
     public static $rules = [
         'category_id' => 'nullable|integer',
-        'date_events' => 'required|integer',
+        //'date_events' => 'required|integer',
         'longitude' => 'required|string|max:255',
         'latitude' => 'required|string|max:255',
         'address' => 'required|string|max:255',
-        'created_at' => 'required|integer',
-        'updated_at' => 'required|integer'
+        //'created_at' => 'required|integer',
+        //'updated_at' => 'required|integer'
     ];
 
     /**

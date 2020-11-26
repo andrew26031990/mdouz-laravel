@@ -2,7 +2,7 @@
     <table class="table" id="events-table">
         <thead>
             <tr>
-                <th>Category Id</th>
+                <th>Category</th>
         <th>Date Events</th>
         <th>Longitude</th>
         <th>Latitude</th>
@@ -11,18 +11,18 @@
             </tr>
         </thead>
         <tbody>
-        @foreach($events as $events)
+        @foreach($events as $event)
             <tr>
-                <td>{{ $events->category_id }}</td>
-            <td>{{ $events->date_events }}</td>
-            <td>{{ $events->longitude }}</td>
-            <td>{{ $events->latitude }}</td>
-            <td>{{ $events->address }}</td>
+                <td>{{ $event->ac_name }}</td>
+            <td>{{ gmdate("Y-m-d\TH:i:s\Z", $event->date_events) }}</td>
+            <td>{{ $event->longitude }}</td>
+            <td>{{ $event->latitude }}</td>
+            <td>{{ $event->address }}</td>
                 <td>
-                    {!! Form::open(['route' => ['events.destroy', $events->id], 'method' => 'delete']) !!}
+                    {!! Form::open(['route' => ['events.destroy', $event->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        <a href="{{ route('events.show', [$events->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
-                        <a href="{{ route('events.edit', [$events->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
+                        {{--<a href="{{ route('events.show', [$event->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>--}}
+                        <a href="{{ route('events.edit', [$event->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
                         {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                     </div>
                     {!! Form::close() !!}
@@ -31,4 +31,11 @@
         @endforeach
         </tbody>
     </table>
+    <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="{{$events->previousPageUrl()}}">«</a></li>
+            <li><a href="{{$events->nextPageUrl()}}">»</a></li>
+            <li><a class="disabled">Total: {{$events->total()}}</a></li>
+        </ul>
+    </div>
 </div>

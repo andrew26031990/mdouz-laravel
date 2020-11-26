@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
-
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=b8898ad5-c549-4f72-aef9-9686e958fba4" type="text/javascript"></script>
     @yield('css')
 </head>
 

@@ -16,7 +16,7 @@ class KeyStorage extends Model
 {
 
     public $table = 'key_storage_item';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -24,6 +24,7 @@ class KeyStorage extends Model
 
 
     public $fillable = [
+        'key',
         'value',
         'comment'
     ];
@@ -45,11 +46,12 @@ class KeyStorage extends Model
      * @var array
      */
     public static $rules = [
+        'key' => 'required|string',
         'value' => 'required|string',
         'comment' => 'nullable|string',
         'updated_at' => 'nullable|integer',
         'created_at' => 'nullable|integer'
     ];
 
-    
+
 }

@@ -6,18 +6,22 @@ use App\Http\Requests\CreateEventsRequest;
 use App\Http\Requests\UpdateEventsRequest;
 use App\Repositories\EventsRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class EventsController extends AppBaseController
 {
     /** @var  EventsRepository */
     private $eventsRepository;
+    private $langModelRepository;
 
-    public function __construct(EventsRepository $eventsRepo)
+    public function __construct(EventsRepository $eventsRepo, LangModelRepository $langModelRepo)
     {
         $this->eventsRepository = $eventsRepo;
+        $this->langModelRepository = $langModelRepo;
     }
 
     /**
@@ -30,7 +34,8 @@ class EventsController extends AppBaseController
     public function index(Request $request)
     {
         $events = $this->eventsRepository->all();
-
+        $events = DB::table('events')->join('article_category', 'article_category.id', '=', 'events.category_id')->
+            select('article_category.name as ac_name', 'events.*')->paginate(10);
         return view('events.index')
             ->with('events', $events);
     }
@@ -42,7 +47,9 @@ class EventsController extends AppBaseController
      */
     public function create()
     {
-        return view('events.create');
+        $lang = $this->langModelRepository->all();
+        $categories = DB::table('article_category')->get();
+        return view('events.create')->with('language', $lang)->with('categories', $categories);
     }
 
     /**
@@ -54,6 +61,7 @@ class EventsController extends AppBaseController
      */
     public function store(CreateEventsRequest $request)
     {
+        dd($request);
         $input = $request->all();
 
         $events = $this->eventsRepository->create($input);
