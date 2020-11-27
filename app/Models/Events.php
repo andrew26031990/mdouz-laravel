@@ -35,7 +35,9 @@ class Events extends Model
         'date_events',
         'longitude',
         'latitude',
-        'address'
+        'address',
+        'created_at',
+        'updated_at'
     ];
 
     /**

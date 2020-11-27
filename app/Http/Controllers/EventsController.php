@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EventsPhotos;
 use App\Http\Requests\CreateEventsRequest;
 use App\Http\Requests\UpdateEventsRequest;
+use App\Repositories\ArticleCategoryRepository;
 use App\Repositories\EventsRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\LangModelRepository;
@@ -61,14 +63,58 @@ class EventsController extends AppBaseController
      */
     public function store(CreateEventsRequest $request)
     {
-        dd($request);
         $input = $request->all();
+        try{
 
-        $events = $this->eventsRepository->create($input);
+            $newEvent = $this->eventsRepository->create(array('category_id' => $request->article_category_id, 'date_events' => strtotime($request->date_event),
+                'longitude' => $request->longitude, 'latitude' => $request->latitude, 'address' => $request->address, 'created_at' => strtotime('today GMT'), 'updated_at' => strtotime('today GMT')));
+            if(isset($input['imageFile'][0]) && $input['imageFile'][0] !== null){
+                $this->fileUpload($request, $newEvent->id);
+            }
 
-        Flash::success('Events saved successfully.');
+            foreach ($input['EventsTimetable'] as $key => $value){ //lang
+                foreach($input['EventsTimetable'][$key] as $key2 => $value2){ //count
+                    foreach($input['EventsTimetable'][$key][$key2] as $key3 => $value3) { //field
+                        dd($key . ' ' . $key2 . ' ' . $key3. ' ' .$value3);
+                    }
+                }
+            }
 
-        return redirect(route('events.index'));
+            foreach ($input['Fields'] as $key => $value){ //lang
+                DB::table('events_translate')->insert(array('lang_id' => $key, 'events_id' => $newEvent->id, 'title' => $value['title'], 'description' => $value['description'], 'slug' => $value['link']));
+            }
+
+            Flash::success('Event saved successfully.');
+
+            return redirect(route('events.index'));
+        }catch (\Exception $ex){
+            Flash::error('Unable to save event'.$ex->getMessage());
+
+            return redirect(route('events.index'));
+        }
+
+        /*foreach ($input['EventsTimetable'] as $key => $value){ //lang
+            foreach($input['EventsTimetable'][$key] as $key2 => $value2){ //count
+                foreach($input['EventsTimetable'][$key][$key2] as $key3 => $value3) { //field
+                    dd($key . ' ' . $key2 . ' ' . $key3. ' ' .$value3);
+                }
+            }
+        }*/
+        //$events = $this->eventsRepository->create($input);
+
+
+    }
+
+    public function fileUpload(Request $request, $events_id)
+    {
+        $baseUrl = '/uploads/events_photos';
+        if ($request->hasfile('imageFile')) {
+            foreach ($request->file('imageFile') as $file) {
+                $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+                DB::table('events_photos')->insert(array('events_id' => $events_id, 'path' => $file->getClientOriginalName(), 'base_url' => $baseUrl));
+                $file->move(public_path().$baseUrl, $name);
+            }
+        }
     }
 
     /**

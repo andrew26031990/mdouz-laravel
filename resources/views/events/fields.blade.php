@@ -3,7 +3,7 @@
     <div class="nav-tabs-custom">
         <div class="form-group">
             <label>Категория</label>
-            <select class="form-control" name="parent"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
+            <select class="form-control" name="article_category_id"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
                 @foreach($categories as $cat)
                     <option value="{{$cat->id}}">{{$cat->name}}</option>
                 @endforeach
@@ -18,7 +18,7 @@
                 </div>
                 <div class="custom-file">
                     <label class="custom-file-label">Выберите одно или несколько изображений для события</label>
-                    <input type="file" name="imageFile[]" accept="image/*" id="images" class="custom-file-input" multiple required>
+                    <input type="file" name="imageFile[]" accept="image/*" id="images" class="custom-file-input" multiple>
                 </div>
             </div>
             <div class="form-group">
@@ -30,6 +30,83 @@
         </div>
         <div style="height: 500px;margin-bottom: 15px">
             <div id="map" style="width: 100%; height: 100%; padding: 0; margin: 0;"></div>
+        </div>
+
+        <ul class="nav nav-tabs">
+            @foreach($language as $lang)
+                <li class="{{$lang->url == "uz" ? "active" : ""}}"><a href="#{{$lang->url}}" data-toggle="tab" aria-expanded="false">{{$lang->name}}</a></li>
+            @endforeach
+        </ul>
+        <div class="tab-content">
+            @foreach($language as $lang)
+            <div class="dynamicform_wrapper">
+                <div class="panel panel-default" id="panel_parent_{{$lang->id}}">
+                    <div class="panel-heading">
+                        <i class="fa fa-envelope"></i> Timetable
+                        <button type="button" class="pull-right add-item btn btn-success btn-xs add_timetable" langid="{{$lang->id}}"><i class="fa fa-plus"></i> Add Timetable</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body container-items timetable_panel_{{$lang->id}}"><!-- widgetContainer -->
+                        <div class="item panel panel-default"><!-- widgetBody -->
+                            <div class="panel-heading">
+                                <span class="panel-title-address">Timetable: 1</span>
+                                <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus" langid="{{$lang->id}}"></i></button>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="panel-body">
+                                <div class="form-group field-eventstimetable-0-full_name">
+                                    <label class="control-label" for="eventstimetable-0-full_name">Полное название</label>
+                                    <input type="text" id="eventstimetable-0-full_name" class="form-control" name="EventsTimetable[{{$lang->id}}][0][full_name]" maxlength="255" aria-invalid="true">
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-date_to">
+                                            <label class="control-label" for="eventstimetable-0-date_to">Дата начала</label>
+                                            <input type="text" id="eventstimetable-0-date_to" class="form-control" name="EventsTimetable[{{$lang->id}}][0][date_to]">
+
+                                            <p class="help-block help-block-error"></p>
+                                        </div>                        </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-date_from">
+                                            <label class="control-label" for="eventstimetable-0-date_from">Дата окончания</label>
+                                            <input type="text" id="eventstimetable-0-date_from" class="form-control" name="EventsTimetable[{{$lang->id}}][0][date_from]" aria-invalid="true">
+                                        </div>
+                                    </div>
+                                </div><!-- end:row -->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-location">
+                                            <label class="control-label" for="eventstimetable-0-location">Локация</label>
+                                            <input type="text" id="eventstimetable-0-location" class="form-control" name="EventsTimetable[{{$lang->id}}][0][location]" maxlength="255">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-position">
+                                            <label class="control-label" for="eventstimetable-0-position">Место проведения</label>
+                                            <input type="text" id="eventstimetable-0-position" class="form-control" name="EventsTimetable[{{$lang->id}}][0][position]" maxlength="255">
+                                        </div>
+                                    </div>
+                                </div><!-- end:row -->
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-timetable_title">
+                                            <label class="control-label" for="eventstimetable-0-timetable_title">Timetable Title</label>
+                                            <input type="text" id="eventstimetable-0-timetable_title" class="form-control" name="EventsTimetable[{{$lang->id}}][0][timetable_title]" maxlength="255">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group field-eventstimetable-0-timetable_description">
+                                            <label class="control-label" for="eventstimetable-0-timetable_description">Timetable Description</label>
+                                            <input type="text" class="form-control" name="EventsTimetable[{{$lang->id}}][0][timetable_description]">
+                                        </div>
+                                    </div>
+                                </div><!-- end:row -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
         </div>
         <ul class="nav nav-tabs">
             @foreach($language as $lang)
@@ -48,79 +125,13 @@
                             <label for="link">Ссылка</label>
                             <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
                         </div>
-                    </div>
-                    <div class="dynamicform_wrapper">
-                        <div class="panel panel-default" id="panel_parent_{{$lang->id}}">
-                            <div class="panel-heading">
-                                <i class="fa fa-envelope"></i> Timetable
-                                <button type="button" class="pull-right add-item btn btn-success btn-xs add_timetable" langid="{{$lang->id}}"><i class="fa fa-plus"></i> Add Timetable</button>
-                                <div class="clearfix"></div>
-                            </div>
-                            <div class="panel-body container-items timetable_panel_{{$lang->id}}"><!-- widgetContainer -->
-                                <div class="item panel panel-default"><!-- widgetBody -->
-                                    <div class="panel-heading">
-                                        <span class="panel-title-address">Timetable: 1</span>
-                                        <button type="button" class="pull-right remove-item btn btn-danger btn-xs"><i class="fa fa-minus" langid="{{$lang->id}}"></i></button>
-                                        <div class="clearfix"></div>
-                                    </div>
-                                    <div class="panel-body">
-                                        <div class="form-group field-eventstimetable-0-full_name required">
-                                            <label class="control-label" for="eventstimetable-0-full_name">Полное название</label>
-                                            <input type="text" id="eventstimetable-0-full_name" class="form-control" name="EventsTimetable[0][full_name]" maxlength="255" aria-invalid="true">
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-date_to required">
-                                                    <label class="control-label" for="eventstimetable-0-date_to">Дата начала</label>
-                                                    <input type="text" id="eventstimetable-0-date_to" class="form-control" name="EventsTimetable[0][date_to]">
-
-                                                    <p class="help-block help-block-error"></p>
-                                                </div>                        </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-date_from required">
-                                                    <label class="control-label" for="eventstimetable-0-date_from">Дата окончания</label>
-                                                    <input type="text" id="eventstimetable-0-date_from" class="form-control" name="EventsTimetable[0][date_from]" aria-invalid="true">
-                                                </div>
-                                            </div>
-                                        </div><!-- end:row -->
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-location">
-                                                    <label class="control-label" for="eventstimetable-0-location">Локауия</label>
-                                                    <input type="text" id="eventstimetable-0-location" class="form-control" name="EventsTimetable[0][location]" maxlength="255">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-position required">
-                                                    <label class="control-label" for="eventstimetable-0-position">Место проведения</label>
-                                                    <input type="text" id="eventstimetable-0-position" class="form-control" name="EventsTimetable[0][position]" maxlength="255">
-
-                                                </div>
-                                            </div>
-                                        </div><!-- end:row -->
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-timetable_title required">
-                                                    <label class="control-label" for="eventstimetable-0-timetable_title">Timetable Title</label>
-                                                    <input type="text" id="eventstimetable-0-timetable_title" class="form-control" name="EventsTimetable[0][timetable_title]" maxlength="255">
-
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="form-group field-eventstimetable-0-timetable_description required">
-                                                    <label class="control-label" for="eventstimetable-0-timetable_description">Timetable Description</label>
-                                                    <input type="text" class="form-control" name="EventsTimetable[0][timetable_description]">
-                                                </div>
-                                            </div>
-                                        </div><!-- end:row -->
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group">
+                            <label for="link">Описание</label>
+                            <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" required></textarea>
+                            {{--<input type="text" >--}}
                         </div>
                     </div>
                 </div>
-
             @endforeach
             <!-- Submit Field -->
             <div class="box-footer">
@@ -251,6 +262,7 @@
             let i = $('i.fa-minus[langid=' + lang_id + ']').length;
             let timetable= $('.timetable_panel_' + lang_id).eq(0).clone();
             timetable.find('input').each(function() {
+                this.value = '';
                 this.name= this.name.replace('[0]', '['+ i +']');
             });
             timetable.insertAfter($('.timetable_panel_' + lang_id).last());
