@@ -1,0 +1,101 @@
+#page-preloader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.23);
+    z-index: 100500;
+    display: none;
+}
+
+#page-preloader .spinner {
+    width: 640px;
+    height: 360px;
+    position: absolute;
+    left: 35%;
+    top: 30%;
+    background: url('../../../img/loader2.gif') no-repeat 50% 50%;
+    margin: -16px 0 0 -16px;
+}
+
+
+.modal-dialog {
+    max-width: 800px;
+    margin: 30px auto;
+}
+
+
+
+.modal-body {
+    position:relative;
+    padding:0px;
+}
+.close {
+    position:absolute;
+    right:-30px;
+    top:0;
+    z-index:999;
+    font-size:2rem;
+    font-weight: normal;
+    color:#fff;
+    opacity:1;
+}
+
+.inactive-block{
+    z-index: 1000;
+    background-color: lightgrey;
+    opacity: 0.3;
+    pointer-events: none;
+}
+.find-filters-select {
+	max-width: 100%;
+}
+.find-filters-select option {
+	font-size: 14px;
+	padding-left: 10px;
+}
+
+
+.find-more-result .find-results{
+    width: 40%;
+}
+.find-more-result .find-card{
+    width: 60%;
+}
+
+@media only screen and (min-width:1366px){.find-more-result .container{max-width:100%}}
+
+.self-vacancy .full-width, .modal .full-width, .find-card .full-width{width: 100%;}
+
+.find-card-block-subtext {
+    margin-top: 25px;
+}
+
+.about-top .about-top-text p{
+    margin-bottom: 16px;
+}
+
+.find_more .find-more-block-title label{
+    font-weight: 500;
+}
+
+#order-modal .service-right-form {
+    max-width:100%;
+}
+
+.find .find-card .find-card-link.send{
+margin-right: 0px;
+}
+main {
+    background-image: url(/img/main-bg.png)!important;
+}
+
+.articles .article-content img {width:100%}
+
+.articles .article-content p{text-align: justify;}
+
+.articles-block-video {
+    width: 100%;
+    margin-bottom: 20px;
+}

@@ -34,7 +34,7 @@ class ArticleController extends AppBaseController
     public function index(Request $request)
     {
         $articles = DB::table('article')->join('article_category', 'article_category.id', '=', 'article.category_id')->
-        select('article_category.name as ac_name', 'article.*')->get();
+        select('article_category.name as ac_name', 'article.*')->paginate(10);
         return view('articles.index')
             ->with('articles', $articles);
     }
@@ -95,29 +95,6 @@ class ArticleController extends AppBaseController
         }
     }
 
-    public function fileUploadMain(Request $request, $article_id)
-    {
-        $baseUrl = '/uploads/articles/article_photo';
-        $file = $request->file('file');
-        $name = date('Ymdhis').'_'.$file->getClientOriginalName();
-        DB::table('article')->where('id', $article_id)->update(array('thumbnail_base_url' => $baseUrl, 'thumbnail_path' => $file->getClientOriginalName()));
-        $file->move(public_path().$baseUrl, $name);
-    }
-
-    public function fileUploadAttachment(Request $request, $article_id)
-    {
-        $baseUrl = '/uploads/articles/article_attachment';
-
-        foreach ($request->file('attachment') as $file) {
-            $name = date('Ymdhis').'_'.$file->getClientOriginalName();
-            $mimeType = $file->getClientMimeType();
-            $size = $file->getSize();
-            DB::table('article_attachment')->insert(array('article_id' => $article_id, 'path' => $name, 'base_url' => $baseUrl, 'base_url' => $baseUrl, 'type' => $mimeType, 'size' => $size, 'name'=>$name, 'created_at'=>strtotime('today GMT')));
-            $file->move(public_path().$baseUrl, $name);
-        }
-
-    }
-
     /**
      * Display the specified Article.
      *
@@ -149,13 +126,18 @@ class ArticleController extends AppBaseController
     {
         $article = $this->articleRepository->find($id);
 
+        $lang = $this->langModelRepository->all();
+        $categories = DB::table('article_category')->get();
+        $article_attachments = DB::table('article_attachment')->where('article_id', $article->id)->get();
+        $article_translate = DB::table('article_translate')->where('article_id', $article->id)->get();
         if (empty($article)) {
             Flash::error('Article not found');
 
             return redirect(route('articles.index'));
         }
 
-        return view('articles.edit')->with('article', $article);
+        return view('articles.edit')->with('article', $article)->with('language', $lang)->
+        with('categories', $categories)->with('article_attachments', $article_attachments)->with('article_translate', $article_translate);
     }
 
     /**
@@ -176,11 +158,37 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }
 
-        $article = $this->articleRepository->update($request->all(), $id);
+        try{
+            $updateArticle = $this->articleRepository->update(array('category_id' => $request->category_id,
+                'published_at' => strtotime('today GMT'),
+                'status' => $request->status, 'on_main' => $request->on_main,
+                'on_home' => $request->on_home,
+                'menu' => $request->menu,
+                'created_at' => strtotime('today GMT'),
+                'updated_at' => strtotime('today GMT')), $article->id);
 
-        Flash::success('Article updated successfully.');
+            //Add article image
+            if(isset($request['file'])){
+                $this->fileUploadMain($request, $article->id);
+            }
 
-        return redirect(route('articles.index'));
+            //Add article attachment
+            if(isset($request['attachment'])){
+                $this->fileUploadAttachment($request, $article->id);
+            }
+
+            //Add article translation fields
+            foreach($request['Fields'] as $key => $part){
+                DB::table('article_translate')->update(array('article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']), $key);
+            }
+
+            Flash::success('Статья обновлена');
+            return redirect(route('articles.index'));
+        }catch (\Exception $ex){
+            Flash::error('Невозможно обновить статью. Причина: '.$ex->getMessage());
+
+            return redirect(route('articles.index'));
+        }
     }
 
     /**
@@ -207,5 +215,33 @@ class ArticleController extends AppBaseController
         Flash::success('Article deleted successfully.');
 
         return redirect(route('articles.index'));
+    }
+
+    public function fileUploadMain(Request $request, $article_id)
+    {
+        $baseUrl = '/uploads/articles/article_photo';
+        $file = $request->file('file');
+        $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+        DB::table('article')->where('id', $article_id)->update(array('thumbnail_base_url' => $baseUrl, 'thumbnail_path' => $name));
+        $file->move(public_path().$baseUrl, $name);
+    }
+
+    public function fileUploadAttachment(Request $request, $article_id)
+    {
+        $baseUrl = '/uploads/articles/article_attachment';
+
+        foreach ($request->file('attachment') as $file) {
+            $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+            $mimeType = $file->getClientMimeType();
+            $size = $file->getSize();
+            DB::table('article_attachment')->insert(array('article_id' => $article_id, 'path' => $name, 'base_url' => $baseUrl, 'type' => $mimeType, 'size' => $size, 'name'=>$name, 'created_at'=>strtotime('today GMT')));
+            $file->move(public_path().$baseUrl, $name);
+        }
+    }
+
+    public function deleteAttachment(){
+        $attachment_id = $_GET['attachment_id'];
+        DB::table('article_attachment')->delete($attachment_id);
+        return 'success';
     }
 }

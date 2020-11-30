@@ -33,4 +33,11 @@
         @endforeach
         </tbody>
     </table>
+    <div class="box-footer clearfix">
+        <ul class="pagination pagination-sm no-margin pull-right">
+            <li><a href="{{$articles->previousPageUrl()}}">«</a></li>
+            <li><a href="{{$articles->nextPageUrl()}}">»</a></li>
+            <li><a class="disabled">Total: {{$articles->total()}}</a></li>
+        </ul>
+    </div>
 </div>

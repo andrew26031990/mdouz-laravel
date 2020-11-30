@@ -52,6 +52,7 @@ Route::resource('country', App\Http\Controllers\CountryModelController::class);
 
 Route::get('getTemplateFields/{id}', [App\Http\Controllers\StaticPagesController::class,'getTemplateFields']);
 Route::get('translit_url/{value}', [App\Http\Controllers\StaticPagesController::class,'translitUrl']);
+Route::get('deleteAttachment/{attachment_id}', [App\Http\Controllers\ArticleController::class,'deleteAttachment']);
 
 Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);
 

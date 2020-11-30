@@ -38,7 +38,9 @@
                 @endif
             </select>
         </div>
-        <input type="hidden" name="name" value="{{$articleCategory->name}}">
+        @if(isset($articleCategory))
+            <input type="hidden" name="name" value="{{$articleCategory->name}}">
+        @endif
         <ul class="nav nav-tabs">
             @foreach($language as $lang)
                 <li class="{{$lang->url == "uz" ? "active" : ""}}"><a href="#{{$lang->url}}" data-toggle="tab" aria-expanded="false">{{$lang->name}}</a></li>

@@ -91,7 +91,7 @@
         @endforeach
         <!-- Submit Field -->
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Создать статью</button>
             </div>
         </div>
         <!-- /.tab-content -->

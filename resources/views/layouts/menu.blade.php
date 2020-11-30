@@ -52,24 +52,22 @@
             </span>
     </a>
     <ul class="treeview-menu">
+        <li class="{{ Request::is('articles*') ? 'active' : '' }}">
+            <a href="{{ route('articles.index') }}"><i class="fa fa-edit"></i><span>Articles</span></a>
+        </li>
+
         <li class="{{ Request::is('articleCategories*') ? 'active' : '' }}">
             <a href="{{ route('articleCategories.index') }}"><i class="fa fa-edit"></i><span>Категории</span></a>
         </li>
-        <li class="{{ Request::is('events*') ? 'active' : '' }}">
+
+        {{--<li class="{{ Request::is('events*') ? 'active' : '' }}">
             <a href="{{ route('events.index') }}"><i class="fa fa-edit"></i><span>Мероприятия</span></a>
-        </li>
+        </li>--}}
     </ul>
 </li>
-
-
-
-
 
 <li class="{{ Request::is('keyStorages*') ? 'active' : '' }}">
     <a href="{{ route('keyStorages.index') }}"><i class="fa fa-edit"></i><span>Key Storages</span></a>
 </li>
 
-<li class="{{ Request::is('articles*') ? 'active' : '' }}">
-    <a href="{{ route('articles.index') }}"><i class="fa fa-edit"></i><span>Articles</span></a>
-</li>
 

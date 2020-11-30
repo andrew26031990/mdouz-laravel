@@ -11,9 +11,9 @@
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
-                   {!! Form::model($article, ['route' => ['articles.update', $article->id], 'method' => 'patch']) !!}
+                   {!! Form::model($article, ['route' => ['articles.update', $article->id], 'method' => 'patch',  'files' =>true, 'enctype'=>'multipart/form-data']) !!}
 
-                        @include('articles.fields')
+                        @include('articles.fields_edit')
 
                    {!! Form::close() !!}
                </div>
