@@ -35,11 +35,11 @@ class Article extends Model
     use HasFactory;
 
     public $table = 'article';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    public $timestamps = false;
 
 
     public $fillable = [
@@ -54,7 +54,9 @@ class Article extends Model
         'created_by',
         'updated_by',
         'published_at',
-        'url'
+        'url',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -94,7 +96,7 @@ class Article extends Model
         'menu' => 'required',
         'created_by' => 'nullable|integer',
         'updated_by' => 'nullable|integer',
-        'published_at' => 'nullable|integer',
+        'published_at' => 'nullable',
         'created_at' => 'nullable|integer',
         'updated_at' => 'nullable|integer',
         'url' => 'nullable|string|max:255'

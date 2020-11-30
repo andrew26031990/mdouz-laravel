@@ -6,6 +6,7 @@ use App\Http\Requests\CreateArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Repositories\ArticleRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Flash;
 use Illuminate\Support\Facades\DB;
@@ -15,10 +16,12 @@ class ArticleController extends AppBaseController
 {
     /** @var  ArticleRepository */
     private $articleRepository;
+    private $langModelRepository;
 
-    public function __construct(ArticleRepository $articleRepo)
+    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo)
     {
         $this->articleRepository = $articleRepo;
+        $this->langModelRepository = $langModelRepo;
     }
 
     /**
@@ -43,7 +46,9 @@ class ArticleController extends AppBaseController
      */
     public function create()
     {
-        return view('articles.create');
+        $lang = $this->langModelRepository->all();
+        $categories = DB::table('article_category')->get();
+        return view('articles.create')->with('language', $lang)->with('categories', $categories);
     }
 
     /**
@@ -56,12 +61,61 @@ class ArticleController extends AppBaseController
     public function store(CreateArticleRequest $request)
     {
         $input = $request->all();
+        try{
+            //Add new article
+            $newArticle = $this->articleRepository->create(array('category_id' => $request->category_id,
+                'published_at' => strtotime('today GMT'),
+                'status' => $request->status, 'on_main' => $request->on_main,
+                'on_home' => $request->on_home,
+                'menu' => $request->menu,
+                'created_at' => strtotime('today GMT'),
+                'updated_at' => strtotime('today GMT')));
 
-        $article = $this->articleRepository->create($input);
+            //Add article image
+            if(isset($request['file'])){
+                $this->fileUploadMain($request, $newArticle->id);
+            }
 
-        Flash::success('Article saved successfully.');
+            //Add article attachment
+            if(isset($request['attachment'])){
+                $this->fileUploadAttachment($request, $newArticle->id);
+            }
 
-        return redirect(route('articles.index'));
+            //Add article translation fields
+            foreach($input['Fields'] as $key => $part){
+                DB::table('article_translate')->insert(array('article_id'=>$newArticle->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']));
+            }
+
+            Flash::success('Article saved successfully.');
+
+            return redirect(route('articles.index'));
+        }catch (\Exception $ex){
+            Flash::error('Unable to save article. Reason: '.$ex->getMessage());
+            return redirect(route('articles.index'));
+        }
+    }
+
+    public function fileUploadMain(Request $request, $article_id)
+    {
+        $baseUrl = '/uploads/articles/article_photo';
+        $file = $request->file('file');
+        $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+        DB::table('article')->where('id', $article_id)->update(array('thumbnail_base_url' => $baseUrl, 'thumbnail_path' => $file->getClientOriginalName()));
+        $file->move(public_path().$baseUrl, $name);
+    }
+
+    public function fileUploadAttachment(Request $request, $article_id)
+    {
+        $baseUrl = '/uploads/articles/article_attachment';
+
+        foreach ($request->file('attachment') as $file) {
+            $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+            $mimeType = $file->getClientMimeType();
+            $size = $file->getSize();
+            DB::table('article_attachment')->insert(array('article_id' => $article_id, 'path' => $name, 'base_url' => $baseUrl, 'base_url' => $baseUrl, 'type' => $mimeType, 'size' => $size, 'name'=>$name, 'created_at'=>strtotime('today GMT')));
+            $file->move(public_path().$baseUrl, $name);
+        }
+
     }
 
     /**
