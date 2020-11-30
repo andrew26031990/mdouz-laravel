@@ -61,3 +61,6 @@ Route::resource('articleCategories', App\Http\Controllers\ArticleCategoryControl
 Route::resource('events', App\Http\Controllers\EventsController::class);
 
 Route::resource('keyStorages', App\Http\Controllers\KeyStorageController::class);
+
+
+Route::resource('articles', App\Http\Controllers\ArticleController::class);
