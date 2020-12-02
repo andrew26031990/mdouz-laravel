@@ -3,45 +3,40 @@
 namespace App\Http\Controllers\Site;
 
 use App\Http\Controllers\Controller;
-use App\Repositories\ArticleCategoryRepository;
-use App\Repositories\ArticleCategoryTranslateRepository;
+use App\Repositories\ArticleRepository;
 use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Lavary\Menu\Menu as LavMenu;
-class SiteController extends Controller
+
+class ArticlesView extends Controller
 {
+    private $articleRepository;
     private $langModelRepository;
 
-    public function __construct(LangModelRepository $langModelRepo)
+    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo)
     {
+        $this->articleRepository = $articleRepo;
         $this->langModelRepository = $langModelRepo;
     }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $lang = $this->langModelRepository->all();
         $lang_selected = DB::table('lang')->where('lang.url', app()->getLocale())->get();
+        dd($request->segment(2). ' '.$lang_selected[0]->id);
         //Menu
         $arrMenu = DB::table('article_category')->
-            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
-            join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_selected[0]->id)->
-            where('article_category.menu', 1)->select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title')->get();
+        join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+        join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_selected[0]->id)->
+        where('article_category.menu', 1)->select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title')->get();
         $menu = $this->buildMenu($arrMenu);
         //Menu
-
-        //Latest news
-        $latest_news = DB::table('article')->
-            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
-            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_selected[0]->id)->
-            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description')->orderBy('article.id', 'desc')->limit(6)->get();
-        //dd($latest_news);
-        //Latest news
-        return view('site.sliders.sliders', ['menu' => $menu])->with('language', $lang)->with('latest_news', $latest_news);
+        return view('site.main', ['menu' => $menu])->with('language', $lang);
     }
 
     public function buildMenu ($arrMenu){

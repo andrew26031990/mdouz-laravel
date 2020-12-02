@@ -40,6 +40,8 @@
         </div>
         @if(isset($articleCategory))
             <input type="hidden" name="name" value="{{$articleCategory->name}}">
+        @else
+            <input type="hidden" name="name" value="">
         @endif
         <ul class="nav nav-tabs">
             @foreach($language as $lang)

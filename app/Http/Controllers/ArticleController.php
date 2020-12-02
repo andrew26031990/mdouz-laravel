@@ -242,6 +242,7 @@ class ArticleController extends AppBaseController
     public function deleteAttachment(){
         $attachment_id = $_GET['attachment_id'];
         DB::table('article_attachment')->delete($attachment_id);
+        //unlink(url('/public/uploads/articles/article_attachment/'))
         return 'success';
     }
 }

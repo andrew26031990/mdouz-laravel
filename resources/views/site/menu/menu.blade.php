@@ -3,7 +3,7 @@
         <a class="header-menu-link" href="{{ $item->url() }}">{{ $item->title }}</a>
         @if($item->hasChildren())
             <ul class="header-submenu">
-                @include(env('THEME').'site.menu', ['items'=>$item->children()])
+                @include(env('THEME').'site.menu.menu', ['items'=>$item->children()])
             </ul>
         @endif
     </li>

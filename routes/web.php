@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Session;
 
 Route::group(['prefix' => '{locale}', 'where' => ['locale' => '[a-zA-Z]{2}'], 'middleware' => 'setlocale'], function() {
     Route::get('/', 'App\Http\Controllers\Site\SiteController@index')->name('mdo');
+    Route::get('/{articles}', 'App\Http\Controllers\Site\ArticlesView@index')->name('articles_view');
 });
 
 Route::get('/', function () {
