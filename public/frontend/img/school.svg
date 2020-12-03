@@ -1,0 +1,22 @@
+<svg id="school" xmlns="http://www.w3.org/2000/svg" width="90" height="90" viewBox="0 0 90 90">
+  <g id="Group_24" data-name="Group 24" transform="translate(52.522 23.613)">
+    <g id="Group_23" data-name="Group 23">
+      <path id="Path_21" data-name="Path 21" d="M324.415,134.333H298.794l15.732,18.75h21.745v-3.912Z" transform="translate(-298.794 -134.333)" fill="#fff"/>
+    </g>
+  </g>
+  <g id="Group_26" data-name="Group 26" transform="translate(0 23.613)">
+    <g id="Group_25" data-name="Group 25">
+      <path id="Path_22" data-name="Path 22" d="M11.857,134.333,0,149.171v3.912H21.746l15.732-18.75Z" transform="translate(0 -134.333)" fill="#fff"/>
+    </g>
+  </g>
+  <g id="Group_28" data-name="Group 28">
+    <g id="Group_27" data-name="Group 27">
+      <path id="Path_23" data-name="Path 23" d="M85.137,84.727V47.637H65.8L47.637,25.995V14.648H62.865V0h-20.5V25.995L24.2,47.637H4.863v37.09H0V90H90V84.727ZM14.121,56.25h5.273v7.5H14.121Zm5.409,22.5H14.256v-7.5H19.53ZM45,36.738A8.262,8.262,0,1,1,36.738,45,8.271,8.271,0,0,1,45,36.738ZM58.887,84.727H53.613V66.387H47.637v18.34H42.363V66.387H36.387v18.34H31.113V61.113H58.887ZM75.744,78.75H70.47v-7.5h5.273Zm.135-15H70.605v-7.5h5.273Z" fill="#fff"/>
+    </g>
+  </g>
+  <g id="Group_30" data-name="Group 30" transform="translate(42.012 42.012)">
+    <g id="Group_29" data-name="Group 29">
+      <path id="Path_24" data-name="Path 24" d="M241.988,239a2.988,2.988,0,1,0,2.988,2.988A2.992,2.992,0,0,0,241.988,239Z" transform="translate(-239 -239)" fill="#fff"/>
+    </g>
+  </g>
+</svg>

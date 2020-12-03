@@ -179,7 +179,7 @@ class ArticleController extends AppBaseController
 
             //Add article translation fields
             foreach($request['Fields'] as $key => $part){
-                DB::table('article_translate')->update(array('article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']), $key);
+                DB::table('article_translate')->updateOrInsert(array('article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']), array('lang_id'=>$key));
             }
 
             Flash::success('Статья обновлена');

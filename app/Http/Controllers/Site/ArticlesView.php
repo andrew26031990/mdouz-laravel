@@ -12,11 +12,13 @@ class ArticlesView extends Controller
 {
     private $articleRepository;
     private $langModelRepository;
+    private $siteController;
 
-    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo)
+    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo, SiteController $siteController)
     {
         $this->articleRepository = $articleRepo;
         $this->langModelRepository = $langModelRepo;
+        $this->siteController = $siteController;
     }
 
     /**
@@ -28,31 +30,21 @@ class ArticlesView extends Controller
     {
         $lang = $this->langModelRepository->all();
         $lang_selected = DB::table('lang')->where('lang.url', app()->getLocale())->get();
-        dd($request->segment(2). ' '.$lang_selected[0]->id);
-        //Menu
-        $arrMenu = DB::table('article_category')->
-        join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
-        join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_selected[0]->id)->
-        where('article_category.menu', 1)->select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title')->get();
-        $menu = $this->buildMenu($arrMenu);
-        //Menu
-        return view('site.main', ['menu' => $menu])->with('language', $lang);
-    }
-
-    public function buildMenu ($arrMenu){
-        $mBuilder = (new \Lavary\Menu\Menu)->make('MyNav', function($m) use ($arrMenu){
-            foreach($arrMenu as $item){
-                if($item->parent_id === null){
-                    $m->add($item->title, $item->id)->id($item->id);
-                }
-                else {
-                    if($m->find($item->parent_id)){
-                        $m->find($item->parent_id)->add($item->title, $item->id)->id($item->id);
-                    }
-                }
-            }
-        });
-        return $mBuilder;
+        $category = DB::table('article_category_translate')->where('article_category_translate.lang_id', $lang_selected[0]->id)->
+            where('article_category_translate.slug' ,$request->segment(2))->get();
+        $site_controller = $this->siteController;
+        $menu = $site_controller->buildMenu($lang_selected[0]->id);
+        $latest_news = $site_controller->latestNews($lang_selected[0]->id);
+        $articles_from_category = DB::table('article_category_translate')->
+            join('article_category', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+            join('article', 'article_category.id', '=', 'article.category_id')->
+            join('article_translate', 'article.id', '=', 'article_translate.article_id')->
+            where('article_category_translate.slug', $request->segment(2))->
+            where('article_translate.lang_id', $lang_selected[0]->id)->
+            distinct()->paginate(9, ['article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
+        return view('site.articles.articles', ['menu' => $menu])->with('language', $lang)->
+            with('latest_news', $latest_news)->with('articles_from_category', $articles_from_category)->
+            with('socials', $this->siteController->getSocials())->with('category', $category);
     }
 
     /**

@@ -84,7 +84,7 @@
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     @if(isset($article_translate) && count($article_translate) > 0)
                         @foreach($article_translate as $article_trans)
-                            @if($article_trans->lang_id == $lang->id)
+                            @if(isset($article_trans->lang_id) && $article_trans->lang_id == $lang->id)
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label for="title">Название статьи</label>
@@ -120,12 +120,12 @@
                             <div class="form-group">
                                 <label for="link">Краткое описание</label>
                                 <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
-                                {{--<input type="text" >--}}
+                                <input type="text" >
                             </div>
                             <div class="form-group">
                                 <label for="link">Текст</label>
                                 <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
-                                {{--<input type="text" >--}}
+                                <input type="text" >
                             </div>
                         </div>
                     @endif

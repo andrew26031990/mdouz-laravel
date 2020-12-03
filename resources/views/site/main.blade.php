@@ -39,16 +39,16 @@
                     <a id="specialButton" href="#" style="z-index: 999">
                         <img src="{{url('frontend/icons/eye_icon.png')}}" width="30px" alt="ВЕРСИЯ ДЛЯ СЛАБОВИДЯЩИХ" title="ВЕРСИЯ ДЛЯ СЛАБОВИДЯЩИХ"/>
                     </a>
-                    <a id="specialButton" href="#" style="z-index: 999">
+                    <a id="specialButton" href="{{$socials[1]->link}}" style="z-index: 999">
                         <img src="{{url('frontend/icons/facebook_icon.png')}}" width="30px"/>
                     </a>
-                    <a id="specialButton" href="#" style="z-index: 999">
+                    <a id="specialButton" href="{{$socials[3]->link}}" style="z-index: 999">
                         <img src="{{url('frontend/icons/instagram_icon.png')}}" width="30px"/>
                     </a>
-                    <a id="specialButton" href="#" style="z-index: 999">
+                    <a id="specialButton" href="{{$socials[0]->link}}" style="z-index: 999">
                         <img src="{{url('frontend/icons/telegram_icon.png')}}" width="30px"/>
                     </a>
-                    <a id="specialButton" href="#" style="z-index: 999">
+                    <a id="specialButton" href="{{$socials[2]->link}}" style="z-index: 999">
                         <img src="{{url('frontend/icons/youtube_icon.png')}}" width="30px"/>
                     </a>
                 </div>
@@ -56,13 +56,26 @@
                 <div class="header-top-right">
                     <ul class="header-lang">
                         @foreach($language as $lang)
-                            <li><a class="{{$lang->id == 3 ? 'active' : ''}}" lang_url="{{$lang->url}}"
-                                   href="{{$lang->url}}">{{$lang->name}}</a></li>
+                            <li>
+                                <a class="{{$lang->url == app()->getLocale() ? 'active' : ''}}" lang_url="{{$lang->url}}" href="{{url($lang->url.'/'.$lang->slug)}}">
+                                    {{$lang->name}}
+                                </a>
+                            </li>
                         @endforeach
                     </ul>
                     <form action="http://mdo.uz/ru/article" method="GET" class="header-search">
                         <p class="header-search-field-wrap">
-                            <input type="text" name="s" class="header-search-field">
+                            {{--<input type="text" name="s" class="header-search-field">--}}
+                            <div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;https://yandex.ru/search/site/&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;Поиск по сайту mdo.uz&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_self&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2435748,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
+                                <form action="https://yandex.ru/search/site/" method="get" target="_self" accept-charset="utf-8">
+                                    <input type="hidden" name="searchid" value="2435748"/>
+                                    <input type="hidden" name="l10n" value="ru"/>
+                                    <input type="hidden" name="reqenc" value=""/>
+                                    <input type="search" class="header-search-field" name="text" value=""/>
+                                    <input type="submit" value="Найти"/>
+                                </form>
+                            </div>
+                            <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }</style><script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1){e.className+=' ya-page_js_yes';}s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Form.init()})})(window,document,'yandex_site_callbacks');</script>
                         </p>
                         <button type="button" class="header-search-btn" aria-label="search"><img
                                 src="{{url('frontend/img/seach.png')}}" alt="">
@@ -90,7 +103,7 @@
     <div class="header-middle">
         <div class="container">
             <div class="header-middle-content">
-                <a href="http://mdo.uz/" class="header-logo">
+                <a href="/" class="header-logo">
                     <img src="{{url('frontend/img/ru-logo.png')}}" alt="logo">
                 </a>
                 <nav class="header-nav">
@@ -120,10 +133,21 @@
                 <div class="dao-search-block">
                     <a href="http://old.mdo.uz/" class="dao-search-block-link">статистика</a>
                     <div style="width: 100%;height: 40%;border-bottom: 1px solid white;">
-                        dsfsfsdf
+                        <div style="width: 63%; position: relative;">
+                            <div>
+                                <img style="margin-top: 5px" src="{{url('frontend/img/baby-boy.svg')}}" />
+                            </div>
+                            <div style="width: 100%">
+                                <div style="float: right;background-color: white;">sdfsdfssdfsfsdf</div>
+                                <div style="float: right;background-color: white;">sdfsdfssdfsfsdf</div>
+                            </div>
+                        </div>
                     </div>
-                    <div style="width: 100%;height: 60%;">
-                        sdsdfsdfsd
+                    <div style="width: 100%;height: 60%;border-bottom: 1px solid white;">
+                        <div style="width: 63%; position: relative;">
+                            <img style="margin-top: 5px" src="{{url('frontend/img/school.svg')}}" />
+                            <div style="float: right">sdfsdfssdfsfsdf</div>
+                        </div>
                     </div>
                 </div>
                 <div class="dao-search-block">
@@ -314,6 +338,7 @@
         let pgwSlider = $('.pgwSlider').pgwSlider({
             'listPosition': 'left',
             'verticalCentering': true,
+            'adaptiveHeight': true
         });
         pgwSlider.stopSlide();
     });

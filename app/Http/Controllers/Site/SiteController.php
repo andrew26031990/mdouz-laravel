@@ -27,32 +27,34 @@ class SiteController extends Controller
         $lang = $this->langModelRepository->all();
         $lang_selected = DB::table('lang')->where('lang.url', app()->getLocale())->get();
         //Menu
-        $arrMenu = DB::table('article_category')->
-            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
-            join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_selected[0]->id)->
-            where('article_category.menu', 1)->select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title')->get();
-        $menu = $this->buildMenu($arrMenu);
+        $menu = $this->buildMenu($lang_selected[0]->id);
         //Menu
-
         //Latest news
-        $latest_news = DB::table('article')->
-            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
-            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_selected[0]->id)->
-            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description')->orderBy('article.id', 'desc')->limit(6)->get();
-        //dd($latest_news);
+        $latest_news = $this->latestNews($lang_selected[0]->id);
         //Latest news
-        return view('site.sliders.sliders', ['menu' => $menu])->with('language', $lang)->with('latest_news', $latest_news);
+        //Socials
+        $socials = $this->getSocials();
+        //Socials
+        return view('site.sliders.sliders', ['menu' => $menu])->with('language', $lang)->with('latest_news', $latest_news)->with('socials', $socials);
     }
 
-    public function buildMenu ($arrMenu){
+    public function buildMenu ($lang_id){
+        $arrMenu = DB::table('article_category')->
+        join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+        join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_id)->
+        where('article_category.menu', 1)->
+        select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title', 'article_category_translate.slug as slug')->get();
+
         $mBuilder = (new \Lavary\Menu\Menu)->make('MyNav', function($m) use ($arrMenu){
+            $parent = '';
             foreach($arrMenu as $item){
                 if($item->parent_id === null){
-                    $m->add($item->title, $item->id)->id($item->id);
+                    $m->add($item->title, app()->getLocale().'/'.$item->slug)->id($item->id);
+                    $parent = $item->slug;
                 }
                 else {
                     if($m->find($item->parent_id)){
-                        $m->find($item->parent_id)->add($item->title, $item->id)->id($item->id);
+                        $m->find($item->parent_id)->add($item->title, app()->getLocale().'/'.$item->slug)->id($item->id);
                     }
                 }
             }
@@ -60,6 +62,16 @@ class SiteController extends Controller
         return $mBuilder;
     }
 
+    public function latestNews ($lang_id){
+        return $latest_news = DB::table('article')->
+            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
+            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->
+            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description')->orderBy('article.id', 'desc')->limit(6)->get();
+    }
+
+    public function getSocials(){
+        return DB::table('social')->get();
+    }
     /**
      * Show the form for creating a new resource.
      *
