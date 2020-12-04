@@ -28,6 +28,7 @@ Route::group(['prefix' => '{locale}', 'where' => ['locale' => '[a-zA-Z]{2}'], 'm
     Route::get('/', 'App\Http\Controllers\Site\SiteController@index')->name('mdo');
     Route::get('/{articles}', 'App\Http\Controllers\Site\ArticlesView@index')->name('articles_view');
     Route::get('/{articles}/{article}', 'App\Http\Controllers\Site\ArticleView@index')->name('article_view');
+
 });
 
 Route::get('/', function () {
@@ -35,37 +36,21 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
-
+Route::get('search', 'App\Http\Controllers\Site\SiteController@search')->name('search');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
 Route::resource('timelineEvent', App\Http\Controllers\TimelineEventModelController::class);
-
 Route::resource('user', App\Http\Controllers\UserModelController::class);
-
 Route::resource('articleAttachmentModels', App\Http\Controllers\ArticleAttachmentController::class);
-
 Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
-
 Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
-
 Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
-
 Route::resource('articleCategoryModels', App\Http\Controllers\ArticleCategoryModelController::class);
-
 Route::resource('articleModels', App\Http\Controllers\ArticleModelController::class);
-
 Route::resource('lang', App\Http\Controllers\LangModelController::class);
-
 Route::resource('social', App\Http\Controllers\SocialModelController::class);
-
 Route::resource('currency', App\Http\Controllers\CurrencyModelController::class);
-
 Route::resource('city', App\Http\Controllers\CityModelController::class);
-
 Route::resource('region', App\Http\Controllers\RegionController::class);
-
 Route::resource('country', App\Http\Controllers\CountryModelController::class);
 
 Route::get('getTemplateFields/{id}', [App\Http\Controllers\StaticPagesController::class,'getTemplateFields']);
@@ -73,13 +58,7 @@ Route::get('translit_url/{value}', [App\Http\Controllers\StaticPagesController::
 Route::get('deleteAttachment/{attachment_id}', [App\Http\Controllers\ArticleController::class,'deleteAttachment']);
 
 Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);
-
-
 Route::resource('articleCategories', App\Http\Controllers\ArticleCategoryController::class);
-
 Route::resource('events', App\Http\Controllers\EventsController::class);
-
 Route::resource('keyStorages', App\Http\Controllers\KeyStorageController::class);
-
-
 Route::resource('articles', App\Http\Controllers\ArticleController::class);

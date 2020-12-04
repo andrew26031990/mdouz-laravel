@@ -63,23 +63,11 @@
                             </li>
                         @endforeach
                     </ul>
-                    <form action="http://mdo.uz/ru/article" method="GET" class="header-search">
-                        <p class="header-search-field-wrap">
-                            {{--<input type="text" name="s" class="header-search-field">--}}
-                            <div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;https://yandex.ru/search/site/&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;Поиск по сайту mdo.uz&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_self&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2435748,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
-                                <form action="https://yandex.ru/search/site/" method="get" target="_self" accept-charset="utf-8">
-                                    <input type="hidden" name="searchid" value="2435748"/>
-                                    <input type="hidden" name="l10n" value="ru"/>
-                                    <input type="hidden" name="reqenc" value=""/>
-                                    <input type="search" class="header-search-field" name="text" value=""/>
-                                    <input type="submit" value="Найти"/>
-                                </form>
-                            </div>
-                            <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }</style><script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1){e.className+=' ya-page_js_yes';}s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Form.init()})})(window,document,'yandex_site_callbacks');</script>
+                    <form action="{{route('search')}}" method="GET" class="header-search">
+                        <p class="header-search-field-wrap show">
+                            <input type="text" name="search_field" class="header-search-field">
                         </p>
-                        <button type="button" class="header-search-btn" aria-label="search"><img
-                                src="{{url('frontend/img/seach.png')}}" alt="">
-                        </button>
+                        <button type="button" class="header-search-btn" aria-label="search"><img src="/img/icons/seach.png" alt=""></button>
                     </form>
                     <div class="burger d-flex d-lg-none">
                         <input type="checkbox" id="burgerBtn" class="burger-checkbox d-none">
@@ -239,7 +227,6 @@
                             <img src="{{url('frontend/img/phone-1.png')}}"
                                  alt="Телефон доверия">
                             +998 (71) 239-33-79 </a>
-                        {{url('/')}}
                         <p class="sidebar-contacts-callback-text">Обратная связь</p>
                         <a href="http://support.mdo.uz/" class="sidebar-contacts-callback-btn">
                             <img src="{{url('frontend/img/speach.png')}}"
@@ -252,26 +239,33 @@
 
                 @yield('content')
                 <div class="ministries">
-                    <a href="https://president.uz/" target="_blank" class="ministries-block">
-                        <img src="{{url('frontend/img/gerb-small.png')}}"
-                             alt="Официальный Веб-сайт Президента Республики Узбекистан">
-                        <p>Официальный Веб-сайт Президента Республики Узбекистан</p>
-                    </a>
-                    <a href="http://constitution.uz/" target="_blank" class="ministries-block">
-                        <img src="{{url('frontend/img/const_uz.png')}}"
-                             alt="Конституция Республики Узбекистан">
-                        <p>Конституция Республики Узбекистан</p>
-                    </a>
-                    <a href="https://my.gov.uz/" target="_blank" class="ministries-block">
-                        <img src="{{url('frontend/img/my_gov_uz.png')}}"
-                             alt="Единый портал интерактивных государственных услуг">
-                        <p>Единый портал интерактивных государственных услуг</p>
-                    </a>
-                    <a href="https://data.gov.uz/" target="_blank" class="ministries-block">
-                        <img src="{{url('frontend/img/data_gov_uz.png')}}"
-                             alt="Портал открытых данных Республики Узбекистан">
-                        <p>Портал открытых данных Республики Узбекистан</p>
-                    </a>
+                    @foreach($portals as $portal)
+                        <a href="{{$portal->value}}" target="_blank" class="ministries-block">
+                            <img src="{{url('frontend/img/my_gov_uz.png')}}"
+                                 alt="{{$portal->comment}}">
+                            <p>{{$portal->comment}}</p>
+                        </a>
+                    @endforeach
+                        {{--<a href="https://president.uz/" target="_blank" class="ministries-block">
+                            <img src="{{url('frontend/img/gerb-small.png')}}"
+                                 alt="Официальный Веб-сайт Президента Республики Узбекистан">
+                            <p>Официальный Веб-сайт Президента Республики Узбекистан</p>
+                        </a>
+                        <a href="http://constitution.uz/" target="_blank" class="ministries-block">
+                            <img src="{{url('frontend/img/const_uz.png')}}"
+                                 alt="Конституция Республики Узбекистан">
+                            <p>Конституция Республики Узбекистан</p>
+                        </a>
+                        <a href="https://my.gov.uz/" target="_blank" class="ministries-block">
+                            <img src="{{url('frontend/img/my_gov_uz.png')}}"
+                                 alt="Единый портал интерактивных государственных услуг">
+                            <p>Единый портал интерактивных государственных услуг</p>
+                        </a>
+                        <a href="https://data.gov.uz/" target="_blank" class="ministries-block">
+                            <img src="{{url('frontend/img/data_gov_uz.png')}}"
+                                 alt="Портал открытых данных Республики Узбекистан">
+                            <p>Портал открытых данных Республики Узбекистан</p>
+                        </a>--}}
                 </div>
 
             </div>
@@ -338,9 +332,10 @@
         let pgwSlider = $('.pgwSlider').pgwSlider({
             'listPosition': 'left',
             'verticalCentering': true,
-            'adaptiveHeight': true
-        });
+            'adaptiveHeight': true,
+         });
         pgwSlider.stopSlide();
+        $('.pgwSlider .ps-current img').css('height', '300px')
     });
 </script>
 <script src="{{url('frontend/js/Popper.js')}}"></script>
@@ -351,5 +346,6 @@
 <script src="{{url('frontend/js/main.js')}}"></script>
 {{--<script src="https://lidrekon.ru/slep/js/jquery.js"></script>--}}
 <script src="https://lidrekon.ru/slep/js/uhpv-full.min.js"></script>
+<script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1){e.className+=' ya-page_js_yes';}s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Form.init()})})(window,document,'yandex_site_callbacks');</script>
 </body>
 </html>

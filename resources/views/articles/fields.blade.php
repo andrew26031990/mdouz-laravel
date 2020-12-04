@@ -8,10 +8,6 @@
                     <option value="{{$cat->id}}">{{$cat->name}}</option>
                 @endforeach
             </select>
-            {{--<div class="form-group">
-                <label for="education_document_date">Дата публикации</label>
-                <input class="form-control date" required id="published_at" name="published_at" type="text">
-            </div>--}}
             <div class="form-group">
                 <label class="custom-file-label">Изображение статьи</label>
                 <div class="user-image mb-3">

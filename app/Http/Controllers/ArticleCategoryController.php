@@ -147,8 +147,8 @@ class ArticleCategoryController extends AppBaseController
         try{
             DB::table('article_category')->where('id', $id)->update(['status' => $request->status, 'menu' => $request->menu, 'name' => $request->name]);
             foreach($request['Fields'] as $key => $part){
-                DB::table('article_category_translate')->where('article_category_translate.article_category_id', $id)->where('lang_id', $key)->
-                    update(['title' => $part['title'], 'slug' => $part['link']]);
+                DB::table('article_category_translate')->
+                    updateOrInsert(['article_category_translate.article_category_id' => $id, 'lang_id' => $key], ['title' => $part['title'], 'slug' => $part['link']]);
             }
             Flash::success('Категория успешно обновлена');
             return redirect(route('articleCategories.index'));

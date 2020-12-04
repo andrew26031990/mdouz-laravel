@@ -20,11 +20,12 @@ class KeyStorage extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
+    public $timestamps = false;
 
 
     public $fillable = [
-        'key',
+        'id',
+        'keyword',
         'value',
         'comment'
     ];
@@ -35,7 +36,7 @@ class KeyStorage extends Model
      * @var array
      */
     protected $casts = [
-        'key' => 'string',
+        'id' => 'string',
         'value' => 'string',
         'comment' => 'string'
     ];
@@ -46,11 +47,11 @@ class KeyStorage extends Model
      * @var array
      */
     public static $rules = [
-        'key' => 'required|string',
-        'value' => 'required|string',
-        'comment' => 'nullable|string',
-        'updated_at' => 'nullable|integer',
-        'created_at' => 'nullable|integer'
+        //'id' => 'required|string',
+        //'value' => 'required|string',
+        //'comment' => 'nullable|string',
+        //'updated_at' => 'nullable|integer',
+        //'created_at' => 'nullable|integer'
     ];
 
 

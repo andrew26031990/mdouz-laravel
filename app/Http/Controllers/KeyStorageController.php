@@ -6,18 +6,22 @@ use App\Http\Requests\CreateKeyStorageRequest;
 use App\Http\Requests\UpdateKeyStorageRequest;
 use App\Repositories\KeyStorageRepository;
 use App\Http\Controllers\AppBaseController;
+use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class KeyStorageController extends AppBaseController
 {
     /** @var  KeyStorageRepository */
     private $keyStorageRepository;
+    private $langModelRepository;
 
-    public function __construct(KeyStorageRepository $keyStorageRepo)
+    public function __construct(KeyStorageRepository $keyStorageRepo, LangModelRepository $langModelRepo)
     {
         $this->keyStorageRepository = $keyStorageRepo;
+        $this->langModelRepository = $langModelRepo;
     }
 
     /**
@@ -42,7 +46,8 @@ class KeyStorageController extends AppBaseController
      */
     public function create()
     {
-        return view('key_storages.create');
+        $lang = $this->langModelRepository->all();
+        return view('key_storages.create')->with('language', $lang);
     }
 
     /**
@@ -55,8 +60,20 @@ class KeyStorageController extends AppBaseController
     public function store(CreateKeyStorageRequest $request)
     {
         $input = $request->all();
-
-        $keyStorage = $this->keyStorageRepository->create($input);
+        try{
+            if($request->keyword !== null){
+                $keyStorage = $this->keyStorageRepository->create(array('keyword' => $request->keyword, 'created_at' => strtotime('today GMT'), 'updated_at' => strtotime('today GMT')));
+                foreach ($request['Fields']  as $key => $part){
+                    DB::table('key_storage_item_translate')->updateOrInsert(['key_storage_item_id' => $keyStorage->id, 'lang_id'=>$key],['value' => $part['value'], 'comment' => $part['comment']]);
+                }
+            }else{
+                Flash::error('Не задано ключевое слово');
+                return redirect(route('keyStorages.create'));
+            }
+        }catch (\Exception $ex){
+            Flash::error('Ошибка сохранения: '.$ex->getMessage());
+            return redirect(route('keyStorages.create'));
+        }
 
         Flash::success('Key Storage saved successfully.');
 
@@ -88,10 +105,11 @@ class KeyStorageController extends AppBaseController
      *
      * @param int $id
      *
-     * @return Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|Response
      */
     public function edit($id)
     {
+        $lang = $this->langModelRepository->all();
         $keyStorage = $this->keyStorageRepository->find($id);
 
         if (empty($keyStorage)) {
@@ -100,7 +118,7 @@ class KeyStorageController extends AppBaseController
             return redirect(route('keyStorages.index'));
         }
 
-        return view('key_storages.edit')->with('keyStorage', $keyStorage);
+        return view('key_storages.fields_edit')->with('keyStorage', $keyStorage)->with('language', $lang);
     }
 
     /**

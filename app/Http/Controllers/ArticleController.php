@@ -159,7 +159,7 @@ class ArticleController extends AppBaseController
         }
 
         try{
-            $updateArticle = $this->articleRepository->update(array('category_id' => $request->category_id,
+            $this->articleRepository->update(array('category_id' => $request->category_id,
                 'published_at' => strtotime('today GMT'),
                 'status' => $request->status, 'on_main' => $request->on_main,
                 'on_home' => $request->on_home,
@@ -179,7 +179,7 @@ class ArticleController extends AppBaseController
 
             //Add article translation fields
             foreach($request['Fields'] as $key => $part){
-                DB::table('article_translate')->updateOrInsert(array('article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']), array('lang_id'=>$key));
+                DB::table('article_translate')->updateOrInsert(['lang_id'=>$key, 'article_id'=>$article->id] ,['article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']]);
             }
 
             Flash::success('Статья обновлена');

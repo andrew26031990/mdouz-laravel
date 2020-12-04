@@ -11,9 +11,9 @@
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
-                   {!! Form::model($keyStorage, ['route' => ['keyStorages.update', $keyStorage->key], 'method' => 'patch']) !!}
+                   {!! Form::model($keyStorage, ['route' => ['keyStorages.update', $keyStorage->id], 'method' => 'patch']) !!}
 
-                        @include('key_storages.fields')
+                   @include('key_storages.fields_edit')
 
                    {!! Form::close() !!}
                </div>
@@ -21,3 +21,4 @@
        </div>
    </div>
 @endsection
+

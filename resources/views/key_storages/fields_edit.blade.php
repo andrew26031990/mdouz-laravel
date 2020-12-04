@@ -11,6 +11,7 @@
                 <li class="{{$lang->url == "uz" ? "active" : ""}}"><a href="#{{$lang->url}}" data-toggle="tab" aria-expanded="false">{{$lang->name}}</a></li>
             @endforeach
         </ul>
+        dfgdfgdf
         <div class="tab-content">
             @foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
@@ -27,11 +28,11 @@
                         </div>
                     </div>
                 </div>
-            @endforeach
-            <!-- Submit Field -->
-            <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Создать статью</button>
-            </div>
+        @endforeach
+        <!-- Submit Field -->
+        <div class="box-footer">
+            <button type="submit" class="btn btn-primary">Создать статью</button>
+        </div>
         </div>
         <!-- /.tab-content -->
     </div>
@@ -39,7 +40,7 @@
     <!-- nav-tabs-custom -->
 </div>
 @push('scripts')
-    <script type="text/javascript">
+{{--    <script type="text/javascript">
         $('input[name="word"]').focusout(function() {
             translitUrl($(this).val());
         })
@@ -55,6 +56,6 @@
                 }
             });
         }
-    </script>
+    </script>--}}
 @endpush
 

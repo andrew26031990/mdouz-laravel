@@ -73,6 +73,7 @@
                     <option value="0" {{$article->menu == 0 ? 'selected' : ''}}>Нет</option>
                 </select>
             </div>
+            <input type="hidden" name="article_id" value="{{$article->id}}">
         </div>
         <ul class="nav nav-tabs">
             @foreach($language as $lang)

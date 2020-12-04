@@ -2,7 +2,7 @@
     <!-- Custom Tabs -->
     <div class="nav-tabs-custom">
         <div class="form-group">
-            <label>Родительская категория</label>
+            <label>Категория</label>
             <select class="form-control" name="parent"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
                 <option value="">Корневая категория</option>
                 @foreach($parentCategories as $parentCat)
@@ -52,9 +52,9 @@
             @foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     <div class="box-body">
-                        @if(isset($translations))
+                        @if(isset($translations)  && count($translations) > 0)
                             @foreach($translations as $trans)
-                                @if($lang->id == $trans->act_lang_id)
+                                @if(isset($trans->act_lang_id) && $trans->act_lang_id == $lang->id)
                                     <div class="form-group">
                                         <label for="title">Название</label>
                                         <input type="text" class="form-control title" value="{{$trans->act_title}}" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>

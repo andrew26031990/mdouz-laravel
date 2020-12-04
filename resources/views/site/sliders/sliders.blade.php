@@ -3,15 +3,14 @@
 @section('content')
 <div class="main-content-first-block">
 
-    <div class="competitions" style="width: 100%;height: auto">
+    <div class="competitions" style="width: 100%;">
         <ul class="pgwSlider">
             @foreach($latest_news as $lat_news)
                 <li>
                     <img style="width: 0;height: 0"
                          src="{{url($lat_news->thumbnail_base_url.'/'.$lat_news->thumbnail_path)}}"
                          alt="{{$lat_news->at_title}}" data-description="{{$lat_news->at_description}}">
-                    <span
-                        style="height: 100%; font-weight: bold;background-color: #e9a41b;">{{$lat_news->at_title}}</span>
+                    <span style="height: 100%; font-weight: bold;background-color: #e9a41b; font-size: 12px; line-height: 3em">{{$lat_news->at_title}}</span>
                 </li>
             @endforeach
         </ul>
