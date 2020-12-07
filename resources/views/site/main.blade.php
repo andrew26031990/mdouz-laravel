@@ -67,7 +67,7 @@
                         <p class="header-search-field-wrap show">
                             <input type="text" name="search_field" class="header-search-field">
                         </p>
-                        <button type="button" class="header-search-btn" aria-label="search"><img src="/img/icons/seach.png" alt=""></button>
+                        <button type="button" class="header-search-btn" aria-label="search"><img src="{{url('frontend/img/seach.png')}}" alt=""></button>
                     </form>
                     <div class="burger d-flex d-lg-none">
                         <input type="checkbox" id="burgerBtn" class="burger-checkbox d-none">
@@ -119,29 +119,49 @@
         <div class="wrapper">
             <aside class="sidebar">
                 <div class="dao-search-block">
-                    <a href="http://old.mdo.uz/" class="dao-search-block-link">статистика</a>
-                    <div style="width: 100%;height: 40%;border-bottom: 1px solid white;">
-                        <div style="width: 63%; position: relative;">
-                            <div>
-                                <img style="margin-top: 5px" src="{{url('frontend/img/baby-boy.svg')}}" />
+                    <div style="width: 100%;height: 50%;border-bottom: 1px solid white;text-align: center;">
+                        <div style="width: 60%; height: 100%; margin: 0 auto; position: relative">
+                            <div style="top: 20px; left: 0; position: absolute">
+                                <img src="{{url('frontend/img/baby-boy.svg')}}" />
                             </div>
-                            <div style="width: 100%">
-                                <div style="float: right;background-color: white;">sdfsdfssdfsfsdf</div>
-                                <div style="float: right;background-color: white;">sdfsdfssdfsfsdf</div>
+                            <div style="height: 100%; width: 70%; right: 0;position: absolute">
+                                <div style="width: 100%; height: 50%; position: relative">
+                                    <div style="position: absolute; top: 30px; background-color: white; padding: 5px">
+                                        <b>количество воспитанников</b>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 50%; position: relative">
+                                    <div style="position: absolute; top: 10px; color: white">
+                                        <b>3000000</b>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%;height: 60%;border-bottom: 1px solid white;">
-                        <div style="width: 63%; position: relative;">
-                            <img style="margin-top: 5px" src="{{url('frontend/img/school.svg')}}" />
-                            <div style="float: right">sdfsdfssdfsfsdf</div>
+                    <div style="width: 100%;height: 50%;border-bottom: 1px solid white;">
+                        <div style="width: 60%; height: 100%; margin: 0 auto; position: relative">
+                            <div style="top: 20px; left: 0; position: absolute">
+                                <img src="{{url('frontend/img/school.svg')}}" />
+                            </div>
+                            <div style="height: 100%; width: 70%; right: 0;position: absolute">
+                                <div style="width: 100%; height: 50%; position: relative">
+                                    <div style="position: absolute; top: 30px; background-color: white; padding: 5px">
+                                        <b>количество учреждений</b>
+                                    </div>
+                                </div>
+                                <div style="width: 100%; height: 50%; position: relative">
+                                    <div style="position: absolute; top: 10px; color: white">
+                                        <b>15000</b>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="dao-search-block">
                     <img style="width: 100%; height: 100%;margin-bottom: 58px;"
                          src="{{url('frontend/img/borekan_zorekan.png')}}">
-                    <a href="" class="dao-search-block-link">Журнал bor ekan zor ekan</a>
+                    <a href="http://mdo.local/{{app()->getLocale()}}/bor-ekan-zor-ekan" class="dao-search-block-link">Bor ekan zor ekan</a>
                 </div>
                 <div class="tenders-block">
                     <div class="tenders-block-content">
@@ -160,54 +180,16 @@
                             <div class="owl-stage-outer">
                                 <div class="owl-stage"
                                      style="transform: translate3d(-900px, 0px, 0px); transition: all 0s ease 0s; width: 2700px;">
-                                    <div class="owl-item cloned" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">26 ноября 2019</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
+                                    @foreach($tendering as $tender)
+                                        <div class="owl-item" style="width: 450px;">
+                                            <div class="tenders-block-slider-item">
+                                                <p class="tenders-block-slider-item-date">{{$tender->at_title}}</p>
+                                                <p class="tenders-block-slider-item-text"></p>
+                                                <a href="{{url(app()->getLocale().'/'.$tender->act_slug.'/'.$tender->at_slug)}}"
+                                                   class="tenders-block-slider-item-link">Подробнее...</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="owl-item cloned" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">24 апреля 2020</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
-                                        </div>
-                                    </div>
-                                    <div class="owl-item active" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">26 ноября 2019</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
-                                        </div>
-                                    </div>
-                                    <div class="owl-item" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">24 апреля 2020</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
-                                        </div>
-                                    </div>
-                                    <div class="owl-item cloned" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">26 ноября 2019</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
-                                        </div>
-                                    </div>
-                                    <div class="owl-item cloned" style="width: 450px;">
-                                        <div class="tenders-block-slider-item">
-                                            <p class="tenders-block-slider-item-date">24 апреля 2020</p>
-                                            <p class="tenders-block-slider-item-text"></p>
-                                            <a href="http://mdo.uz/ru/article/view"
-                                               class="tenders-block-slider-item-link">Подробнее...</a>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="owl-nav disabled">
@@ -241,31 +223,11 @@
                 <div class="ministries">
                     @foreach($portals as $portal)
                         <a href="{{$portal->value}}" target="_blank" class="ministries-block">
-                            <img src="{{url('frontend/img/my_gov_uz.png')}}"
+                            <img src="{{url($portal->base_url.'/'.$portal->path)}}"
                                  alt="{{$portal->comment}}">
                             <p>{{$portal->comment}}</p>
                         </a>
                     @endforeach
-                        {{--<a href="https://president.uz/" target="_blank" class="ministries-block">
-                            <img src="{{url('frontend/img/gerb-small.png')}}"
-                                 alt="Официальный Веб-сайт Президента Республики Узбекистан">
-                            <p>Официальный Веб-сайт Президента Республики Узбекистан</p>
-                        </a>
-                        <a href="http://constitution.uz/" target="_blank" class="ministries-block">
-                            <img src="{{url('frontend/img/const_uz.png')}}"
-                                 alt="Конституция Республики Узбекистан">
-                            <p>Конституция Республики Узбекистан</p>
-                        </a>
-                        <a href="https://my.gov.uz/" target="_blank" class="ministries-block">
-                            <img src="{{url('frontend/img/my_gov_uz.png')}}"
-                                 alt="Единый портал интерактивных государственных услуг">
-                            <p>Единый портал интерактивных государственных услуг</p>
-                        </a>
-                        <a href="https://data.gov.uz/" target="_blank" class="ministries-block">
-                            <img src="{{url('frontend/img/data_gov_uz.png')}}"
-                                 alt="Портал открытых данных Республики Узбекистан">
-                            <p>Портал открытых данных Республики Узбекистан</p>
-                        </a>--}}
                 </div>
 
             </div>

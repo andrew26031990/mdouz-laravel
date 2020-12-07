@@ -71,7 +71,7 @@ class ArticleController extends AppBaseController
                 'created_at' => strtotime('today GMT'),
                 'updated_at' => strtotime('today GMT')));
 
-            //Add article image
+            //Add image
             if(isset($request['file'])){
                 $this->fileUploadMain($request, $newArticle->id);
             }

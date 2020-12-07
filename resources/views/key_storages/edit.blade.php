@@ -11,7 +11,7 @@
        <div class="box box-primary">
            <div class="box-body">
                <div class="row">
-                   {!! Form::model($keyStorage, ['route' => ['keyStorages.update', $keyStorage->id], 'method' => 'patch']) !!}
+                   {!! Form::model($keyStorage, ['route' => ['keyStorages.update', $keyStorage->id], 'method' => 'patch', 'files' =>true, 'enctype'=>'multipart/form-data']) !!}
 
                    @include('key_storages.fields_edit')
 

@@ -13,7 +13,7 @@
                <div class="row">
                    {!! Form::model($articleCategory, ['route' => ['articleCategories.update', $articleCategory->id], 'method' => 'patch']) !!}
 
-                        @include('article_categories.fields')
+                        @include('article_categories.fields_edit')
 
                    {!! Form::close() !!}
                </div>

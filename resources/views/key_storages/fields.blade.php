@@ -5,6 +5,15 @@
         <input class="form-control" name="word" rows="6" required>
         <input class="form-control" type="text" readonly name="keyword">
     </div>
+    <div class="form-group">
+        <label class="custom-file-label">Изображение</label>
+        <div class="user-image mb-3">
+            <div class="imgPreviewTitle"> </div>
+        </div>
+        <div class="custom-file">
+            <input type="file" name="file" id="imageTitle" accept="image/*" class="custom-file-input">
+        </div>
+    </div>
     <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
             @foreach($language as $lang)
@@ -55,6 +64,39 @@
                 }
             });
         }
+
+        //Image preview BEGIN
+        $(function() {
+            // Multiple images preview with JavaScript
+            var multiImgPreview = function(input, imgPreviewPlaceholder) {
+                console.log(input.files);
+                if (input.files) {
+                    var filesAmount = input.files.length;
+
+                    for (i = 0; i < filesAmount; i++) {
+                        var reader = new FileReader();
+
+                        reader.onload = function(event) {
+                            $($.parseHTML('<img style="width: 200px; height: 100px;">')).attr('src', event.target.result).appendTo(imgPreviewPlaceholder);
+                        }
+
+                        reader.readAsDataURL(input.files[i]);
+                    }
+                }
+
+            };
+
+            $('#images').on('change', function() {
+                $('div.imgPreview').html('');
+                multiImgPreview(this, 'div.imgPreview');
+            });
+
+            $('#imageTitle').on('change', function() {
+                $('div.imgPreviewTitle').html('');
+                multiImgPreview(this, 'div.imgPreviewTitle');
+            });
+        });
+        //Image preview END
     </script>
 @endpush
 

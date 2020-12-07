@@ -44,7 +44,9 @@ class ArticlesView extends Controller
             distinct()->paginate(9, ['article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
         return view('site.articles.articles', ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('articles_from_category', $articles_from_category)->
-            with('socials', $this->siteController->getSocials())->with('category', $category);
+            with('socials', $this->siteController->getSocials())->with('category', $category)->
+            with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
+            ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id));
     }
 
     /**

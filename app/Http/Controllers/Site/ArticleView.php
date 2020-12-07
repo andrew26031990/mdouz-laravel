@@ -40,7 +40,9 @@ class ArticleView extends Controller
             where('article_attachment.article_id', $article[0]->id)->get();
         return view('site.article.article', ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('article', $article)->with('article_attachment', $article_attachment)->
-            with('socials', $this->siteController->getSocials());
+            with('socials', $this->siteController->getSocials())
+            ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
+            ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id));
     }
 
     /**

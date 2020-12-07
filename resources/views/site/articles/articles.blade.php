@@ -24,7 +24,7 @@
                                title="{{$articles->title}}">{{$articles->title}}</a>
                         </div>
                         <div class="articles-block-bottom">
-                            <p class="articles-block-text">{{$articles->description}}</p>
+                            <p class="articles-block-text">{!! substr($articles->description, 0, 100) !!}...</p>
                         </div>
                     </div>
                 @endforeach

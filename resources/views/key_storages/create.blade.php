@@ -11,7 +11,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::open(['route' => 'keyStorages.store']) !!}
+                    {!! Form::open(['route' => 'keyStorages.store', 'files' =>true, 'enctype'=>'multipart/form-data']) !!}
 
                         @include('key_storages.fields')
 

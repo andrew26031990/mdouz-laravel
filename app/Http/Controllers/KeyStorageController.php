@@ -10,6 +10,7 @@ use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Flash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Response;
 
 class KeyStorageController extends AppBaseController
@@ -63,21 +64,36 @@ class KeyStorageController extends AppBaseController
         try{
             if($request->keyword !== null){
                 $keyStorage = $this->keyStorageRepository->create(array('keyword' => $request->keyword, 'created_at' => strtotime('today GMT'), 'updated_at' => strtotime('today GMT')));
+
+                //Add article image
+                if(isset($request['file'])){
+                    $this->fileUpload($request, $keyStorage->id);
+                }
+
                 foreach ($request['Fields']  as $key => $part){
                     DB::table('key_storage_item_translate')->updateOrInsert(['key_storage_item_id' => $keyStorage->id, 'lang_id'=>$key],['value' => $part['value'], 'comment' => $part['comment']]);
                 }
             }else{
                 Flash::error('Не задано ключевое слово');
-                return redirect(route('keyStorages.create'));
+                return redirect(route('keyStorages.index'));
             }
         }catch (\Exception $ex){
             Flash::error('Ошибка сохранения: '.$ex->getMessage());
-            return redirect(route('keyStorages.create'));
+            return redirect(route('keyStorages.index'));
         }
 
         Flash::success('Key Storage saved successfully.');
 
         return redirect(route('keyStorages.index'));
+    }
+
+    public function fileUpload(Request $request, $key_storage_item_id)
+    {
+        $baseUrl = '/uploads/key_storage_item_images';
+        $file = $request->file('file');
+        $name = date('Ymdhis').'_'.$file->getClientOriginalName();
+        DB::table('key_storage_item')->where('id', $key_storage_item_id)->update(array('base_url' => $baseUrl, 'path' => $name));
+        $file->move(public_path().$baseUrl, $name);
     }
 
     /**
@@ -109,7 +125,6 @@ class KeyStorageController extends AppBaseController
      */
     public function edit($id)
     {
-        $lang = $this->langModelRepository->all();
         $keyStorage = $this->keyStorageRepository->find($id);
 
         if (empty($keyStorage)) {
@@ -118,7 +133,11 @@ class KeyStorageController extends AppBaseController
             return redirect(route('keyStorages.index'));
         }
 
-        return view('key_storages.fields_edit')->with('keyStorage', $keyStorage)->with('language', $lang);
+        $lang = $this->langModelRepository->all();
+
+        $keystorage_translate = DB::table('key_storage_item_translate')->where('key_storage_item_translate.key_storage_item_id', $id)->get();
+
+        return view('key_storages.edit')->with('keyStorage', $keyStorage)->with('language', $lang)->with('keystorage_translate', $keystorage_translate);
     }
 
     /**
@@ -131,6 +150,7 @@ class KeyStorageController extends AppBaseController
      */
     public function update($id, UpdateKeyStorageRequest $request)
     {
+        //dd($request);
         $keyStorage = $this->keyStorageRepository->find($id);
 
         if (empty($keyStorage)) {
@@ -139,11 +159,29 @@ class KeyStorageController extends AppBaseController
             return redirect(route('keyStorages.index'));
         }
 
+        $this->keyStorageRepository->update(array('keyword' => $request->keyword), $id);
+
+        if($request['file'] != null){
+            unlink(public_path($keyStorage->base_url.'/'.$keyStorage->path));
+            $this->fileUpload($request, $id);
+        }
+
+        //Add article translation fields
+        foreach($request['Fields'] as $key => $part){
+            DB::table('key_storage_item_translate')->updateOrInsert(['lang_id'=>$key, 'key_storage_item_id'=>$keyStorage->id] ,['value' => $part['value'], 'comment' => $part['comment']]);
+        }
+
         $keyStorage = $this->keyStorageRepository->update($request->all(), $id);
 
         Flash::success('Key Storage updated successfully.');
 
         return redirect(route('keyStorages.index'));
+    }
+
+    public function deleteFile($base_url, $path)
+    {
+        //dd(public_path().$base_url.'/'.$path);
+        unlink(public_path().$base_url.'/'.$path);
     }
 
     /**

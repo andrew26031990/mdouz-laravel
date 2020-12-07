@@ -108,7 +108,7 @@ class ArticleCategoryController extends AppBaseController
     {
 
         $articleCategory = $this->articleCategoryRepository->find($id);
-
+        $lang = $this->langModelRepository->all();
         if (empty($articleCategory)) {
             Flash::error('Категория не найдена');
 
@@ -117,13 +117,20 @@ class ArticleCategoryController extends AppBaseController
         $lang = $this->langModelRepository->all();
         $parentCategories = DB::table('article_category')->get();
 
-        $translations = DB::table('article_category')->
-            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
-            where('article_category_translate.article_category_id', $id)->
-            select('article_category_translate.slug as act_slug', 'article_category_translate.title as act_title', 'article_category_translate.lang_id as act_lang_id')->get();
+        $translations = DB::table('article_category_translate')->where('article_category_id', $id)->get();
+        $translations_lang_array = DB::table('article_category_translate')->where('article_category_id', $id)->select('article_category_translate.lang_id as act_lang')->get();
+        $new_array = $this->getArray($translations_lang_array);
 
         return view('article_categories.edit')->with('articleCategory', $articleCategory)->
-            with('parentCategories', $parentCategories)->with('language', $lang)->with('translations', $translations);
+            with('parentCategories', $parentCategories)->with('language', $lang)->with('translations', $translations)->with('new_array', $new_array);
+    }
+
+    public function getArray($translations_lang_array){
+        $arr = [];
+        foreach ($translations_lang_array as $key => $item){
+            array_push($arr, $item->act_lang);
+        }
+        return $arr;
     }
 
     /**

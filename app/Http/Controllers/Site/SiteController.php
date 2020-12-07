@@ -38,7 +38,11 @@ class SiteController extends Controller
         //Socials
         $socials = $this->getSocials();
         //Socials
-        return view('site.sliders.sliders', ['menu' => $menu])->with('language', $lang)->with('latest_news', $latest_news)->with('socials', $socials)->with('portals', $portals);
+        $tendering = $this->getTendering($lang_selected[0]->id);
+
+        return view('site.sliders.sliders', ['menu' => $menu])->
+            with('language', $lang)->with('latest_news', $latest_news)->
+            with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering);
     }
 
     public function buildMenu ($lang_id){
@@ -81,6 +85,19 @@ class SiteController extends Controller
 
     public function getSocials(){
         return DB::table('social')->get();
+    }
+
+    public function getTendering($lang_id){
+        return DB::table('article_translate')->
+            join('article', 'article.id', '=', 'article_translate.article_id')->
+            join('article_category','article.category_id', '=', 'article_category.id')->
+            join('article_category_translate', 'article_category.id', '=', 'article_category_translate.article_category_id')->
+            where('article_translate.lang_id', '=', $lang_id)->
+            where('article_category_translate.lang_id', '=', $lang_id)->
+            where('article_category.id', '=', 26)->
+            where('article_translate.lang_id', '=', $lang_id)->
+            select('article_category_translate.slug as act_slug', 'article.published_at as a_published', 'article_translate.slug as at_slug', 'article_translate.title as at_title')->
+            limit(5)->get();
     }
 
 
@@ -152,7 +169,6 @@ class SiteController extends Controller
 
     public function search(Request $request)
     {
-        //Utility::stripXSS();
         $search = $request->input('search_field');
         $lang = $this->langModelRepository->all();
         $lang_selected = DB::table('lang')->where('lang.url', app()->getLocale())->get();
@@ -163,11 +179,12 @@ class SiteController extends Controller
             join('article', 'article_category.id', '=', 'article.category_id')->
             join('article_translate', 'article.id', '=', 'article_translate.article_id')->
             where('article_translate.lang_id', $lang_selected[0]->id)->
+            where('article_category_translate.lang_id', $lang_selected[0]->id)->
             where('article_translate.title', 'like', '%' . $search . '%')->
-            paginate(9, ['article_translate.article_id as ac_id', 'article_category_translate.slug as ac_slug', 'article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
-
+            select(['article_translate.article_id as ac_id', 'article_category_translate.slug as ac_slug', 'article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug'])->
+            paginate(9);
         return view('site.search.search', ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('articles', $articles)->
-            with('socials', $this->getSocials());
+            with('socials', $this->getSocials())->with('portals', $this->getPortalsView($lang_selected[0]->id))->with('tendering', $this->getTendering($lang_selected[0]->id));
     }
 }
