@@ -62,10 +62,6 @@
                 </div>
             @endforeach
 
-
-
-
-
             {{--@foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     @if(isset($translations) && count($translations) > 0)

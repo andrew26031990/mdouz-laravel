@@ -21,7 +21,8 @@
         "laravel/ui": "3.0",
         "laravelcollective/html": "^6.2",
         "lavary/laravel-menu": "^1.7",
-        "spatie/laravel-menu": "^3.7"
+        "spatie/laravel-menu": "^3.7",
+        "ext-json": "*"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

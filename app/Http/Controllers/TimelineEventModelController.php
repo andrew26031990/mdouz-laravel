@@ -8,6 +8,7 @@ use App\Repositories\TimelineEventModelRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\DB;
 use Response;
 
 class TimelineEventModelController extends AppBaseController
@@ -29,8 +30,14 @@ class TimelineEventModelController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $timelineEvent = $this->timelineEventModelRepository->all();
+        //$timelineEvent = $this->timelineEventModelRepository->all();
+        $timelineEvent = DB::table('timeline_event')->orderBy('id', 'desc')->get();
+        //dd($timelineEvent);
+        /*foreach ($timelineEvent as $key => $value){
 
+            $data = json_decode($value->data);
+            dd($data->public_identity);
+        }*/
         return view('timeline_event_models.index')
             ->with('timelineEvent', $timelineEvent);
     }

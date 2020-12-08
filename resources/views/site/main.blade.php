@@ -26,6 +26,7 @@
     <link href="{{url('frontend/css/bootstrap.css')}}" rel="stylesheet">
     <link href="{{url('frontend/css/main.min.css')}}" rel="stylesheet">
     <link href="{{url('frontend/css/custom.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="{{url('css/timeline.min.css')}}" />
     <link href="{{url('frontend/css/pgwslider.min.css')}}" rel="stylesheet">
 </head>
 <body>
@@ -132,7 +133,7 @@
                                 </div>
                                 <div style="width: 100%; height: 50%; position: relative">
                                     <div style="position: absolute; top: 10px; color: white">
-                                        <b>3000000</b>
+                                        <b>@money(3000000)</b>
                                     </div>
                                 </div>
                             </div>

@@ -14,7 +14,30 @@ return [
     */
 
     'failed' => 'These credentials do not match our records.',
-    'password' => 'The provided password is incorrect.',
+    'password' => 'Password',
+    'email' => 'Email',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+    'sign_out' => 'Sign out',
+    'remember_me' => 'Remember me',
+    'sign_in' => 'Sign in',
+    'full_name' => 'Full name',
+    'confirm_password' => 'Confirm password',
+    'register' => 'Register',
+    'app' => [
+        'online' => 'Online',
+        'member_since' => 'Member since',
+        'profile' => 'Profile',
+        'search' => 'Search...'
+    ],
+    'login' => [
+        'title' => 'Online',
+        'forgot_password' => 'Forgot password?',
+        'register_membership' => 'Register'
+    ],
+    'registration' => [
+        'i_agree' => 'I agree',
+        'terms' => 'Terms',
+        'have_membership' => 'Have membership?'
+    ]
 
 ];
