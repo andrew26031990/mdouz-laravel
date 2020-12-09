@@ -133,7 +133,7 @@
                                 </div>
                                 <div style="width: 100%; height: 50%; position: relative">
                                     <div style="position: absolute; top: 10px; color: white">
-                                        <b>@money(3000000)</b>
+                                        <b>3000000</b>
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +171,6 @@
                                     src="{{url('frontend/img/graph.png')}}" alt="">Тендерные
                                 торги</h2>
                             <div class="tenders-block-slider-dots">
-                                <button role="button" class="owl-dot active"><span></span></button>
                                 <button role="button" class="owl-dot"><span></span></button>
                             </div>
                         </div>
@@ -181,16 +180,20 @@
                             <div class="owl-stage-outer">
                                 <div class="owl-stage"
                                      style="transform: translate3d(-900px, 0px, 0px); transition: all 0s ease 0s; width: 2700px;">
-                                    @foreach($tendering as $tender)
-                                        <div class="owl-item" style="width: 450px;">
-                                            <div class="tenders-block-slider-item">
-                                                <p class="tenders-block-slider-item-date">{{$tender->at_title}}</p>
-                                                <p class="tenders-block-slider-item-text"></p>
-                                                <a href="{{url(app()->getLocale().'/'.$tender->act_slug.'/'.$tender->at_slug)}}"
-                                                   class="tenders-block-slider-item-link">Подробнее...</a>
+                                    @if(count($tendering) > 0)
+                                        @foreach($tendering as $tender)
+                                            <div class="owl-item" style="width: 450px;">
+                                                <div class="tenders-block-slider-item">
+                                                    <p class="tenders-block-slider-item-date">{{$tender->at_title}}</p>
+                                                    <p class="tenders-block-slider-item-text"></p>
+                                                    <a href="{{url(app()->getLocale().'/'.$tender->act_slug.'/'.$tender->at_slug)}}"
+                                                       class="tenders-block-slider-item-link">Подробнее...</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    @else
+                                        Нет статей
+                                    @endif
                                 </div>
                             </div>
                             <div class="owl-nav disabled">
@@ -198,23 +201,45 @@
                                 <button type="button" role="presentation" class="owl-next"></button>
                             </div>
                         </div>
-                        <a href="http://mdo.uz/ru/news/tags/tendernye-torgi" class="tenders-block-show-all">Смотреть
-                            все...</a>
+                        {{--<a href="http://mdo.uz/ru/news/tags/tendernye-torgi" class="tenders-block-show-all">Смотреть
+                            все...</a>--}}
                     </div>
                 </div>
 
                 <div class="sidebar-contacts d-none d-md-block">
                     <div class="sidebar-contacts-content">
-                        <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                        @foreach($portals as $portal)
+                            @if($portal->ksi_id == 43)
+                                <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                                <a href="tel:{{$portal->ksit_value}}" class="sidebar-contacts-phone">
+                                    @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                        <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
+                                             alt="{{$portal->ksit_comment}}">
+                                    @endif
+                                    {{$portal->ksit_value}} </a>
+                            @endif
+                        @endforeach
+                        @foreach($portals as $portal)
+                            @if($portal->ksi_id == 44)
+                                <p class="sidebar-contacts-callback-text">Обратная связь</p>
+                                <a href="{{$portal->ksit_value}}" target="_BLANK" class="sidebar-contacts-phone">
+                                    @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                        <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
+                                             alt="{{$portal->ksit_comment}}">
+                                    @endif
+                                    {{$portal->ksit_comment}} </a>
+                            @endif
+                        @endforeach
+{{--                        <p class="sidebar-contacts-phone-text">Телефон доверия</p>
                         <a href="tel:+998 (71) 239-33-79" class="sidebar-contacts-phone">
                             <img src="{{url('frontend/img/phone-1.png')}}"
                                  alt="Телефон доверия">
-                            +998 (71) 239-33-79 </a>
-                        <p class="sidebar-contacts-callback-text">Обратная связь</p>
+                            +998 (71) 239-33-79 </a>--}}
+                        {{--<p class="sidebar-contacts-callback-text">Обратная связь</p>
                         <a href="http://support.mdo.uz/" class="sidebar-contacts-callback-btn">
                             <img src="{{url('frontend/img/speach.png')}}"
                                  alt="Жалобы и предложения">
-                            Жалобы и предложения </a>
+                            Жалобы и предложения </a>--}}
                     </div>
                 </div>
             </aside>
@@ -223,18 +248,43 @@
                 @yield('content')
                 <div class="ministries">
                     @foreach($portals as $portal)
-                        <a href="{{$portal->value}}" target="_blank" class="ministries-block">
-                            <img src="{{url($portal->base_url.'/'.$portal->path)}}"
-                                 alt="{{$portal->comment}}">
-                            <p>{{$portal->comment}}</p>
-                        </a>
+                        @if($portal->ksi_id == 6 || $portal->ksi_id == 17 || $portal->ksi_id == 22 || $portal->ksi_id == 24)
+                            <a href="{{$portal->ksit_value}}" target="_blank" class="ministries-block">
+                                <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
+                                     alt="{{$portal->ksit_comment}}">
+                                <p>{{$portal->ksit_comment}}</p>
+                            </a>
+                        @endif
                     @endforeach
+
                 </div>
 
             </div>
             <div class="sidebar-contacts d-block d-md-none">
                 <div class="sidebar-contacts-content">
-                    <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                    @foreach($portals as $portal)
+                        @if($portal->ksi_id == 43)
+                            <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                            <a href="tel:{{$portal->ksit_value}}" class="sidebar-contacts-phone">
+                                @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                    <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
+                                         alt="{{$portal->ksit_comment}}">
+                                @endif
+                                {{$portal->ksit_value}} </a>
+                        @endif
+                    @endforeach
+                    @foreach($portals as $portal)
+                        @if($portal->ksi_id == 44)
+                            <p class="sidebar-contacts-callback-text">Обратная связь</p>
+                                <button class="sidebar-contacts-callback-btn">
+                                @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                    <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
+                                         alt="{{$portal->ksit_comment}}">
+                                @endif
+                                {{$portal->ksit_comment}} </button>
+                        @endif
+                    @endforeach
+                    {{--<p class="sidebar-contacts-phone-text">Телефон доверия</p>
                     <a href="tel:+998 (71) 239-33-79" class="sidebar-contacts-phone"><img
                             src="{{url('frontend/img/phone-1.png')}}" alt="">+998 (71)
                         239-33-79</a>
@@ -242,7 +292,7 @@
                     <button class="sidebar-contacts-callback-btn"><img
                             src="{{url('frontend/img/speach.png')}}"
                             alt="Жалобы и предложения">Жалобы и предложения
-                    </button>
+                    </button>--}}
                 </div>
             </div>
         </div>
@@ -271,13 +321,34 @@
             </div>
 
             <div class="footer-block contacts">
-                <p class="footer-block-title">Контакты</p>
+                @foreach($portals as $portal)
+                    @if($portal->ksi_id == 45)
+                        <p class="footer-block-title">Контакты</p>
+                        <p class="footer-block-contact">
+                            @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}" alt="">
+                            @endif
+                            {{$portal->ksit_value}}
+                        </p>
+                    @endif
+                @endforeach
+                @foreach($portals as $portal)
+                    @if($portal->ksi_id == 46)
+                        <p class="footer-block-contact">
+                            @if($portal->ksi_base_url != null || $portal->ksi_path != null)
+                                <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}" alt="">
+                            @endif
+                            E-mail: <a href="mailto:{{$portal->ksit_value}}">{{$portal->ksit_value}}</a>
+                        </p>
+                    @endif
+                @endforeach
+                {{--<p class="footer-block-title">Контакты</p>
                 <p class="footer-block-contact"><img
                         src="{{url('frontend/img/pin.png')}}" alt="">100070, Город
                     Ташкент, Мирабадский район, улица Амира Темура, 17</p>
                 <p class="footer-block-contact"><img
                         src="{{url('frontend/img/mail.png')}}" alt="">E-mail: <a
-                        href="mailto:devon@mdo.uz">devon@mdo.uz</a></p>
+                        href="mailto:devon@mdo.uz">devon@mdo.uz</a></p>--}}
             </div>
         </div>
     </div>

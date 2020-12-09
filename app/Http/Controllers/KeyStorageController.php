@@ -150,7 +150,6 @@ class KeyStorageController extends AppBaseController
      */
     public function update($id, UpdateKeyStorageRequest $request)
     {
-        //dd($request);
         $keyStorage = $this->keyStorageRepository->find($id);
 
         if (empty($keyStorage)) {
@@ -159,10 +158,12 @@ class KeyStorageController extends AppBaseController
             return redirect(route('keyStorages.index'));
         }
 
-        $this->keyStorageRepository->update(array('keyword' => $request->keyword), $id);
+        $updated = $this->keyStorageRepository->update(array('keyword' => $request->keyword), $id);
 
-        if($request['file'] != null){
-            unlink(public_path($keyStorage->base_url.'/'.$keyStorage->path));
+        if(isset($request['file'])){
+            if($keyStorage->base_url !== null || $keyStorage->path != null){
+                unlink(public_path($keyStorage->base_url.'/'.$keyStorage->path));
+            }
             $this->fileUpload($request, $id);
         }
 

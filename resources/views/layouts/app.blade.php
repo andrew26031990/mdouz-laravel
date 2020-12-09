@@ -169,8 +169,7 @@
 </script>
 <script type="text/javascript">
     $(function () {
-        $('.timeline').Timeline({
-        });
+        $('.timeline').Timeline();
     })
 </script>
 @stack('scripts')

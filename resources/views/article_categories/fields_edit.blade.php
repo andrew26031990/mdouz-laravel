@@ -52,13 +52,33 @@
             {{--{{dump($translations_lang_array)}}--}}
             @foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
-                    @foreach($translations as $trans)
-
-                            @if(in_array((int)$lang->id, $new_array))
-                                sdfsdfsdf
+                    @if(in_array((int)$lang->id, $new_array))
+                        @foreach($translations as $trans)
+                            @if($trans->lang_id == $lang->id)
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="title">Название</label>
+                                        <input type="text" class="form-control title" value="{{$trans->title}}" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="link">Ссылка</label>
+                                        <input type="text" class="form-control link" value="{{$trans->slug}}" name="Fields[{{$lang->id}}][link]" required >
+                                    </div>
+                                </div>
                             @endif
-
-                    @endforeach
+                        @endforeach
+                    @else
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="title">Название</label>
+                                <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="link">Ссылка</label>
+                                <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
+                            </div>
+                        </div>
+                    @endif
                 </div>
             @endforeach
 

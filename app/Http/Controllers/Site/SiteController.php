@@ -80,6 +80,7 @@ class SiteController extends Controller
         return $latest_news = DB::table('key_storage_item')->
             join('key_storage_item_translate', 'key_storage_item_translate.key_storage_item_id', '=', 'key_storage_item.id')
             ->where('key_storage_item_translate.lang_id', '=',$lang_id)->
+            select('key_storage_item.id as ksi_id', 'key_storage_item_translate.value as ksit_value', 'key_storage_item.base_url as ksi_base_url', 'key_storage_item.path as ksi_path', 'key_storage_item_translate.comment as ksit_comment')->
             get();
     }
 

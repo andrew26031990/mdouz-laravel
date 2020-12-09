@@ -83,53 +83,30 @@
         <div class="tab-content">
             @foreach($language as $lang)
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
-                    @if(isset($article_translate) && count($article_translate) > 0)
+                    @if(in_array((int)$lang->id, $lang_array))
                         @foreach($article_translate as $article_trans)
-                            {{--@if(isset($article_trans->lang_id) && $article_trans->lang_id == $lang->id)--}}
-                                @if(property_exists($article_trans, 'lang_id') && $article_trans->lang_id == $lang->id)
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label for="title">Название статьи</label>
-                                            <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" value="{{$article_trans->title}}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Ссылка статьи</label>
-                                            <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" value="{{$article_trans->slug}}" required >
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Краткое описание</label>
-                                            <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required>{{$article_trans->description}}</textarea>
-                                            {{--<input type="text" >--}}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Текст</label>
-                                            <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required>{{$article_trans->body}}</textarea>
-                                            {{--<input type="text" >--}}
-                                        </div>
+                            @if($article_trans->lang_id == $lang->id)
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label for="title">Название статьи</label>
+                                        <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" value="{{$article_trans->title}}" required>
                                     </div>
-                                @else
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label for="title">Название статьи</label>
-                                            <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Ссылка статьи</label>
-                                            <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Краткое описание</label>
-                                            <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
-                                            {{--<input type="text" >--}}
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="link">Текст</label>
-                                            <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
-                                            {{--<input type="text" >--}}
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="link">Ссылка статьи</label>
+                                        <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" value="{{$article_trans->slug}}" required >
                                     </div>
-                                @endif
-                            {{--@endif--}}
+                                    <div class="form-group">
+                                        <label for="link">Краткое описание</label>
+                                        <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required>{{$article_trans->description}}</textarea>
+                                        {{--<input type="text" >--}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="link">Текст</label>
+                                        <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required>{{$article_trans->body}}</textarea>
+                                        {{--<input type="text" >--}}
+                                    </div>
+                                </div>
+                            @endif
                         @endforeach
                     @else
                         <div class="box-body">

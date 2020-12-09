@@ -129,6 +129,8 @@ class ArticleController extends AppBaseController
         $lang = $this->langModelRepository->all();
         $categories = DB::table('article_category')->get();
         $article_attachments = DB::table('article_attachment')->where('article_id', $article->id)->get();
+        $translations_lang_array = DB::table('article_translate')->where('article_id', $id)->select('article_translate.lang_id as at_lang')->get();
+        $lang_array = $this->getArray($translations_lang_array);
         $article_translate = DB::table('article_translate')->where('article_id', $article->id)->get();
         if (empty($article)) {
             Flash::error('Article not found');
@@ -137,7 +139,15 @@ class ArticleController extends AppBaseController
         }
 
         return view('articles.edit')->with('article', $article)->with('language', $lang)->
-        with('categories', $categories)->with('article_attachments', $article_attachments)->with('article_translate', $article_translate);
+        with('categories', $categories)->with('article_attachments', $article_attachments)->with('article_translate', $article_translate)->with('lang_array', $lang_array);
+    }
+
+    public function getArray($translations_lang_array){
+        $arr = [];
+        foreach ($translations_lang_array as $key => $item){
+            array_push($arr, $item->at_lang);
+        }
+        return $arr;
     }
 
     /**
