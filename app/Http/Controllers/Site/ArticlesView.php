@@ -46,7 +46,8 @@ class ArticlesView extends Controller
             with('latest_news', $latest_news)->with('articles_from_category', $articles_from_category)->
             with('socials', $this->siteController->getSocials())->with('category', $category)->
             with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
-            ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id));
+            ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
+            ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
     }
 
     /**

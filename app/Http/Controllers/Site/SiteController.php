@@ -40,9 +40,11 @@ class SiteController extends Controller
         //Socials
         $tendering = $this->getTendering($lang_selected[0]->id);
 
+        $getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
+        //dd($getBottomArticles);
         return view('site.sliders.sliders', ['menu' => $menu])->
             with('language', $lang)->with('latest_news', $latest_news)->
-            with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering);
+            with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering)->with('bottom_articles', $getBottomArticles);
     }
 
     public function buildMenu ($lang_id){
@@ -69,11 +71,29 @@ class SiteController extends Controller
         return $mBuilder;
     }
 
-    public function latestNews ($lang_id){
+    /*public function latestNews ($lang_id){
         return $latest_news = DB::table('article')->
             join('article_translate', 'article_translate.article_id', '=', 'article.id')->
             join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->
             where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description')->orderBy('article.id', 'desc')->limit(6)->get();
+    }*/
+
+    public function latestNews ($lang_id){
+        return $latest_news = DB::table('article')->
+            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
+            join('article_category', 'article_category.id', '=', 'article.category_id')->
+            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
+            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->limit(6)->get();
+    }
+
+    public function bottom_articles ($lang_id){
+        return $latest_news = DB::table('article')->
+            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
+            join('article_category', 'article_category.id', '=', 'article.category_id')->
+            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
+            select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->get();
     }
 
     public function getPortalsView ($lang_id){
@@ -97,7 +117,7 @@ class SiteController extends Controller
             where('article_category_translate.lang_id', '=', $lang_id)->
             where('article_category.id', '=', 26)->
             where('article_translate.lang_id', '=', $lang_id)->
-            select('article_category_translate.slug as act_slug', 'article.published_at as a_published', 'article_translate.slug as at_slug', 'article_translate.title as at_title')->
+            select('article_category_translate.slug as act_slug', 'article.published_at as a_published', 'article_translate.slug as at_slug', 'article_translate.title as at_title', 'article_category_translate.title as act_title')->
             limit(5)->get();
     }
 

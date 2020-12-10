@@ -93,7 +93,13 @@
         <div class="container">
             <div class="header-middle-content">
                 <a href="/" class="header-logo">
-                    <img src="{{url('frontend/img/ru-logo.png')}}" alt="logo">
+                    @if(app()->getLocale() == 'uz')
+                        <img src="{{url('frontend/img/logo-uz.png')}}" alt="logo">
+                    @elseif(app()->getLocale() == 'ru')
+                        <img src="{{url('frontend/img/logo-ru.png')}}" alt="logo">
+                    @else
+                        <img src="{{url('frontend/img/logo-en.png')}}" alt="logo">
+                    @endif
                 </a>
                 <nav class="header-nav">
 
@@ -108,7 +114,14 @@
                 <p class="header-gerb">
                     <img src="{{url('frontend/img/gerb.png')}}"
                          alt="Республика Узбекистан">
-                    Республика Узбекистан </p>
+                    @if(app()->getLocale() == 'uz')
+                        Узбекистон республикаси
+                    @elseif(app()->getLocale() == 'ru')
+                        Республика Узбекистан
+                    @else
+                        The Republic of Uzbekistan
+                    @endif
+                </p>
             </div>
 
         </div>
@@ -167,9 +180,13 @@
                 <div class="tenders-block">
                     <div class="tenders-block-content">
                         <div class="title-wrap">
-                            <h2 class="title"><img
-                                    src="{{url('frontend/img/graph.png')}}" alt="">Тендерные
-                                торги</h2>
+                            @if(count($tendering) > 0)
+                                <h2 class="title"><img
+                                        src="{{url('frontend/img/graph.png')}}" alt="">{{$tendering[0]->act_title}}</h2>
+
+                            @else
+                                Нет статей
+                            @endif
                             <div class="tenders-block-slider-dots">
                                 <button role="button" class="owl-dot"><span></span></button>
                             </div>
@@ -210,7 +227,7 @@
                     <div class="sidebar-contacts-content">
                         @foreach($portals as $portal)
                             @if($portal->ksi_id == 43)
-                                <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                                <p class="sidebar-contacts-phone-text">{{$portal->ksit_comment}}</p>
                                 <a href="tel:{{$portal->ksit_value}}" class="sidebar-contacts-phone">
                                     @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                         <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
@@ -221,7 +238,7 @@
                         @endforeach
                         @foreach($portals as $portal)
                             @if($portal->ksi_id == 44)
-                                <p class="sidebar-contacts-callback-text">Обратная связь</p>
+                                {{--<p class="sidebar-contacts-callback-text">{{$portal->ksit_comment}}</p>--}}
                                 <a href="{{$portal->ksit_value}}" target="_BLANK" class="sidebar-contacts-phone">
                                     @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                         <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
@@ -264,7 +281,7 @@
                 <div class="sidebar-contacts-content">
                     @foreach($portals as $portal)
                         @if($portal->ksi_id == 43)
-                            <p class="sidebar-contacts-phone-text">Телефон доверия</p>
+                            <p class="sidebar-contacts-phone-text">{{$portal->ksit_comment}}</p>
                             <a href="tel:{{$portal->ksit_value}}" class="sidebar-contacts-phone">
                                 @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                     <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
@@ -275,7 +292,7 @@
                     @endforeach
                     @foreach($portals as $portal)
                         @if($portal->ksi_id == 44)
-                            <p class="sidebar-contacts-callback-text">Обратная связь</p>
+                            {{--<p class="sidebar-contacts-callback-text">{{$portal->ksit_comment}}</p>--}}
                                 <button class="sidebar-contacts-callback-btn">
                                 @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                     <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
@@ -304,26 +321,60 @@
 
 
             <div class="footer-block">
-                <p class="footer-block-title">Открытые данные</p>
+                @if(app()->getLocale() == 'uz')
+                    <p class="footer-block-title">Ommaviy ma'lumotlar</p>
+                @elseif(app()->getLocale() == 'ru')
+                    <p class="footer-block-title">Открытые данные</p>
+                @else
+                    <p class="footer-block-title">Open data</p>
+                @endif
+
                 <ul class="footer-block-menu">
-                    <li><a href="http://mdo.uz/ru/news/otkrytye-dannye">Статистика</a></li>
-                    <li><a href="http://mdo.uz/ru/news/struktura-ministerstva">О гендерном равенстве</a></li>
-                    <li><a href="http://mdo.uz/ru/news/vakansii">О вакансиях</a></li>
+                    @foreach($bottom_articles as $bottom)
+                        @if($bottom->id == 633 || $bottom->id == 632 || $bottom->id == 634)
+                            <li>
+                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
+                            </li>
+                        @endif
+                        {{--<li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/statistika">Статистика</a></li>
+                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-gendernom-ravenstve">О гендерном равенстве</a></li>
+                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-vakansiyah">О вакансиях</a></li>--}}
+                    @endforeach
                 </ul>
             </div>
             <div class="footer-block">
-                <p class="footer-block-title">Тендеры, объявления, финансы</p>
+                @if(app()->getLocale() == 'uz')
+                    <p class="footer-block-title" style="width: 420px;">Tenderlar, e'lonlar, moliya</p>
+                @elseif(app()->getLocale() == 'ru')
+                    <p class="footer-block-title" style="width: 420px;">Тендеры, объявления, финансы</p>
+                @else
+                    <p class="footer-block-title" style="width: 420px;">Tenders, announcements, finances</p>
+                @endif
+
                 <ul class="footer-block-menu">
-                    <li><a href="http://mdo.uz/ru/news/grafik-priema-obrasenij">О тендерах</a></li>
-                    <li><a href="http://mdo.uz/ru/news/poradok-obrasenij">Объявления</a></li>
-                    <li><a href="http://mdo.uz/ru/news/virtualnaa-priemnaa">О финансовых учетах</a></li>
+                    @foreach($bottom_articles as $bottom)
+                        @if($bottom->id == 635 || $bottom->id == 636 || $bottom->id == 637)
+                            <li>
+                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
+                            </li>
+                        @endif
+                        {{--<li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/statistika">Статистика</a></li>
+                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-gendernom-ravenstve">О гендерном равенстве</a></li>
+                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-vakansiyah">О вакансиях</a></li>--}}
+                    @endforeach
                 </ul>
             </div>
 
             <div class="footer-block contacts">
                 @foreach($portals as $portal)
                     @if($portal->ksi_id == 45)
-                        <p class="footer-block-title">Контакты</p>
+                        @if(app()->getLocale() == 'uz')
+                            <p class="footer-block-title">Aloqalar</p>
+                        @elseif(app()->getLocale() == 'ru')
+                            <p class="footer-block-title">Контакты</p>
+                        @else
+                            <p class="footer-block-title">Contacts</p>
+                        @endif
                         <p class="footer-block-contact">
                             @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                 <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}" alt="">
