@@ -51,7 +51,7 @@ class SiteController extends Controller
         $arrMenu = DB::table('article_category')->
         join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
         join('lang', 'article_category_translate.lang_id', '=', 'lang.id')->where('article_category_translate.lang_id', $lang_id)->
-        where('article_category.menu', 1)->where('article_category_translate.slug', '!=', 'video')->
+        where('article_category.menu', 1)->/*where('article_category_translate.slug', '!=', 'video')->*/
         select('article_category.id as id', 'article_category.parent_id as parent_id', 'article_category_translate.title as title', 'article_category_translate.slug as slug')->get();
 
         $mBuilder = (new \Lavary\Menu\Menu)->make('MyNav', function($m) use ($arrMenu){

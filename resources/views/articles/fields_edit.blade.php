@@ -9,7 +9,7 @@
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Change article image</label>
+                <label class="custom-file-label">Change article image (640 x 400)</label>
                 <div class="user-image mb-3">
                     @if($article->thumbnail_base_url !== null)
                         <img style="width: 200px; height: 100px;" src="{{url($article->thumbnail_base_url).'/'.$article->thumbnail_path }}">

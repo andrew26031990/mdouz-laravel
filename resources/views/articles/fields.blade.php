@@ -9,7 +9,7 @@
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Article image</label>
+                <label class="custom-file-label">Article image (640 x 400)</label>
                 <div class="user-image mb-3">
                     <div class="imgPreviewTitle"> </div>
                 </div>

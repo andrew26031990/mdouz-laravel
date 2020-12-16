@@ -38,6 +38,9 @@
             <a href="{{ route('articleCategories.index') }}"><i class="fa fa-folder-open-o"></i><span>Categories</span></a>
         </li>
 
+        <li class="{{ Request::is('videos*') ? 'active' : '' }}">
+            <a href="{{ route('videos.index') }}"><i class="fa fa-video-camera"></i><span>Videos</span></a>
+        </li>
         {{--<li class="{{ Request::is('events*') ? 'active' : '' }}">
             <a href="{{ route('events.index') }}"><i class="fa fa-edit"></i><span>Мероприятия</span></a>
         </li>--}}
@@ -67,5 +70,7 @@
 <li class="{{ Request::is('user*') ? 'active' : '' }}">
     <a href="{{ route('user.index') }}"><i class="fa fa-users"></i><span>Users</span></a>
 </li>--}}
+
+
 
 
