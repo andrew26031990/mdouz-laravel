@@ -12,9 +12,8 @@
                     @foreach($articles_from_category as $articles)
                         <div class="articles-block">
                             <div class="articles-block-top">
-                                <a href="{{url(Request::url().'/'.$articles->slug)}}"
-                                   class="articles-block-img-wrapper">
-                                    <p class="articles-block-date">{{gmdate("d.m.Y", $articles->date_published)}}</p>
+                                <a href="{{url(Request::url().'/'.$articles->slug)}}" class="articles-block-img-wrapper">
+                                    <span class="articles-block-date">{{gmdate("d.m.Y", $articles->date_published)}}</span>
                                     <img class="pressa-slider-img img-responsive"
                                          src="{{($articles->base_url !== null || $articles->image_name !== null) ? url($articles->base_url.'/'.$articles->image_name) : url('frontend/img/nophoto.png')}}"
                                          alt="{{$articles->title}}"
@@ -25,7 +24,7 @@
                                    title="{{$articles->title}}">{{$articles->title}}</a>
                             </div>
                             <div class="articles-block-bottom">
-                                <p class="articles-block-text">{!! substr($articles->description, 0, 100) !!}...</p>
+                                <p class="articles-block-text">{!! html_entity_decode($articles->description) !!}</p>
                             </div>
                         </div>
                     @endforeach

@@ -23,7 +23,7 @@
                 <td>
                     {!! Form::open(['route' => ['lang.destroy', $langModel->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
-                        <a href="{{ route('lang.show', [$langModel->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
+                        {{--<a href="{{ route('lang.show', [$langModel->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>--}}
                         <a href="{{ route('lang.edit', [$langModel->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
                         {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}
                     </div>

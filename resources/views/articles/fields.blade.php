@@ -2,14 +2,14 @@
     <!-- Custom Tabs -->
     <div class="nav-tabs-custom">
         <div class="form-group">
-            <label>Категория</label>
+            <label>Categories</label>
             <select class="form-control" name="category_id"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
                 @foreach($categories as $cat)
                     <option value="{{$cat->id}}">{{$cat->name}}</option>
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Изображение статьи</label>
+                <label class="custom-file-label">Article image</label>
                 <div class="user-image mb-3">
                     <div class="imgPreviewTitle"> </div>
                 </div>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="custom-file-label">Прикрепленные файлы</label>
+                <label class="custom-file-label">Attached files</label>
                 <div class="user-image mb-3">
                     <div class="imgPreview"> </div>
                 </div>
@@ -27,31 +27,31 @@
                 </div>
             </div>
             <div class="form-group">
-                <label>Опубликовано</label>
+                <label>Published</label>
                 <select class="form-control" name="status">
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>На главной</label>
+                <label>On main</label>
                 <select class="form-control" name="on_main">
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>В большой размере пресс-центра</label>
+                <label>Large size press center</label>
                 <select class="form-control" name="on_home">
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Вывести в меню</label>
+                <label>Display in the menu</label>
                 <select class="form-control" name="menu">
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 </select>
             </div>
         </div>
@@ -65,29 +65,27 @@
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="title">Название статьи</label>
+                            <label for="title">Article name</label>
                             <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="link">Ссылка статьи</label>
+                            <label for="link">Article link (generates automatically)</label>
                             <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
                         </div>
                         <div class="form-group">
-                            <label for="link">Краткое описание</label>
-                            <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
-                            {{--<input type="text" >--}}
+                            <label for="link">Description</label>
+                            <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
                         </div>
                         <div class="form-group">
-                            <label for="link">Текст</label>
-                            <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
-                            {{--<input type="text" >--}}
+                            <label for="link">Text</label>
+                            <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
                         </div>
                     </div>
                 </div>
         @endforeach
         <!-- Submit Field -->
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Создать статью</button>
+                <button type="submit" class="btn btn-primary">Create article</button>
             </div>
         </div>
         <!-- /.tab-content -->

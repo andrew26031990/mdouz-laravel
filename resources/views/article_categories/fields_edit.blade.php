@@ -2,9 +2,9 @@
     <!-- Custom Tabs -->
     <div class="nav-tabs-custom">
         <div class="form-group">
-            <label>Категория</label>
+            <label>Categories</label>
             <select class="form-control" name="parent"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
-                <option value="">Корневая категория</option>
+                <option value="">Root category</option>
                 @foreach($parentCategories as $parentCat)
                     @if(isset($articleCategory))
                         <option value="{{$parentCat->id}}" {{$articleCategory->id == $parentCat->id ? 'selected' : ''}}>{{$parentCat->name}}</option>
@@ -15,26 +15,26 @@
             </select>
         </div>
         <div class="form-group">
-            <label>Отобразить в меню</label>
+            <label>Show in menu</label>
             <select class="form-control" name="menu">
                 @if(isset($articleCategory))
-                    <option value="1" {{$articleCategory->menu == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$articleCategory->menu == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$articleCategory->menu == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$articleCategory->menu == 0 ? 'selected' : ''}}>no</option>
                 @else
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 @endif
             </select>
         </div>
         <div class="form-group">
-            <label>Опубликовать</label>
+            <label>Published</label>
             <select class="form-control" name="status">
                 @if(isset($articleCategory))
-                    <option value="1" {{$articleCategory->status == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$articleCategory->status == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$articleCategory->status == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$articleCategory->status == 0 ? 'selected' : ''}}>No</option>
                 @else
-                    <option value="1">Да</option>
-                    <option value="0">Нет</option>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
                 @endif
             </select>
         </div>
@@ -57,11 +57,11 @@
                             @if($trans->lang_id == $lang->id)
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <label for="title">Название</label>
+                                        <label for="title">Name</label>
                                         <input type="text" class="form-control title" value="{{$trans->title}}" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="link">Ссылка</label>
+                                        <label for="link">Link (generates automatically)</label>
                                         <input type="text" class="form-control link" value="{{$trans->slug}}" name="Fields[{{$lang->id}}][link]" required >
                                     </div>
                                 </div>
@@ -70,11 +70,11 @@
                     @else
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="title">Название</label>
+                                <label for="title">Name</label>
                                 <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
                             </div>
                             <div class="form-group">
-                                <label for="link">Ссылка</label>
+                                <label for="link">Link (generates automatically)</label>
                                 <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
                             </div>
                         </div>
@@ -129,7 +129,7 @@
             @endforeach--}}
 
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Update category</button>
             </div>
         </div>
         <!-- /.tab-content -->

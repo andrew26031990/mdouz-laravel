@@ -15,8 +15,8 @@
           content="MvqGIB4vQo31W5jK3yji5h2yMT0ej93kkisGcpne-t91tLRDU14OyaAj_vK3d7ONWOt3Sl_2saahfmU6tIGx7Q==">
 
     <!-- Template Basic Images Start -->
-    <link rel="icon" href="http://mdo.uz/img/favicon1.ico">
-    <link rel="apple-touch-icon" sizes="180x180" href="http://mdo.uz/img/apple-touch-icon-180x180.png">
+    <link rel="icon" href="{{url('frontend/icons/favicon.ico')}}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{url('frontend/icons/apple-touch-icon-180x180.png')}}">
     <!-- Template Basic Images End -->
 
     <!-- Custom Browsers Color Start -->
@@ -65,7 +65,7 @@
                         @endforeach
                     </ul>
                     <form action="{{route('search')}}" method="GET" class="header-search">
-                        <p class="header-search-field-wrap show">
+                        <p class="header-search-field-wrap">
                             <input type="text" name="search_field" class="header-search-field">
                         </p>
                         <button type="button" class="header-search-btn" aria-label="search"><img src="{{url('frontend/img/seach.png')}}" alt=""></button>
@@ -132,13 +132,56 @@
     <div class="container">
         <div class="wrapper">
             <aside class="sidebar">
-                <div class="dao-search-block">
-                    <div style="width: 100%;height: 50%;border-bottom: 1px solid white;text-align: center;">
-                        <div style="width: 60%; height: 100%; margin: 0 auto; position: relative">
-                            <div style="top: 20px; left: 0; position: absolute">
+                <div class="dao-search-block" style="height: auto; padding-bottom: 12px; padding-top: 12px;">
+                    <div class="row" style="margin-bottom: 12px; padding-bottom: 12px;border-bottom: 1px solid white;width: 100%">
+                        <div class="col">
+                            <img src="{{url('frontend/img/baby-boy.svg')}}" />
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <div style="background-color: white;text-transform: uppercase">
+                                        <b>количество воспитанников</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 12px;">
+                                <div class="col">
+                                    <div style="color: white; text-transform: uppercase">
+                                        <b>3000000</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="width: 90%">
+                        <div class="col">
+                            <img src="{{url('frontend/img/school.svg')}}" />
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <div style="background-color: white; text-transform: uppercase">
+                                        <b>количество учреждений</b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 12px;">
+                                <div class="col">
+                                    <div style="color: white; text-transform: uppercase">
+                                        <b>15000</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{--<div style="width: 100%;height: 50%;border-bottom: 1px solid white;text-align: center;">
+                        <div style="width: 60%; height: 100%; margin: 0 auto;">
+                            <div style="margin-left: 0; width: 50%;">
                                 <img src="{{url('frontend/img/baby-boy.svg')}}" />
                             </div>
-                            <div style="height: 100%; width: 70%; right: 0;position: absolute">
+                            <div style="width: 50%;">
                                 <div style="width: 100%; height: 50%; position: relative">
                                     <div style="position: absolute; top: 30px; background-color: white; padding: 5px">
                                         <b>количество воспитанников</b>
@@ -152,9 +195,9 @@
                             </div>
                         </div>
                     </div>
-                    <div style="width: 100%;height: 50%;border-bottom: 1px solid white;">
-                        <div style="width: 60%; height: 100%; margin: 0 auto; position: relative">
-                            <div style="top: 20px; left: 0; position: absolute">
+                    <div style="width: 100%;height: 50%;border-bottom: 1px solid white;text-align: center;">
+                        <div style="width: 60%; height: 100%; margin: 0 auto;">
+                            <div style="margin-left: 0; width: 50%;">
                                 <img src="{{url('frontend/img/school.svg')}}" />
                             </div>
                             <div style="height: 100%; width: 70%; right: 0;position: absolute">
@@ -170,12 +213,12 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>--}}
                 </div>
                 <div class="dao-search-block">
                     <img style="width: 100%; height: 100%;margin-bottom: 58px;"
                          src="{{url('frontend/img/borekan_zorekan.png')}}">
-                    <a href="http://mdo.local/{{app()->getLocale()}}/bor-ekan-zor-ekan" class="dao-search-block-link">Bor ekan zor ekan</a>
+                    <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/bor-ekan-zor-ekan" class="dao-search-block-link">Bor ekan zor ekan</a>
                 </div>
                 <div class="tenders-block">
                     <div class="tenders-block-content">
@@ -218,8 +261,6 @@
                                 <button type="button" role="presentation" class="owl-next"></button>
                             </div>
                         </div>
-                        {{--<a href="http://mdo.uz/ru/news/tags/tendernye-torgi" class="tenders-block-show-all">Смотреть
-                            все...</a>--}}
                     </div>
                 </div>
 
@@ -247,16 +288,6 @@
                                     {{$portal->ksit_comment}} </a>
                             @endif
                         @endforeach
-{{--                        <p class="sidebar-contacts-phone-text">Телефон доверия</p>
-                        <a href="tel:+998 (71) 239-33-79" class="sidebar-contacts-phone">
-                            <img src="{{url('frontend/img/phone-1.png')}}"
-                                 alt="Телефон доверия">
-                            +998 (71) 239-33-79 </a>--}}
-                        {{--<p class="sidebar-contacts-callback-text">Обратная связь</p>
-                        <a href="http://support.mdo.uz/" class="sidebar-contacts-callback-btn">
-                            <img src="{{url('frontend/img/speach.png')}}"
-                                 alt="Жалобы и предложения">
-                            Жалобы и предложения </a>--}}
                     </div>
                 </div>
             </aside>
@@ -292,24 +323,15 @@
                     @endforeach
                     @foreach($portals as $portal)
                         @if($portal->ksi_id == 44)
-                            {{--<p class="sidebar-contacts-callback-text">{{$portal->ksit_comment}}</p>--}}
-                                <button class="sidebar-contacts-callback-btn">
+                            <p class="sidebar-contacts-callback-text">{{$portal->ksit_comment}}</p>
+                                <a href="{{$portal->ksit_value}}" target="_BLANK" class="sidebar-contacts-callback-btn">
                                 @if($portal->ksi_base_url != null || $portal->ksi_path != null)
                                     <img src="{{url($portal->ksi_base_url.'/'.$portal->ksi_path)}}"
                                          alt="{{$portal->ksit_comment}}">
                                 @endif
-                                {{$portal->ksit_comment}} </button>
+                                {{$portal->ksit_comment}} </a>
                         @endif
                     @endforeach
-                    {{--<p class="sidebar-contacts-phone-text">Телефон доверия</p>
-                    <a href="tel:+998 (71) 239-33-79" class="sidebar-contacts-phone"><img
-                            src="{{url('frontend/img/phone-1.png')}}" alt="">+998 (71)
-                        239-33-79</a>
-                    <p class="sidebar-contacts-callback-text">Обратная связь</p>
-                    <button class="sidebar-contacts-callback-btn"><img
-                            src="{{url('frontend/img/speach.png')}}"
-                            alt="Жалобы и предложения">Жалобы и предложения
-                    </button>--}}
                 </div>
             </div>
         </div>
@@ -330,15 +352,12 @@
                 @endif
 
                 <ul class="footer-block-menu">
-                    @foreach($bottom_articles as $bottom)
+                    @foreach($bottom_articles ?? '' as $bottom)
                         @if($bottom->id == 633 || $bottom->id == 632 || $bottom->id == 634)
                             <li>
                                 <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
                             </li>
                         @endif
-                        {{--<li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/statistika">Статистика</a></li>
-                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-gendernom-ravenstve">О гендерном равенстве</a></li>
-                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-vakansiyah">О вакансиях</a></li>--}}
                     @endforeach
                 </ul>
             </div>
@@ -352,15 +371,12 @@
                 @endif
 
                 <ul class="footer-block-menu">
-                    @foreach($bottom_articles as $bottom)
+                    @foreach($bottom_articles ?? '' as $bottom)
                         @if($bottom->id == 635 || $bottom->id == 636 || $bottom->id == 637)
                             <li>
                                 <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
                             </li>
                         @endif
-                        {{--<li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/statistika">Статистика</a></li>
-                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-gendernom-ravenstve">О гендерном равенстве</a></li>
-                        <li><a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/otkrytye-dannye/o-vakansiyah">О вакансиях</a></li>--}}
                     @endforeach
                 </ul>
             </div>
@@ -393,13 +409,6 @@
                         </p>
                     @endif
                 @endforeach
-                {{--<p class="footer-block-title">Контакты</p>
-                <p class="footer-block-contact"><img
-                        src="{{url('frontend/img/pin.png')}}" alt="">100070, Город
-                    Ташкент, Мирабадский район, улица Амира Темура, 17</p>
-                <p class="footer-block-contact"><img
-                        src="{{url('frontend/img/mail.png')}}" alt="">E-mail: <a
-                        href="mailto:devon@mdo.uz">devon@mdo.uz</a></p>--}}
             </div>
         </div>
     </div>
@@ -417,7 +426,6 @@
         let pgwSlider = $('.pgwSlider').pgwSlider({
             'listPosition': 'left',
             'verticalCentering': true,
-            'adaptiveHeight': true,
          });
         pgwSlider.stopSlide();
         $('.pgwSlider .ps-current img').css('height', '300px')
@@ -429,8 +437,35 @@
 <script src="{{url('frontend/js/custom.js')}}"></script>
 <script src="{{url('frontend/js/common.js')}}"></script>
 <script src="{{url('frontend/js/main.js')}}"></script>
-{{--<script src="https://lidrekon.ru/slep/js/jquery.js"></script>--}}
 <script src="https://lidrekon.ru/slep/js/uhpv-full.min.js"></script>
 <script type="text/javascript">(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1){e.className+=' ya-page_js_yes';}s.type='text/javascript';s.async=true;s.charset='utf-8';s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){Ya.Site.Form.init()})})(window,document,'yandex_site_callbacks');</script>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter69006928 = new Ya.Metrika({
+                    id:69006928,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/69006928" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </body>
 </html>

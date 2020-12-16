@@ -82,7 +82,7 @@
         </form>
 
         <a href="{{ url('/password/reset') }}">@lang('auth.login.forgot_password')</a><br>
-        <a href="{{ url('/register') }}" class="text-center">@lang('auth.login.register_membership')</a>
+        {{--<a href="{{ url('/register') }}" class="text-center">@lang('auth.login.register_membership')</a>--}}
 
     </div>
     <!-- /.login-box-body -->

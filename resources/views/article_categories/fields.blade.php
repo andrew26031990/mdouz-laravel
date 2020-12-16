@@ -2,26 +2,26 @@
     <!-- Custom Tabs -->
     <div class="nav-tabs-custom">
         <div class="form-group">
-            <label>Категория</label>
+            <label>Categories</label>
             <select class="form-control" name="parent"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
-                <option value="">Корневая категория</option>
+                <option value="">Root category</option>
                 @foreach($parentCategories as $parentCat)
                     <option value="{{$parentCat->id}}">{{$parentCat->name}}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
-            <label>Отобразить в меню</label>
+            <label>Show in menu</label>
             <select class="form-control" name="menu">
-                <option value="1">Да</option>
-                <option value="0">Нет</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Опубликовать</label>
+            <label>Published</label>
             <select class="form-control" name="status">
-                <option value="1">Да</option>
-                <option value="0">Нет</option>
+                <option value="1">Yes</option>
+                <option value="0">No</option>
             </select>
         </div>
         <input type="hidden" name="name" value="">
@@ -35,18 +35,18 @@
                 <div class="tab-pane {{$lang->url == "uz" ? "active" : ""}}" id="{{$lang->url}}">
                     <div class="box-body">
                         <div class="form-group">
-                            <label for="title">Название</label>
+                            <label for="title">Name</label>
                             <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
                         </div>
                         <div class="form-group">
-                            <label for="link">Ссылка</label>
+                            <label for="link">Link (generates automatically)</label>
                             <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
                         </div>
                     </div>
                 </div>
             @endforeach
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Create category</button>
             </div>
         </div>
         <!-- /.tab-content -->

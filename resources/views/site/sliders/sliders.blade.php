@@ -14,9 +14,9 @@
                     @else
                         <img style="width: 0;height: 0"
                              src="{{url($lat_news->thumbnail_base_url.'/'.$lat_news->thumbnail_path)}}"
-                             alt="{{$lat_news->at_title}}" data-description="{{$lat_news->at_description}}">
+                             alt="{!!$lat_news->at_title!!}" data-description="{!!$lat_news->at_description!!}">
                     @endif
-                    <span style="height: 100%; font-weight: bold;background-color: #e9a41b; font-size: 12px; line-height: 3em">{{$lat_news->at_title}}</span>
+                    <span style="height: 100%; font-weight: bold;background-color: #e9a41b; font-size: 12px; line-height: 3em">{!!$lat_news->at_title!!}</span>
                 </li>
             @endforeach
         </ul>
@@ -53,15 +53,15 @@
                                 @else
                                     <img class="pressa-img img-responsive"
                                          src="{{url($lat_news->thumbnail_base_url.'/'.$lat_news->thumbnail_path)}}"
-                                         alt="{{$lat_news->at_title}}"
-                                         title="{{$lat_news->at_title}}">
+                                         alt="{!!$lat_news->at_title!!}"
+                                         title="{!!$lat_news->at_title!!}">
                                 @endif
                                 <time datetime="2019-04-22">{{date("d.m.y", $lat_news->published_at)}}</time>
                             </a>
                             <footer>
                                 <a href="{{URL::to('/').'/'.app()->getLocale().'/'.$lat_news->act_slug.'/'.$lat_news->at_slug}}"
                                    class="main-news-slider-item-title"
-                                   title="{{$lat_news->at_title}}">{{$lat_news->at_title}}</a>
+                                   title="{!!$lat_news->at_title!!}">{!!$lat_news->at_title!!}</a>
                             </footer>
                         </article>
                     </div>

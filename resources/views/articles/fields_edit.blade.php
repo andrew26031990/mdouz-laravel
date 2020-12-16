@@ -2,14 +2,14 @@
     <!-- Custom Tabs -->
     <div class="nav-tabs-custom">
         <div class="form-group">
-            <label>Категория</label>
+            <label>Categories</label>
             <select class="form-control" name="category_id">
                 @foreach($categories as $cat)
                     <option value="{{$cat->id}}" {{$article->category_id == $cat->id ? 'selected' : ''}}>{{$cat->name}}</option>
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Изменить изображение статьи</label>
+                <label class="custom-file-label">Change article image</label>
                 <div class="user-image mb-3">
                     @if($article->thumbnail_base_url !== null)
                         <img style="width: 200px; height: 100px;" src="{{url($article->thumbnail_base_url).'/'.$article->thumbnail_path }}">
@@ -26,51 +26,51 @@
             </div>
             <div class="form-group">
                 @if(count($article_attachments) > 0)
-                    <label class="custom-file-label">Прикрепленные файлы</label>
+                    <label class="custom-file-label">Attached files</label>
                     @foreach($article_attachments as $article_attachment)
                         <button type="button" class="btn btn-primary">
                             {{$article_attachment->path}} <a class="badge badge-light" onclick="return confirm('Вы действительно хотите удалить изображение?')" attachment_id="{{$article_attachment->id}}">x</a>
                         </button>
                     @endforeach
                 @else
-                    <label class="custom-file-label">Нет прикрепленных файлов</label>
+                    <label class="custom-file-label">No attached files</label>
                 @endif
                 <div class="user-image mb-3">
                     <div class="imgPreview">
 
                     </div>
                 </div>
-                <br><label class="custom-file-label">Прикрепить еще файлы</label>
+                <br><label class="custom-file-label">Attach files</label>
                 <div class="custom-file">
                     <input type="file" name="attachment[]" id="images" class="custom-file-input" multiple>
                 </div>
             </div>
             <div class="form-group">
-                <label>Опубликовано</label>
+                <label>Published</label>
                 <select class="form-control" name="status">
-                    <option value="1" {{$article->status == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$article->status == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$article->status == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$article->status == 0 ? 'selected' : ''}}>No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>На главной</label>
+                <label>On main</label>
                 <select class="form-control" name="on_main">
-                    <option value="1" {{$article->on_main == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$article->on_main == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$article->on_main == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$article->on_main == 0 ? 'selected' : ''}}>No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>В большой размере пресс-центра</label>
+                <label>Large size press center</label>
                 <select class="form-control" name="on_home">
-                    <option value="1" {{$article->on_home == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$article->on_home == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$article->on_home == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$article->on_home == 0 ? 'selected' : ''}}>No</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Вывести в меню</label>
+                <label>Display in the menu</label>
                 <select class="form-control" name="menu">
-                    <option value="1" {{$article->menu == 1 ? 'selected' : ''}}>Да</option>
-                    <option value="0" {{$article->menu == 0 ? 'selected' : ''}}>Нет</option>
+                    <option value="1" {{$article->menu == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$article->menu == 0 ? 'selected' : ''}}>No</option>
                 </select>
             </div>
             <input type="hidden" name="article_id" value="{{$article->id}}">
@@ -88,22 +88,20 @@
                             @if($article_trans->lang_id == $lang->id)
                                 <div class="box-body">
                                     <div class="form-group">
-                                        <label for="title">Название статьи</label>
+                                        <label for="title">Article name</label>
                                         <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" value="{{$article_trans->title}}" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="link">Ссылка статьи</label>
+                                        <label for="link">Article link (generates automatically)</label>
                                         <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" value="{{$article_trans->slug}}" required >
                                     </div>
                                     <div class="form-group">
-                                        <label for="link">Краткое описание</label>
-                                        <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required>{{$article_trans->description}}</textarea>
-                                        {{--<input type="text" >--}}
+                                        <label for="link">Description</label>
+                                        <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][description]" rows="6" required>{{$article_trans->description}}</textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label for="link">Текст</label>
-                                        <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required>{{$article_trans->body}}</textarea>
-                                        {{--<input type="text" >--}}
+                                        <label for="link">Text</label>
+                                        <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][body]" rows="6" required>{{$article_trans->body}}</textarea>
                                     </div>
                                 </div>
                             @endif
@@ -111,22 +109,20 @@
                     @else
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="title">Название статьи</label>
+                                <label for="title">Article name</label>
                                 <input type="text" class="form-control title" name="Fields[{{$lang->id}}][title]" langid="{{$lang->url}}" required>
                             </div>
                             <div class="form-group">
-                                <label for="link">Ссылка статьи</label>
+                                <label for="link">Article link (generates automatically)</label>
                                 <input type="text" class="form-control link" name="Fields[{{$lang->id}}][link]" required >
                             </div>
                             <div class="form-group">
-                                <label for="link">Краткое описание</label>
-                                <textarea class="form-control description" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
-                                <input type="text" >
+                                <label for="link">Description</label>
+                                <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][description]" rows="6" required></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="link">Текст</label>
-                                <textarea class="form-control description" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
-                                <input type="text" >
+                                <label for="link">Text</label>
+                                <textarea class="form-control description ckeditor" name="Fields[{{$lang->id}}][body]" rows="6" required></textarea>
                             </div>
                         </div>
                     @endif
@@ -134,7 +130,7 @@
         @endforeach
         <!-- Submit Field -->
             <div class="box-footer">
-                <button type="submit" class="btn btn-primary">Обновить статью</button>
+                <button type="submit" class="btn btn-primary">Update article</button>
             </div>
         </div>
         <!-- /.tab-content -->

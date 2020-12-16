@@ -41,7 +41,7 @@ class ArticlesView extends Controller
             join('article_translate', 'article.id', '=', 'article_translate.article_id')->
             where('article_category_translate.slug', $request->segment(2))->
             where('article_translate.lang_id', $lang_selected[0]->id)->
-            distinct()->paginate(9, ['article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
+            distinct()->orderBy('article.published_at', 'desc')->paginate(9, ['article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
         return view('site.articles.articles', ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('articles_from_category', $articles_from_category)->
             with('socials', $this->siteController->getSocials())->with('category', $category)->
