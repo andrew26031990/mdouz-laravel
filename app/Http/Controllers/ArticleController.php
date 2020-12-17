@@ -33,10 +33,13 @@ class ArticleController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $lang = $this->langModelRepository->all();
         $articles = DB::table('article')->join('article_category', 'article_category.id', '=', 'article.category_id')->
-        select('article_category.name as ac_name', 'article.*')->paginate(10);
+            select('article_category.name as ac_name', 'article.*')->paginate(10);
+        $article_translate = DB::table('article_translate')->get();
+
         return view('articles.index')
-            ->with('articles', $articles);
+            ->with('articles', $articles)->with('language', $lang)->with('article_translate', $article_translate);
     }
 
     /**

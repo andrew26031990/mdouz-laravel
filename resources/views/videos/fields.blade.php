@@ -40,7 +40,7 @@
                         <div class="form-group">
                             <label class="custom-file-label">Video</label>
                             <div class="custom-file">
-                                <input type="file" name="Fields[{{$lang->id}}][video]" id="imageTitle" accept="video/*" class="custom-file-input" required>
+                                <input type="file" name="Fields[{{$lang->id}}][video]" id="imageTitle" accept="video/mp4,video/x-m4v,video/" class="custom-file-input" required>
                             </div>
                         </div>
                         <div class="form-group">

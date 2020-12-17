@@ -4,6 +4,9 @@
             <tr>
                 <th>Id</th>
                 <th>Category</th>
+                @foreach($language as $lang)
+                    <th>{{$lang->name}}</th>
+                @endforeach
                 <th>Status</th>
                 <th>On Main</th>
                 <th>On Home</th>
@@ -17,6 +20,16 @@
             <tr>
                 <td>{{ $article->id }}</td>
                 <td>{{ $article->ac_name }}</td>
+                @foreach($language as $lang)
+                    @foreach($article_translate as $article_trans)
+                        @if($lang->id == $article_trans->lang_id && $article->id == $article_trans->article_id)
+                            <td>{{$article_trans->title}}</td>
+                        @endif
+                        {{--@if(!$article_trans->lang_id->contains('lang_id', $lang->id) && !$article_trans->article_id->contains('article_id', $article->id))
+                            <td></td>
+                        @endif--}}
+                    @endforeach
+                @endforeach
                 <td>{{ $article->status }}</td>
                 <td>{{ $article->on_main }}</td>
                 <td>{{ $article->on_home }}</td>

@@ -34,6 +34,7 @@ class SiteController extends Controller
         //Menu
         //Latest news
         $latest_news = $this->latestNews($lang_selected[0]->id);
+        $latest_ministry_news = $this->latestMinistryNews($lang_selected[0]->id);
         //Latest news
         //Socials
         $socials = $this->getSocials();
@@ -41,9 +42,10 @@ class SiteController extends Controller
         $tendering = $this->getTendering($lang_selected[0]->id);
 
         $getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
-        //dd($getBottomArticles);
+        $footer = $this->generateFooter($lang_selected[0]->id);
+
         return view('site.sliders.sliders', ['menu' => $menu])->
-            with('language', $lang)->with('latest_news', $latest_news)->
+            with('language', $lang)->with('latest_news', $latest_news)->with('latest_ministry_news', $latest_ministry_news)->
             with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering)->with('bottom_articles', $getBottomArticles);
     }
 
@@ -71,12 +73,14 @@ class SiteController extends Controller
         return $mBuilder;
     }
 
-    /*public function latestNews ($lang_id){
-        return $latest_news = DB::table('article')->
-            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
-            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->
-            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description')->orderBy('article.id', 'desc')->limit(6)->get();
-    }*/
+    public function generateFooter ($lang_id){
+        return $footer = DB::table('footer_menu')->
+            join('footer_menu_item', 'footer_menu_item.footer_menu_id', '=', 'footer_menu.id')->
+            join('article', 'article.id', '=', 'footer_menu_item.item_id')->
+            join('article_translate', 'article.id', '=', 'article_translate.article_id')->
+            where('article_translate.lang_id', $lang_id)->
+            where('footer_menu.status', 1)->get();
+    }
 
     public function latestNews ($lang_id){
         return $latest_news = DB::table('article')->
@@ -84,7 +88,18 @@ class SiteController extends Controller
             join('article_category', 'article_category.id', '=', 'article.category_id')->
             join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
             join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
-            where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->limit(6)->get();
+        where('article_category.name', '=', 'novosti-ministerstva')->where('article_category_translate.title', '!=', '')->
+        where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->limit(6)->get();
+    }
+
+    public function latestMinistryNews ($lang_id){
+        return $latest_news = DB::table('article')->
+        join('article_translate', 'article_translate.article_id', '=', 'article.id')->
+        join('article_category', 'article_category.id', '=', 'article.category_id')->
+        join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+        join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
+        where('article_category.name', '=', 'stati')->where('article_category_translate.title', '!=', '')->
+        where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->limit(6)->get();
     }
 
     public function bottom_articles ($lang_id){

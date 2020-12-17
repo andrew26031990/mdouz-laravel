@@ -32,18 +32,37 @@ class ArticleView extends Controller
         $site_controller = $this->siteController;
         $menu = $site_controller->buildMenu($lang_selected[0]->id);
         $latest_news = $site_controller->latestNews($lang_selected[0]->id);
-        $article = DB::table('article_translate')->
-            join('article', 'article_translate.article_id', '=', 'article.id')->
-            where('article_translate.slug', $request->segment(3))->
-            where('article_translate.lang_id', $lang_selected[0]->id)->get();
-        $article_attachment = DB::table('article_attachment')->
-            where('article_attachment.article_id', $article[0]->id)->get();
-        return view('site.article.article', ['menu' => $menu])->with('language', $lang)->
+
+        if(str_contains($request->server('REQUEST_URI'), 'video')){
+            $view = 'video';
+            $article = DB::table('video_translate')->
+                join('video', 'video_translate.video_id', '=', 'video.id')->
+                where('video_translate.slug', $request->segment(3))->
+                where('video_translate.lang_id', $lang_selected[0]->id)->get();
+            return view("site.article.$view", ['menu' => $menu])->with('language', $lang)->
+            with('latest_news', $latest_news)->with('article', $article)->
+            with('socials', $this->siteController->getSocials())
+                ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
+                ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
+                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
+        }else{
+            $view = 'article';
+            $article = DB::table('article_translate')->
+                join('article', 'article_translate.article_id', '=', 'article.id')->
+                where('article_translate.slug', $request->segment(3))->
+                where('article_translate.lang_id', $lang_selected[0]->id)->get();
+            $article_attachment = DB::table('article_attachment')->
+                where('article_attachment.article_id', $article[0]->id)->get();
+            return view("site.article.$view", ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('article', $article)->with('article_attachment', $article_attachment)->
             with('socials', $this->siteController->getSocials())
-            ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
-            ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
-            ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
+                ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
+                ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
+                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
+        }
+
+
+
     }
 
     /**

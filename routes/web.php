@@ -65,3 +65,5 @@ Route::resource('articles', App\Http\Controllers\ArticleController::class);
 
 
 Route::resource('videos', App\Http\Controllers\VideoController::class);
+
+Route::resource('footerMenus', App\Http\Controllers\FooterMenuController::class);

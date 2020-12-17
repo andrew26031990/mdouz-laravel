@@ -74,3 +74,7 @@
 
 
 
+<li class="{{ Request::is('footerMenus*') ? 'active' : '' }}">
+    <a href="{{ route('footerMenus.index') }}"><i class="fa fa-edit"></i><span>Footer Menus</span></a>
+</li>
+
