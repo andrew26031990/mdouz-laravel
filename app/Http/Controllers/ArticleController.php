@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\Models\Article;
 use App\Repositories\ArticleRepository;
+use App\Repositories\LogsRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\LangModelRepository;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
 
@@ -17,11 +20,13 @@ class ArticleController extends AppBaseController
     /** @var  ArticleRepository */
     private $articleRepository;
     private $langModelRepository;
+    private $logsRepository;
 
-    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo)
+    public function __construct(ArticleRepository $articleRepo, LangModelRepository $langModelRepo, LogsRepository $logsRepo)
     {
         $this->articleRepository = $articleRepo;
         $this->langModelRepository = $langModelRepo;
+        $this->logsRepository = $logsRepo;
     }
 
     /**
@@ -35,11 +40,14 @@ class ArticleController extends AppBaseController
     {
         $lang = $this->langModelRepository->all();
         $articles = DB::table('article')->join('article_category', 'article_category.id', '=', 'article.category_id')->
-            select('article_category.name as ac_name', 'article.*')->paginate(10);
+            where('article.deleted_at', '=', null)->
+            select('article_category.name as ac_name', 'article.*')->get()/*paginate(10)*/;
         $article_translate = DB::table('article_translate')->get();
-
+        $trashed = DB::table('article')->join('article_category', 'article_category.id', '=', 'article.category_id')->
+            where('article.deleted_at', '!=', null)->
+            select('article_category.name as ac_name', 'article.*')->get();
         return view('articles.index')
-            ->with('articles', $articles)->with('language', $lang)->with('article_translate', $article_translate);
+            ->with('articles', $articles)->with('language', $lang)->with('article_translate', $article_translate)->with('trashed', $trashed);
     }
 
     /**
@@ -88,6 +96,10 @@ class ArticleController extends AppBaseController
             foreach($input['Fields'] as $key => $part){
                 DB::table('article_translate')->insert(array('article_id'=>$newArticle->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']));
             }
+
+            $description = 'User '.Auth::user()->name.' created article with id '.$newArticle->id;
+
+            $this->logsRepository->create(array('event' => 'store article', 'description'=>$description, 'ip'=> $request->ip(), 'date'=> strtotime('today GMT')));
 
             Flash::success('Article saved successfully.');
 
@@ -195,6 +207,10 @@ class ArticleController extends AppBaseController
                 DB::table('article_translate')->updateOrInsert(['lang_id'=>$key, 'article_id'=>$article->id] ,['article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']]);
             }
 
+            $description = 'User '.Auth::user()->name.' updated article with id '.$id;
+
+            $this->logsRepository->create(array('event' => 'update article', 'description'=>$description, 'ip'=> $request->ip(), 'date'=> strtotime('today GMT')));
+
             Flash::success('Статья обновлена');
             return redirect(route('articles.index'));
         }catch (\Exception $ex){
@@ -224,6 +240,11 @@ class ArticleController extends AppBaseController
         }
 
         $this->articleRepository->delete($id);
+
+        $description = 'User '.Auth::user()->name.' delete article with id '.$id;
+
+        $this->logsRepository->create(array('event' => 'delete article', 'description'=>$description, 'ip'=> request()->ip(), 'date'=> strtotime('today GMT')));
+
 
         Flash::success('Article deleted successfully.');
 
@@ -257,5 +278,27 @@ class ArticleController extends AppBaseController
         DB::table('article_attachment')->delete($attachment_id);
         //unlink(url('/public/uploads/articles/article_attachment/'))
         return 'success';
+    }
+
+    public function restore($id)
+    {
+        $products = Article::onlyTrashed()->find($id);
+
+        if (empty($products)) {
+            Flash::error('Article not found in recycle bin');
+
+            return redirect(route('articles.index'));
+        }
+
+        Article::onlyTrashed()->find($id)->restore();
+
+        $description = 'User '.Auth::user()->name.' restored article with id '.$id;
+
+        $this->logsRepository->create(array('event' => 'restore article', 'description'=>$description, 'ip'=> request()->ip(), 'date'=> strtotime('today GMT')));
+
+
+        Flash::success('Article successfully restored');
+
+        return redirect(route('articles.index'));
     }
 }

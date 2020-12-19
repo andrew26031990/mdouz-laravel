@@ -9,7 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "ckeditor/ckeditor": "^4.15",
+        "dlnsk/h-rbac": "^0.4.2",
         "doctrine/dbal": "~2.3",
         "fideloper/proxy": "^4.4",
         "fruitcake/laravel-cors": "^2.0",
@@ -21,8 +23,7 @@
         "laravel/ui": "3.0",
         "laravelcollective/html": "^6.2",
         "lavary/laravel-menu": "^1.7",
-        "spatie/laravel-menu": "^3.7",
-        "ext-json": "*"
+        "spatie/laravel-menu": "^3.7"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Article
@@ -31,15 +32,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  */
 class Article extends Model
 {
-
+    use SoftDeletes;
     use HasFactory;
 
     public $table = 'article';
 
+    public $timestamps = true;
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-    public $timestamps = false;
+
+    protected $dates = ['deleted_at'];
+
+    protected $dateFormat = 'U';
 
 
     public $fillable = [
@@ -140,5 +146,9 @@ class Article extends Model
     public function articleTranslates()
     {
         return $this->hasMany(\App\Models\ArticleTranslate::class, 'article_id');
+    }
+
+    public static function trash() {
+        return self::onlyTrashed()->get();
     }
 }

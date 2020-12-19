@@ -8,8 +8,10 @@ use App\Repositories\ArticleCategoryRepository;
 use App\Http\Controllers\AppBaseController;
 use App\Repositories\ArticleCategoryTranslateRepository;
 use App\Repositories\LangModelRepository;
+use App\Repositories\LogsRepository;
 use Illuminate\Http\Request;
 use Flash;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Response;
 
@@ -19,12 +21,14 @@ class ArticleCategoryController extends AppBaseController
     private $articleCategoryRepository;
     private $langModelRepository;
     private $articleCategoryTranslateRepository;
+    private $logsRepository;
 
-    public function __construct(ArticleCategoryRepository $articleCategoryRepo, LangModelRepository $langModelRepo, ArticleCategoryTranslateRepository $articleCategoryTranslateRepo)
+    public function __construct(ArticleCategoryRepository $articleCategoryRepo, LangModelRepository $langModelRepo, ArticleCategoryTranslateRepository $articleCategoryTranslateRepo,  LogsRepository $logsRepo)
     {
         $this->articleCategoryRepository = $articleCategoryRepo;
         $this->langModelRepository = $langModelRepo;
         $this->articleCategoryTranslateRepository = $articleCategoryTranslateRepo;
+        $this->logsRepository = $logsRepo;
     }
 
     /**
@@ -68,6 +72,11 @@ class ArticleCategoryController extends AppBaseController
             foreach($input['Fields'] as $key => $part){
                 $this->articleCategoryTranslateRepository->create(array('article_category_id'=>$id->id, 'title' => $part['title'], 'slug' => $part['link'], 'lang_id' => $key));
             }
+
+            $description = 'User '.Auth::user()->name.' stored article category with id '.$id;
+
+            $this->logsRepository->create(array('event' => 'store article', 'description'=>$description, 'ip'=> request()->ip(), 'date'=> strtotime('today GMT')));
+
             Flash::success('Категория успешно сохранена');
             return redirect(route('articleCategories.index'));
         }catch (\Exception $ex){
@@ -157,6 +166,12 @@ class ArticleCategoryController extends AppBaseController
                 DB::table('article_category_translate')->
                     updateOrInsert(['article_category_translate.article_category_id' => $id, 'lang_id' => $key], ['title' => $part['title'], 'slug' => $part['link']]);
             }
+
+            $description = 'User '.Auth::user()->name.' updated article category with id '.$id;
+
+            $this->logsRepository->create(array('event' => 'store article', 'description'=>$description, 'ip'=> request()->ip(), 'date'=> strtotime('today GMT')));
+
+
             Flash::success('Категория успешно обновлена');
             return redirect(route('articleCategories.index'));
         }catch (\Exception $ex){
@@ -193,6 +208,11 @@ class ArticleCategoryController extends AppBaseController
         try{
             DB::table('article_category_translate')->where('article_category_id', '=', $id)->delete();
             $this->articleCategoryRepository->delete($id);
+
+            $description = 'User '.Auth::user()->name.' destroyed article category with id '.$id;
+
+            $this->logsRepository->create(array('event' => 'destroy article', 'description'=>$description, 'ip'=> request()->ip(), 'date'=> strtotime('today GMT')));
+
             Flash::success('Категория успешно удалена');
             return redirect(route('articleCategories.index'));
         }catch (\Exception $ex){

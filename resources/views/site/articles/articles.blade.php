@@ -4,7 +4,9 @@
     <div class="articles">
         <!--h1></h1-->
         <h2 class="page-title">
+		@if(count($category) > 0)
             {{$category[0]->title}}
+		@endif
         </h2>
         <div class="articles-content">
             @if(count($articles_from_category) > 0)
@@ -35,7 +37,13 @@
                     <li><a href="{{$articles_from_category->nextPageUrl()}}">»</a></li>
                 </ul>
             @else
-                Нет статей
+                @if(app()->getLocale() == 'uz')
+                    Ma'lumotlar yangilanmoqda
+                @elseif(app()->getLocale() == 'ru')
+                    Данные обновляются
+                @else
+                    Data is being updated
+                @endif
             @endif
         </div>
     </div>

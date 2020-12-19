@@ -1,4 +1,4 @@
-{{--
+@role('admin')
 <li class="treeview" style="height: auto;">
     <a href="#">
         <i class="fa fa-wrench"></i><span>Settings</span>
@@ -20,7 +20,7 @@
         </li>
     </ul>
 </li>
---}}
+@endrole
 
 <li class="treeview" style="height: auto;">
     <a href="#">
@@ -76,5 +76,9 @@
 
 <li class="{{ Request::is('footerMenus*') ? 'active' : '' }}">
     <a href="{{ route('footerMenus.index') }}"><i class="fa fa-edit"></i><span>Footer Menus</span></a>
+</li>
+
+<li class="{{ Request::is('logs*') ? 'active' : '' }}">
+    <a href="{{ route('logs.index') }}"><i class="fa fa-edit"></i><span>Logs</span></a>
 </li>
 

@@ -176,6 +176,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Krlove\EloquentModelGenerator\Provider\GeneratorServiceProvider::class,
         Lavary\Menu\ServiceProvider::class,
+        Dlnsk\HierarchicalRBAC\HRBACServiceProvider::class,
     ],
 
     /*

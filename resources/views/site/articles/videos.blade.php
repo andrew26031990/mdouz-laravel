@@ -13,8 +13,7 @@
                         <div class="articles-block">
                             <div class="articles-block-top">
                                 <a href="{{url(Request::url().'/'.$articles->slug)}}" class="articles-block-img-wrapper">
-                                    <span class="articles-block-date">{{gmdate("d.m.Y", $articles->created_at)}}</span>
-                                    <video controls="" poster="{{($articles->photo_base_path !== null || $articles->photo_path !== null) ? url($articles->photo_base_path.'/'.$articles->photo_path) : url('frontend/img/nophoto.png')}}">
+                                    <video class="articles-block-img-wrapper" controls>
                                         <source src = "{{url($articles->video_base_url.'/'.$articles->video_path)}}" type="video/mp4">
                                     </video>
                                 </a>
@@ -22,9 +21,9 @@
                                    class="articles-block-title"
                                    title="{{$articles->title}}">{{$articles->title}}</a>
                             </div>
-                            <div class="articles-block-bottom">
+                            <!--<div class="articles-block-bottom">
                                 <p class="articles-block-text">{!! html_entity_decode($articles->description) !!}</p>
-                            </div>
+                            </div>-->
                         </div>
                     @endforeach
                 </div>
@@ -34,7 +33,13 @@
                     <li><a href="{{$articles_from_category->nextPageUrl()}}">»</a></li>
                 </ul>
             @else
-                Нет статей
+                @if(app()->getLocale() == 'uz')
+                    Ma'lumotlar yangilanmoqda
+                @elseif(app()->getLocale() == 'ru')
+                    Данные обновляются
+                @else
+                    Data is being updated
+                @endif
             @endif
         </div>
     </div>

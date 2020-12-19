@@ -8,11 +8,11 @@
             @foreach($latest_news as $lat_news)
                 <li>
                     @if($lat_news->thumbnail_base_url == null || $lat_news->thumbnail_path == null)
-                        <img style="width: 0;height: 0"
+                        <img
                              src="{{url('frontend/img/nophoto.png')}}"
                              alt="" data-description="">
                     @else
-                        <img style="width: 0;height: 0"
+                        <img style="background-position: center;"
                              src="{{url($lat_news->thumbnail_base_url.'/'.$lat_news->thumbnail_path)}}"
                              alt="{!!$lat_news->at_title!!}" data-description="{!!$lat_news->at_description!!}">
                     @endif
@@ -56,7 +56,7 @@
                                          alt="{!!$lat_ministry_news->at_title!!}"
                                          title="{!!$lat_ministry_news->at_title!!}">
                                 @endif
-                                <time datetime="2019-04-22">{{date("d.m.y", $lat_ministry_news->published_at)}}</time>
+                                <time datetime="{{date("d.m.y", $lat_ministry_news->published_at)}}">{{date("d.m.y", $lat_ministry_news->published_at)}}</time>
                             </a>
                             <footer>
                                 <a href="{{URL::to('/').'/'.app()->getLocale().'/'.$lat_ministry_news->act_slug.'/'.$lat_ministry_news->at_slug}}"

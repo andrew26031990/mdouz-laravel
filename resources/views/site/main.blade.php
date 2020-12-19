@@ -53,15 +53,25 @@
                         <img src="{{url('frontend/icons/youtube_icon.png')}}" width="30px"/>
                     </a>
                 </div>
-
+					<div style="width: 100%; text-align: center">
+                        @if(app()->getLocale() == 'uz')
+                            <h1 style="color: red">Sayt ishlab chiqilmoqda</h1>
+                        @elseif(app()->getLocale() == 'ru')
+                            <h1 style="color: red">Сайт находится в режиме разработки</h1>
+                        @else
+                            <h1 style="color: red">The site is under development</h1>
+                        @endif
+					</div>
                 <div class="header-top-right">
                     <ul class="header-lang">
                         @foreach($language as $lang)
+							@if($lang->id != 1)
                             <li>
                                 <a class="{{$lang->url == app()->getLocale() ? 'active' : ''}}" lang_url="{{$lang->url}}" href="{{url($lang->url.'/'.$lang->slug)}}">
                                     {{$lang->name}}
                                 </a>
                             </li>
+							@endif
                         @endforeach
                     </ul>
                     <form action="{{route('search')}}" method="GET" class="header-search">
@@ -115,7 +125,7 @@
                     <img src="{{url('frontend/img/gerb.png')}}"
                          alt="Республика Узбекистан">
                     @if(app()->getLocale() == 'uz')
-                        Узбекистон республикаси
+                        Ozbekiston Respublikasi
                     @elseif(app()->getLocale() == 'ru')
                         Республика Узбекистан
                     @else
@@ -141,14 +151,20 @@
                             <div class="row">
                                 <div class="col">
                                     <div style="background-color: white;text-transform: uppercase">
-                                        <b>количество воспитанников</b>
+                                        @if(app()->getLocale() == 'uz')
+                                            <b>o'quvchilar soni</b>
+                                        @elseif(app()->getLocale() == 'ru')
+                                            <b>количество воспитанников</b>
+                                        @else
+                                            <b>number of students</b>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 12px;">
                                 <div class="col">
                                     <div style="color: white; text-transform: uppercase">
-                                        <b>3000000</b>
+                                        <b>1 652 841</b>
                                     </div>
                                 </div>
                             </div>
@@ -162,14 +178,20 @@
                             <div class="row">
                                 <div class="col">
                                     <div style="background-color: white; text-transform: uppercase">
-                                        <b>количество учреждений</b>
+                                        @if(app()->getLocale() == 'uz')
+                                            <b>muassasalar soni</b>
+                                        @elseif(app()->getLocale() == 'ru')
+                                            <b>количество учреждений</b>
+                                        @else
+                                            <b>number of institutions</b>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 12px;">
                                 <div class="col">
                                     <div style="color: white; text-transform: uppercase">
-                                        <b>15000</b>
+                                        <b>17 297</b>
                                     </div>
                                 </div>
                             </div>
@@ -425,10 +447,12 @@
     $(document).ready(function () {
         let pgwSlider = $('.pgwSlider').pgwSlider({
             'listPosition': 'left',
-            'verticalCentering': true,
+			'verticalCentering': true
          });
         pgwSlider.stopSlide();
-        $('.pgwSlider .ps-current img').css('height', '300px')
+        $('.pgwSlider .ps-current img').css('height', '300px');
+        $('.pgwSlider .ps-current img').css('object-fit', 'cover');
+        $('body .ps-list li').css('height', '46.5px')
     });
 </script>
 <script src="{{url('frontend/js/Popper.js')}}"></script>

@@ -37,7 +37,11 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::get('search', 'App\Http\Controllers\Site\SiteController@search')->name('search');
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+/*Route::group(["middleware" => "role:user"], function() {*/
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+/*});*/
+
 Route::resource('timelineEvent', App\Http\Controllers\TimelineEventModelController::class);
 Route::resource('user', App\Http\Controllers\UserModelController::class);
 Route::resource('articleAttachmentModels', App\Http\Controllers\ArticleAttachmentController::class);
@@ -56,6 +60,7 @@ Route::resource('country', App\Http\Controllers\CountryModelController::class);
 Route::get('getTemplateFields/{id}', [App\Http\Controllers\StaticPagesController::class,'getTemplateFields']);
 Route::get('translit_url/{value}', [App\Http\Controllers\StaticPagesController::class,'translitUrl']);
 Route::get('deleteAttachment/{attachment_id}', [App\Http\Controllers\ArticleController::class,'deleteAttachment']);
+Route::get('/article/restore/{id}', [App\Http\Controllers\ArticleController::class, 'restore'])->name('article_restore');
 
 Route::resource('staticPages', App\Http\Controllers\StaticPagesController::class);
 Route::resource('articleCategories', App\Http\Controllers\ArticleCategoryController::class);
@@ -65,5 +70,7 @@ Route::resource('articles', App\Http\Controllers\ArticleController::class);
 
 
 Route::resource('videos', App\Http\Controllers\VideoController::class);
-
 Route::resource('footerMenus', App\Http\Controllers\FooterMenuController::class);
+
+
+Route::resource('logs', App\Http\Controllers\LogsController::class);

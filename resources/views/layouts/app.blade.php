@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="{{url('css/timeline.min.css')}}" />
     <!-- iCheck -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/iCheck/1.0.2/skins/square/_all.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css">
 
@@ -63,7 +64,7 @@
                                     <img src="http://infyom.com/images/logo/blue_logo_150x150.jpg"
                                          class="img-circle" alt="User Image"/>
                                     <p>
-                                        {{ Auth::user()->name }}
+                                        {{ Auth::user()->role }}
                                         <small>@lang('auth.app.member_since') {{ Auth::user()->created_at->format('M. Y') }}</small>
                                     </p>
                                 </li>
@@ -156,6 +157,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script
     src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="https://adminlte.io/themes/AdminLTE/bower_components/ckeditor/ckeditor.js"></script>
 <!-- AdminLTE App -->
