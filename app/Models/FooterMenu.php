@@ -22,7 +22,7 @@ class FooterMenu extends Model
     use HasFactory;
 
     public $table = 'footer_menu';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
@@ -53,7 +53,7 @@ class FooterMenu extends Model
      * @var array
      */
     public static $rules = [
-        'title' => 'required|string|max:255',
+        //'title' => 'required|string|max:255',
         'key' => 'required|string|max:255',
         'status' => 'nullable'
     ];

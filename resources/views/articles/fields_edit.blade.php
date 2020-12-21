@@ -9,7 +9,7 @@
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Change article image (640 x 400)</label>
+                <label class="custom-file-label">Change article image (775 x 300)</label>
                 <div class="user-image mb-3">
                     @if($article->thumbnail_base_url !== null)
                         <img style="width: 200px; height: 100px;" src="{{url($article->thumbnail_base_url).'/'.$article->thumbnail_path }}">
@@ -71,6 +71,13 @@
                 <select class="form-control" name="menu">
                     <option value="1" {{$article->menu == 1 ? 'selected' : ''}}>Yes</option>
                     <option value="0" {{$article->menu == 0 ? 'selected' : ''}}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Display in footer</label>
+                <select class="form-control" name="footer">
+                    <option value="1" {{$article->in_footer == 1 ? 'selected' : ''}}>Yes</option>
+                    <option value="0" {{$article->in_footer == 0 ? 'selected' : ''}}>No</option>
                 </select>
             </div>
             <input type="hidden" name="article_id" value="{{$article->id}}">

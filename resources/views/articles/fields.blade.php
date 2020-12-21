@@ -9,7 +9,7 @@
                 @endforeach
             </select>
             <div class="form-group">
-                <label class="custom-file-label">Article image (640 x 400)</label>
+                <label class="custom-file-label">Article image (775 x 300)</label>
                 <div class="user-image mb-3">
                     <div class="imgPreviewTitle"> </div>
                 </div>
@@ -50,6 +50,13 @@
             <div class="form-group">
                 <label>Display in the menu</label>
                 <select class="form-control" name="menu">
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Display in footer</label>
+                <select class="form-control" name="footer">
                     <option value="1">Yes</option>
                     <option value="0">No</option>
                 </select>

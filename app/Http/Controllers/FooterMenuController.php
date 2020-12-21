@@ -49,9 +49,10 @@ class FooterMenuController extends AppBaseController
      */
     public function create()
     {
+        $lang = $this->langModelRepository->all();
         $articles = DB::table('article')->join('article_translate', 'article.id', '=', 'article_translate.article_id')->
-            where('article_translate.lang_id', '=', 3)->where('article_translate.title', '!=', '')->get();
-        return view('footer_menus.create')->with('articles', $articles);
+            where('article_translate.lang_id', '=', 3)->where('article_translate.title', '!=', '')->select('article.id as id', 'article_translate.title as title')->get();
+        return view('footer_menus.create')->with('articles', $articles)->with('language', $lang);
     }
 
     /**
@@ -63,10 +64,13 @@ class FooterMenuController extends AppBaseController
      */
     public function store(CreateFooterMenuRequest $request)
     {
-        dd($request);
         $input = $request->all();
 
         $footerMenu = DB::table('footer_menu')->insertGetId(array('title'=>$request->title, 'key'=>$request->key, 'status'=>$request->status));
+
+        foreach($input['Fields'] as $key => $part){
+            DB::table('footer_menu_translate')->insert(array('footer_menu_id'=>$footerMenu, 'lang_id' => $key, 'title' => $part['title']));
+        }
 
         foreach ($request->articles as $article){
             DB::table('footer_menu_item')->insert(array('footer_menu_id'=>$footerMenu, 'item_id'=>$article));
@@ -106,19 +110,21 @@ class FooterMenuController extends AppBaseController
      */
     public function edit($id)
     {
+        $lang = $this->langModelRepository->all();
         $footerMenu = $this->footerMenuRepository->find($id);
         $articles = DB::table('article')->join('article_translate', 'article.id', '=', 'article_translate.article_id')->
             where('article_translate.lang_id', '=', 3)->where('article_translate.title', '!=', '')->get();
         $uploaded = DB::table('footer_menu_item')->where('footer_menu_item.footer_menu_id', '=', $id)->select('footer_menu_item.item_id')->get();
         $uploaded_articles = $this->getArray($uploaded);
-
+        $footerMenuTranslate = DB::table('footer_menu_translate')->where('footer_menu_id', '=', $id)->get();
         if (empty($footerMenu)) {
             Flash::error('Footer Menu not found');
 
             return redirect(route('footerMenus.index'));
         }
-
-        return view('footer_menus.edit')->with('footerMenu', $footerMenu)->with('articles', $articles)->with('uploaded_articles', $uploaded_articles);
+        return view('footer_menus.edit')->with('footerMenu', $footerMenu)->
+            with('articles', $articles)->with('uploaded_articles', $uploaded_articles)->
+            with('language', $lang)->with('footer_menu_translate', $footerMenuTranslate);
     }
 
     public function getArray($array){
@@ -148,7 +154,13 @@ class FooterMenuController extends AppBaseController
         }
 
         $this->footerMenuRepository->update(array('title' => $request->title, 'key'=>$request->key, 'status'=>$request->status), $id);
+
         DB::table('footer_menu_item')->where('footer_menu_item.footer_menu_id', '=', $id)->delete();
+
+        foreach($request['Fields'] as $key => $part){
+            DB::table('footer_menu_translate')->updateOrInsert(array('footer_menu_id'=>$id, 'lang_id' => $key), array('title' => $part['title']));
+        }
+
         foreach ($request['articles'] as $article){
             DB::table('footer_menu_item')->insert(array('footer_menu_id'=>$id, 'item_id'=>$article));
         }

@@ -44,7 +44,8 @@ class ArticleView extends Controller
             with('socials', $this->siteController->getSocials())
                 ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
                 ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
-                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
+                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id))
+                ->with('bottom_articles_title', $this->siteController->bottom_articles_title($lang_selected[0]->id));
         }else{
             $view = 'article';
             $article = DB::table('article_translate')->
@@ -58,7 +59,8 @@ class ArticleView extends Controller
             with('socials', $this->siteController->getSocials())
                 ->with('portals', $this->siteController->getPortalsView($lang_selected[0]->id))
                 ->with('tendering', $this->siteController->getTendering($lang_selected[0]->id))
-                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id));
+                ->with('bottom_articles', $this->siteController->bottom_articles($lang_selected[0]->id))
+                ->with('bottom_articles_title', $this->siteController->bottom_articles_title($lang_selected[0]->id));
         }
 
 

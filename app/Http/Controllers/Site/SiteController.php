@@ -27,7 +27,7 @@ class SiteController extends Controller
     {
         $lang = $this->langModelRepository->all();
         $lang_selected = DB::table('lang')->where('lang.url', app()->getLocale())->get();
-
+        //dd($this->bottom_articles($lang_selected[0]->id));
         $portals = $this->getPortalsView($lang_selected[0]->id);
         //Menu
         $menu = $this->buildMenu($lang_selected[0]->id);
@@ -42,12 +42,16 @@ class SiteController extends Controller
         //Socials
         $tendering = $this->getTendering($lang_selected[0]->id);
 
+        //$getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
+        $bottomArticlesTitle = $this->bottom_articles_title($lang_selected[0]->id);
         $getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
+        dd($getBottomArticles);
+        dd($bottomArticlesTitle);
         $footer = $this->generateFooter($lang_selected[0]->id);
 
         return view('site.sliders.sliders', ['menu' => $menu])->
             with('language', $lang)->with('latest_news', $latest_news)->with('latest_ministry_news', $latest_ministry_news)->
-            with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering)->with('bottom_articles', $getBottomArticles);
+            with('socials', $socials)->with('portals', $portals)->with('tendering', $tendering)->with('bottom_articles', $getBottomArticles)->with('bottom_articles_title', $bottomArticlesTitle);
     }
 
     public function buildMenu ($lang_id){
@@ -84,7 +88,7 @@ class SiteController extends Controller
     }
 
     public function latestNews ($lang_id){
-        return $latest_news = DB::table('article')->
+        return DB::table('article')->
             join('article_translate', 'article_translate.article_id', '=', 'article.id')->
             join('article_category', 'article_category.id', '=', 'article.category_id')->
             join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
@@ -94,7 +98,7 @@ class SiteController extends Controller
     }
 
     public function latestMinistryNews ($lang_id){
-        return $latest_news = DB::table('article')->
+        return DB::table('article')->
         join('article_translate', 'article_translate.article_id', '=', 'article.id')->
         join('article_category', 'article_category.id', '=', 'article.category_id')->
         join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
@@ -103,13 +107,23 @@ class SiteController extends Controller
         where('article.on_home', 1)->select('article.id as id', 'article.updated_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.updated_at', 'desc')->limit(6)->get();
     }
 
-    public function bottom_articles ($lang_id){
-        return $latest_news = DB::table('article')->
-            join('article_translate', 'article_translate.article_id', '=', 'article.id')->
-            join('article_category', 'article_category.id', '=', 'article.category_id')->
-            join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
-            join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
-            select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->get();
+    public function bottom_articles_title ($lang_id){
+        return DB::table('footer_menu')->
+        join('footer_menu_translate', 'footer_menu.id', '=', 'footer_menu_translate.footer_menu_id')
+        ->where('footer_menu_translate.lang_id', '=', $lang_id)->select('footer_menu_translate.title as fmt_title', 'footer_menu.id as fm_id')->
+        get();
+    }
+
+    public function bottom_articles ($lang_id)
+    {
+        return DB::table('footer_menu')->
+        join('footer_menu_item', 'footer_menu.id', '=', 'footer_menu_item.footer_menu_id')->
+        join('article', 'article.id', '=', 'footer_menu_item.item_id')->
+        join('article_translate', 'article.id', '=', 'article_translate.article_id')->
+        join('article_category', 'article_category.id', '=', 'article.category_id')->
+        join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
+        where('article_translate.lang_id', '=', $lang_id)->where('article_category_translate.lang_id', '=', $lang_id)->select('article.id as id', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_category_translate.slug as act_slug', 'footer_menu.id as fm_id')
+        ->get();
     }
 
     public function getPortalsView ($lang_id){

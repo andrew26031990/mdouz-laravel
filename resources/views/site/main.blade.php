@@ -362,7 +362,21 @@
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
-
+            @foreach($bottom_articles_title as $item)
+                <div class="footer-block">
+                    <p class="footer-block-title">{{$item->fmt_title}}</p>
+                    <ul class="footer-block-menu">
+                        @foreach($bottom_articles ?? '' as $bottom)
+                            @if($bottom->fm_id == $item->fm_id)
+                                <li>
+                                    <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
+                                </li>
+                            @endif
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
+{{--
 
             <div class="footer-block">
                 @if(app()->getLocale() == 'uz')
@@ -375,9 +389,9 @@
 
                 <ul class="footer-block-menu">
                     @foreach($bottom_articles ?? '' as $bottom)
-                        @if($bottom->id == 633 || $bottom->id == 632 || $bottom->id == 634)
+                        @if($bottom->a_id == 633 || $bottom->a_id == 632 || $bottom->a_id == 634)
                             <li>
-                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
+                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->a_id}}/{{$bottom->a_id}}">{{$bottom->a_id}}</a>
                             </li>
                         @endif
                     @endforeach
@@ -394,14 +408,15 @@
 
                 <ul class="footer-block-menu">
                     @foreach($bottom_articles ?? '' as $bottom)
-                        @if($bottom->id == 635 || $bottom->id == 636 || $bottom->id == 637)
+                        @if($bottom->a_id == 635 || $bottom->a_id == 636 || $bottom->a_id == 637)
                             <li>
-                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
+                                <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->a_id}}/{{$bottom->a_id}}">{{$bottom->a_id}}</a>
                             </li>
                         @endif
                     @endforeach
                 </ul>
             </div>
+--}}
 
             <div class="footer-block contacts">
                 @foreach($portals as $portal)
@@ -451,9 +466,9 @@
          });
         pgwSlider.stopSlide();
         $('.pgwSlider .ps-current img').css('height', '300px');
-        $('.pgwSlider .ps-current img').css('object-fit', 'cover');
-        $('body .ps-list li').css('height', '46.5px')
-    });
+    /*$('.pgwSlider .ps-current img').css('object-fit', 'cover');
+    $('body .ps-list li').css('height', '46.5px')*/
+});
 </script>
 <script src="{{url('frontend/js/Popper.js')}}"></script>
 <script src="{{url('frontend/js/pgwslider.min.js')}}"></script>

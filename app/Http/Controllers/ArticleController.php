@@ -79,6 +79,7 @@ class ArticleController extends AppBaseController
                 'status' => $request->status, 'on_main' => $request->on_main,
                 'on_home' => $request->on_home,
                 'menu' => $request->menu,
+                'in_footer' => $request->footer,
                 'created_at' => strtotime('today GMT'),
                 'updated_at' => strtotime('today GMT')));
 
@@ -189,6 +190,7 @@ class ArticleController extends AppBaseController
                 'status' => $request->status, 'on_main' => $request->on_main,
                 'on_home' => $request->on_home,
                 'menu' => $request->menu,
+                'in_footer' => $request->footer,
                 'created_at' => strtotime('today GMT'),
                 'updated_at' => strtotime('today GMT')), $article->id);
 
