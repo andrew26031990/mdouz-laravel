@@ -17,10 +17,6 @@
                         <a style="color: white" href="{{url($article_att->base_url.'/'.$article_att->path)}}" download>Скачать</a>
                     </div>
                 @endforeach
-            @else
-                <div class="article-content">
-                    Вложения отсутствуют
-                </div>
             @endif
         </div>
     </div>

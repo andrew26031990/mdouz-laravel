@@ -43,13 +43,6 @@
                         @else
                             <option value="{{$article->id}}">{{$article->title}}</option>
                         @endif
-                        {{--@foreach($uploaded_articles as $uploaded)
-                            @if($uploaded->item_id == $article->id)
-                                <option value="{{$article->id}}" selected>{{$article->title}}</option>
-                            @else
-                                <option value="{{$article->id}}">{{$article->title}}</option>
-                            @endif
-                        @endforeach--}}
                     @endforeach
                 </select>
             </div>

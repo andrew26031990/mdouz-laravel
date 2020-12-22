@@ -54,6 +54,7 @@ class ArticlesView extends Controller
             join('article_translate', 'article.id', '=', 'article_translate.article_id')->
             where('article_category_translate.slug', $request->segment(2))->
             where('article_translate.lang_id', $lang_selected[0]->id)->
+            where('article.deleted_at', '=', null)->
             distinct()->orderBy('article.published_at', 'desc')->paginate(9, ['article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug']);
 
         }

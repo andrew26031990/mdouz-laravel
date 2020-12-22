@@ -2,18 +2,26 @@
     <table class="table" id="footerMenus-table">
         <thead>
             <tr>
-                <th>Title</th>
-        <th>Key</th>
-        <th>Status</th>
-                <th colspan="3">Action</th>
+                <th>Key</th>
+                @foreach($language as $lang)
+                    <th>{{$lang->name}}</th>
+                @endforeach
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
         @foreach($footerMenus as $footerMenu)
             <tr>
-                <td>{{ $footerMenu->title }}</td>
-            <td>{{ $footerMenu->key }}</td>
-            <td>{{ $footerMenu->status }}</td>
+                <td>{{ $footerMenu->key }}</td>
+                @foreach($language as $lang)
+                    @if($footerMenusTranslate->whereIn('footer_menu_id', $footerMenu->id)->whereIn('lang_id', $lang->id)->count() > 0)
+                        <td><a href="{{ route('footerMenus.edit', [$footerMenu->id]) }}">{{$footerMenusTranslate->whereIn('footer_menu_id', $footerMenu->id)->whereIn('lang_id', $lang->id)->first()->title}}</a></td>
+                    @else
+                        <td style="color: red">(нет перевода, tarjima yo'q)</td>
+                    @endif
+                @endforeach
+                <td>{{ $footerMenu->status }}</td>
                 <td>
                     {!! Form::open(['route' => ['footerMenus.destroy', $footerMenu->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
@@ -27,3 +35,8 @@
         </tbody>
     </table>
 </div>
+@push('scripts')
+    <script type="text/javascript">
+        $('#footerMenus-table').DataTable();
+    </script>
+@endpush

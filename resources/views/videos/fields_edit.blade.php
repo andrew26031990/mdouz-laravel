@@ -8,7 +8,7 @@
                     <option value="{{$cat->id}}" {{$video->category_id == $cat->id ? 'selected' : ''}}>{{$cat->name}}</option>
                 @endforeach
             </select>
-            <div class="form-group">
+            {{--<div class="form-group">
                 <label class="custom-file-label">Video image</label>
                 <div class="user-image mb-3">
                     <div class="imgPreviewTitle">
@@ -21,7 +21,7 @@
                 <div class="custom-file">
                     <input type="file" name="video_image" id="imageTitle" accept="image/*" class="custom-file-input">
                 </div>
-            </div>
+            </div>--}}
             <input name="created_at" type="hidden" value="{{time()}}" />
             <input name="updated_at" type="hidden" value="{{time()}}" />
         </div>

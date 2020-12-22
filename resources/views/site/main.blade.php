@@ -65,13 +65,11 @@
                 <div class="header-top-right">
                     <ul class="header-lang">
                         @foreach($language as $lang)
-							@if($lang->id != 1)
                             <li>
                                 <a class="{{$lang->url == app()->getLocale() ? 'active' : ''}}" lang_url="{{$lang->url}}" href="{{url($lang->url.'/'.$lang->slug)}}">
                                     {{$lang->name}}
                                 </a>
                             </li>
-							@endif
                         @endforeach
                     </ul>
                     <form action="{{route('search')}}" method="GET" class="header-search">
@@ -152,11 +150,11 @@
                                 <div class="col">
                                     <div style="background-color: white;text-transform: uppercase">
                                         @if(app()->getLocale() == 'uz')
-                                            <b>o'quvchilar soni</b>
+                                            <b>o'quvchilar<br> soni</b>
                                         @elseif(app()->getLocale() == 'ru')
-                                            <b>количество воспитанников</b>
+                                            <b>количество<br> воспитанников</b>
                                         @else
-                                            <b>number of students</b>
+                                            <b>number of<br> preschoolers</b>
                                         @endif
                                     </div>
                                 </div>
@@ -172,18 +170,18 @@
                     </div>
                     <div class="row" style="width: 90%">
                         <div class="col">
-                            <img src="{{url('frontend/img/school.svg')}}" />
+                            <img style="margin-left: -21px" src="{{url('frontend/img/school.svg')}}" />
                         </div>
                         <div class="col">
                             <div class="row">
                                 <div class="col">
                                     <div style="background-color: white; text-transform: uppercase">
                                         @if(app()->getLocale() == 'uz')
-                                            <b>muassasalar soni</b>
+                                            <b>muassasalar<br> soni</b>
                                         @elseif(app()->getLocale() == 'ru')
-                                            <b>количество учреждений</b>
+                                            <b>количество<br> учреждений</b>
                                         @else
-                                            <b>number of institutions</b>
+                                            <b>number of<br> institutions</b>
                                         @endif
                                     </div>
                                 </div>
@@ -362,12 +360,13 @@
 <footer class="footer">
     <div class="container">
         <div class="footer-content">
+            {{--{{dd($bottom_articles_title)}}--}}
             @foreach($bottom_articles_title as $item)
                 <div class="footer-block">
                     <p class="footer-block-title">{{$item->fmt_title}}</p>
                     <ul class="footer-block-menu">
-                        @foreach($bottom_articles ?? '' as $bottom)
-                            @if($bottom->fm_id == $item->fm_id)
+                        @foreach($bottom_articles as $bottom)
+                            @if($bottom->fm_id != $item->fm_id)
                                 <li>
                                     <a href="http://{{$_SERVER['SERVER_NAME']}}/{{app()->getLocale()}}/{{$bottom->act_slug}}/{{$bottom->at_slug}}">{{$bottom->at_title}}</a>
                                 </li>

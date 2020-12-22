@@ -45,8 +45,7 @@ class SiteController extends Controller
         //$getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
         $bottomArticlesTitle = $this->bottom_articles_title($lang_selected[0]->id);
         $getBottomArticles = $this->bottom_articles($lang_selected[0]->id);
-        dd($getBottomArticles);
-        dd($bottomArticlesTitle);
+
         $footer = $this->generateFooter($lang_selected[0]->id);
 
         return view('site.sliders.sliders', ['menu' => $menu])->
@@ -232,10 +231,11 @@ class SiteController extends Controller
             where('article_translate.lang_id', $lang_selected[0]->id)->
             where('article_category_translate.lang_id', $lang_selected[0]->id)->
             where('article_translate.title', 'like', '%' . $search . '%')->
+            where('article.deleted_at','=', null)->
             select(['article_translate.article_id as ac_id', 'article_category_translate.slug as ac_slug', 'article.published_at as date_published', 'article.thumbnail_base_url as base_url', 'article.thumbnail_path as image_name', 'article_translate.title as title', 'article_translate.description as description', 'article_translate.slug as slug'])->
             paginate(9);
         return view('site.search.search', ['menu' => $menu])->with('language', $lang)->
             with('latest_news', $latest_news)->with('articles', $articles)->
-            with('socials', $this->getSocials())->with('portals', $this->getPortalsView($lang_selected[0]->id))->with('bottom_articles', $this->bottom_articles($lang_selected[0]->id))->with('tendering', $this->getTendering($lang_selected[0]->id));
+            with('socials', $this->getSocials())->with('portals', $this->getPortalsView($lang_selected[0]->id))->with('bottom_articles', $this->bottom_articles($lang_selected[0]->id))->with('bottom_articles_title', $this->bottom_articles_title($lang_selected[0]->id))->with('tendering', $this->getTendering($lang_selected[0]->id));
     }
 }

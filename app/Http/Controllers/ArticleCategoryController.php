@@ -40,9 +40,11 @@ class ArticleCategoryController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $articleCategories = $this->articleCategoryRepository->paginate(13);
+        $lang = $this->langModelRepository->all();
+        $articleCategories = $this->articleCategoryRepository->all();
+        $article_category_translate = DB::table('article_category_translate')->get();
         return view('article_categories.index')
-            ->with('articleCategories', $articleCategories);
+            ->with('articleCategories', $articleCategories)->with('article_category_translate', $article_category_translate)->with('language', $lang);
     }
 
     /**

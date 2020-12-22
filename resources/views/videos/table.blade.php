@@ -3,17 +3,23 @@
         <thead>
             <tr>
                 <th>Category</th>
-                <th>Photo Path</th>
-                <th>Photo Base Path</th>
-                <th colspan="3">Action</th>
+                @foreach($language as $lang)
+                    <th>{{$lang->name}}</th>
+                @endforeach
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
         @foreach($videos as $video)
             <tr>
                 <td>{{ $video->ac_name }}</td>
-                <td>{{ $video->v_pp }}</td>
-                <td>{{ $video->v_pbp }}</td>
+                @foreach($language as $lang)
+                    @if($video_translate->whereIn('video_id', $video->v_id)->whereIn('lang_id', $lang->id)->count() > 0)
+                        <td><a href="{{ route('videos.edit', [$video->v_id]) }}">{{$video_translate->whereIn('video_id', $video->v_id)->whereIn('lang_id', $lang->id)->first()->title}}</a></td>
+                    @else
+                        <td style="color: red">(нет перевода, tarjima yo'q)</td>
+                    @endif
+                @endforeach
                 <td>
                     {!! Form::open(['route' => ['videos.destroy', $video->v_id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
@@ -27,3 +33,8 @@
         </tbody>
     </table>
 </div>
+@push('scripts')
+    <script type="text/javascript">
+        $('#videos-table').DataTable();
+    </script>
+@endpush

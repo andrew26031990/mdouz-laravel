@@ -36,10 +36,11 @@ class FooterMenuController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $lang = $this->langModelRepository->all();
         $footerMenus = $this->footerMenuRepository->all();
-
+        $footerMenusTranslate = DB::table('footer_menu_translate')->get();
         return view('footer_menus.index')
-            ->with('footerMenus', $footerMenus);
+            ->with('footerMenus', $footerMenus)->with('footerMenusTranslate', $footerMenusTranslate)->with('language', $lang);
     }
 
     /**
@@ -113,7 +114,7 @@ class FooterMenuController extends AppBaseController
         $lang = $this->langModelRepository->all();
         $footerMenu = $this->footerMenuRepository->find($id);
         $articles = DB::table('article')->join('article_translate', 'article.id', '=', 'article_translate.article_id')->
-            where('article_translate.lang_id', '=', 3)->where('article_translate.title', '!=', '')->get();
+            where('article_translate.lang_id', '=', 3)->where('article_translate.title', '!=', '')->select('article_id as id', 'article_translate.title as title')->get();
         $uploaded = DB::table('footer_menu_item')->where('footer_menu_item.footer_menu_id', '=', $id)->select('footer_menu_item.item_id')->get();
         $uploaded_articles = $this->getArray($uploaded);
         $footerMenuTranslate = DB::table('footer_menu_translate')->where('footer_menu_id', '=', $id)->get();

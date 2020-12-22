@@ -33,10 +33,12 @@ class VideoController extends AppBaseController
      */
     public function index(Request $request)
     {
+        $lang = $this->langModelRepository->all();
         $videos = DB::table('video')->join('article_category', 'video.category_id', '=', 'article_category.id')->
         select('article_category.name as ac_name', 'video.id as v_id', 'video.photo_path as v_pp', 'video.photo_base_path as v_pbp')->get();
+        $video_translate = DB::table('video_translate')->get();
         return view('videos.index')
-            ->with('videos', $videos);
+            ->with('videos', $videos)->with('video_translate', $video_translate)->with('language', $lang);
     }
 
     /**
@@ -69,9 +71,9 @@ class VideoController extends AppBaseController
                 'updated_at' => strtotime('today GMT')));
 
             //Add image
-            if(isset($input['video_image'])){
+            /*if(isset($input['video_image'])){
                 $this->fileUploadMain($request, $newVideo->id, 'create');
-            }
+            }*/
 
             //Add article translation fields
             foreach($input['Fields'] as $key => $part){
@@ -171,9 +173,9 @@ class VideoController extends AppBaseController
         $this->videoRepository->update(array('category_id' => $request->category_id,
             'updated_at' => strtotime('today GMT')), $id);
 
-        if($request->video_image !== null){
+        /*if($request->video_image !== null){
             $this->fileUploadMain($request, $id, 'update');
-        }
+        }*/
 
         foreach($request['Fields'] as $key => $part){
             $video_translate = DB::table('video_translate')->updateOrInsert(['lang_id'=>$key, 'video_id'=>$video->id], ['title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'youtube_url' => $part['youtube']]);

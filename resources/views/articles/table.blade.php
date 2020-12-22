@@ -1,32 +1,32 @@
 <div class="table-responsive">
     <table class="table" id="articles-table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Category</th>
-                {{--@foreach($language as $lang)
-                    <th>{{$lang->name}}</th>
-                @endforeach--}}
-                <th>Status</th>
-                <th>On Main</th>
-                <th>On Home</th>
-                <th>Menu</th>
-                {{--<th>Url</th>--}}
-                <th>Action</th>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <th>Category</th>
+            @foreach($language as $lang)
+                <th>{{$lang->name}}</th>
+            @endforeach
+            <th>Status</th>
+            <th>On Main</th>
+            <th>On Home</th>
+            <th>Menu</th>
+            {{--<th>Url</th>--}}
+            <th>Action</th>
+        </tr>
         </thead>
         <tbody>
         @foreach($articles as $article)
             <tr>
                 <td>{{ $article->id }}</td>
                 <td>{{ $article->ac_name }}</td>
-                {{--@foreach($language as $lang)
-                    @foreach($article_translate as $article_trans)
-                        @if($lang->id == $article_trans->lang_id && $article->id == $article_trans->article_id)
-                            <td>{{$article_trans->title}}</td>
-                        @endif
-                    @endforeach
-                @endforeach--}}
+                @foreach($language as $lang)
+                    @if($article_translate->whereIn('article_id', $article->id)->whereIn('lang_id', $lang->id)->count() > 0)
+                        <td><a href="{{ route('articles.edit', [$article->id]) }}">{{$article_translate->whereIn('article_id', $article->id)->whereIn('lang_id', $lang->id)->first()->title}}</a></td>
+                    @else
+                        <td style="color: red">(нет перевода, tarjima yo'q)</td>
+                    @endif
+                @endforeach
                 <td>{{ $article->status }}</td>
                 <td>{{ $article->on_main }}</td>
                 <td>{{ $article->on_home }}</td>
@@ -44,14 +44,6 @@
         @endforeach
         </tbody>
     </table>
-    {{--<div class="box-footer clearfix">
-        <ul class="pagination pagination-sm no-margin pull-right">
-            <li><a href="{{$articles->previousPageUrl()}}">«</a></li>
-            <li><a href="{{$articles->nextPageUrl()}}">»</a></li>
-            <li><a href="articles?page={{$articles->lastPage()}}">Last page</a></li>
-            <li><a class="disabled">Total: {{$articles->total()}}</a></li>
-        </ul>
-    </div>--}}
 </div>
 @if(Auth::user()->role == 'admin')
     <h1>Deleted articles</h1>
@@ -62,6 +54,9 @@
                 <th>Id</th>
                 <th>Category</th>
                 <th>Status</th>
+                @foreach($language as $lang)
+                    <th>{{$lang->name}}</th>
+                @endforeach
                 <th>On Main</th>
                 <th>On Home</th>
                 <th>Menu</th>
@@ -75,6 +70,13 @@
                     <td>{{ $trash->id }}</td>
                     <td>{{ $trash->ac_name }}</td>
                     <td>{{ $trash->status }}</td>
+                    @foreach($language as $lang)
+                        @if($article_translate->whereIn('article_id', $trash->id)->whereIn('lang_id', $lang->id)->count() > 0)
+                            <td><a href="{{ route('articles.edit', [$trash->id]) }}">{{$article_translate->whereIn('article_id', $trash->id)->whereIn('lang_id', $lang->id)->first()->title}}</a></td>
+                        @else
+                            <td style="color: red">(нет перевода, tarjima yo'q)</td>
+                        @endif
+                    @endforeach
                     <td>{{ $trash->on_main }}</td>
                     <td>{{ $trash->on_home }}</td>
                     <td>{{ $trash->menu }}</td>
