@@ -53,7 +53,7 @@
                         <img src="{{url('frontend/icons/youtube_icon.png')}}" width="30px"/>
                     </a>
                 </div>
-					<div style="width: 100%; text-align: center">
+					{{--<div style="width: 100%; text-align: center">
                         @if(app()->getLocale() == 'uz')
                             <h1 style="color: red">Sayt ishlab chiqilmoqda</h1>
                         @elseif(app()->getLocale() == 'ru')
@@ -61,7 +61,7 @@
                         @else
                             <h1 style="color: red">The site is under development</h1>
                         @endif
-					</div>
+					</div>--}}
                 <div class="header-top-right">
                     <ul class="header-lang">
                         @foreach($language as $lang)

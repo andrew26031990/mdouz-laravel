@@ -5,7 +5,7 @@
             <label>Categories</label>
             <select class="form-control" name="category_id"  @if(strpos(Request::route()->getName(), 'edit')) disabled @endif>
                 @foreach($categories as $cat)
-                    <option value="{{$cat->id}}">{{$cat->name}}</option>
+                    <option value="{{$cat->id}}">{{$cat->title}}</option>
                 @endforeach
             </select>
             <div class="form-group">

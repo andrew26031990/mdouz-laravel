@@ -92,7 +92,7 @@ class SiteController extends Controller
             join('article_category', 'article_category.id', '=', 'article.category_id')->
             join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
             join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
-        where('article_category.name', '=', 'ministry-news')->
+        where('article_category.name', '=', 'ministry-news')->where('article.deleted_at', '=', null)->
         where('article.on_home', 1)->select('article.id as id', 'article.published_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.id', 'desc')->limit(6)->get();
     }
 
@@ -102,7 +102,7 @@ class SiteController extends Controller
         join('article_category', 'article_category.id', '=', 'article.category_id')->
         join('article_category_translate', 'article_category_translate.article_category_id', '=', 'article_category.id')->
         join('lang', 'article_translate.lang_id', '=', 'lang.id')->where('article_translate.lang_id', $lang_id)->where('article_category_translate.lang_id', $lang_id)->
-        where('article_category.name', '=', 'stati')->where('article_category_translate.title', '!=', '')->
+        where('article_category.name', '=', 'stati')->where('article_category_translate.title', '!=', '')->where('article.deleted_at', '=', null)->
         where('article.on_home', 1)->select('article.id as id', 'article.updated_at as published_at', 'article.thumbnail_base_url as thumbnail_base_url', 'article.thumbnail_path as thumbnail_path', 'article_translate.title as at_title', 'article_translate.slug as at_slug', 'article_translate.description as at_description', 'article_category_translate.slug as act_slug', 'article_category_translate.title as act_title')->orderBy('article.updated_at', 'desc')->limit(6)->get();
     }
 

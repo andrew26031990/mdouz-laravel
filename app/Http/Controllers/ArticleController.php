@@ -58,7 +58,9 @@ class ArticleController extends AppBaseController
     public function create()
     {
         $lang = $this->langModelRepository->all();
-        $categories = DB::table('article_category')->get();
+        $categories = DB::table('article_category')->
+            join('article_category_translate', 'article_category.id', '=', 'article_category_translate.article_category_id')->where('article_category_translate.lang_id', '=', 3)->
+            select('article_category.id as id', 'article_category_translate.title as title')->get();
         return view('articles.create')->with('language', $lang)->with('categories', $categories);
     }
 
@@ -95,7 +97,7 @@ class ArticleController extends AppBaseController
 
             //Add article translation fields
             foreach($input['Fields'] as $key => $part){
-                DB::table('article_translate')->insert(array('article_id'=>$newArticle->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']));
+                DB::table('article_translate')->insert(array('article_id'=>$newArticle->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'] == null ? '': $part['description'], 'body' => $part['body'] == null ? '' : $part['body']));
             }
 
             $description = 'User '.Auth::user()->name.' created article with id '.$newArticle->id;
@@ -107,7 +109,7 @@ class ArticleController extends AppBaseController
             return redirect(route('articles.index'));
         }catch (\Exception $ex){
             Flash::error('Unable to save article. Reason: '.$ex->getMessage());
-            return redirect(route('articles.index'));
+            return redirect()->back();//route('articles.index')
         }
     }
 
@@ -206,7 +208,7 @@ class ArticleController extends AppBaseController
 
             //Add article translation fields
             foreach($request['Fields'] as $key => $part){
-                DB::table('article_translate')->updateOrInsert(['lang_id'=>$key, 'article_id'=>$article->id] ,['article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'], 'body' => $part['body']]);
+                DB::table('article_translate')->updateOrInsert(['lang_id'=>$key, 'article_id'=>$article->id] ,['article_id'=>$article->id, 'lang_id' => $key, 'title' => $part['title'], 'slug' => $part['link'], 'description' => $part['description'] == null ? '': $part['description'], 'body' => $part['body'] == null ? '' : $part['body']]);
             }
 
             $description = 'User '.Auth::user()->name.' updated article with id '.$id;
